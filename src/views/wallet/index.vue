@@ -139,13 +139,13 @@ export default {
 			const part1 = url.split('&state')[0]
 			const code = part1.split('code=')[1]
 
-			// const { data } = await chainAuth(code)
+			const { data } = await chainAuth(code)
 			// wxid_uhjz2timrfdv21 -> fy wxid_7h9gf2umzeja22 -> pratest1111
 			/* eslint-disable */
-			const { data: testData } = await chainAuth('888888')
-			const data = {
-			  wxid: 'wxid_7h9gf2umzeja22'
-			}
+			// const { data: testData } = await chainAuth('888888')
+			// const data = {
+			//   wxid: 'wxid_7h9gf2umzeja22'
+			// }
 
 		  if (data) {
 			this.avatar = data.avatar
