@@ -76,7 +76,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { getTeamInfo, getMembers } from '@/util/api'
-import { didToHex, clipAddress, formatNumber } from '@/util/common'
+import { didToHex, clipAddress, formatNumber, sleep } from '@/util/common'
 import { SET_TEAM_INFO, SET_WALLET_INFO } from '@/vuex/constants'
 export default {
 	name: 'teamIndex',
@@ -88,7 +88,7 @@ export default {
 	},
 	async mounted() {
 		try {
-			// this.$store.commit('showLoading')
+			await sleep(300)
 			const didHash = didToHex(this.walletInfo.did)
 			const { data: { page }} = await getMembers(didHash)
 			this.num = page.dataTotal

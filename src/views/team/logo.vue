@@ -47,7 +47,6 @@ export default {
 			const data = new FormData()
 
 			data.append('file', file)
-
 			const rs = await uploadImg(data)
 			this.logo = `https://static.chain.pro/${rs.data}`
 		},

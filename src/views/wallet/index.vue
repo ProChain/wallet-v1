@@ -68,7 +68,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { chainBindSn, chainAuth } from '@/util/api'
-import { clipAddress } from '@/util/common'
+import { clipAddress, sleep } from '@/util/common'
 import ClipboardJS from 'clipboard'
 import { convert, getMetadata } from '@/util/chain'
 import { SET_WALLET_INFO } from '@/vuex/constants'
@@ -127,6 +127,7 @@ export default {
 			this.clipboard.on('error', function(e) {
 				console.error('Action:', e.action)
 			})
+			await sleep(300)
 			await this.getUserMetadata()
 		} catch (e) {
 			console.log(e)

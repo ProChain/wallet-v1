@@ -18,54 +18,57 @@
 import { mapState } from 'vuex'
 import { getWechatUser, decodeAvatar } from '@/util/api'
 import { convert } from '@/util/chain'
+import { sleep } from '@/util/common'
 export default {
-    name: 'walletDecode',
-    data() {
-        return {
-            decode: '',
-            userInfo: {},
-            did: ''
-        };
-    },
-    computed: {
-        ...mapState([
-            'walletInfo'
-        ])
-    },
-    mounted() {
-        this.$nextTick(async() => {
-            const url = window.location.href
-            const part1 = url.split('&state')[0]
-            const code = part1.split('code=')[1]
+	name: 'walletDecode',
+	data() {
+		return {
+			decode: '',
+			userInfo: {},
+			did: ''
+		};
+	},
+	computed: {
+		...mapState([
+			'walletInfo'
+		])
+	},
+	mounted() {
+		this.$nextTick(async() => {
+			const url = window.location.href
+			const part1 = url.split('&state')[0]
+			const code = part1.split('code=')[1]
 
-            const { data: userInfo } = await getWechatUser(code)
-            userInfo.headimgurl = userInfo.headimgurl.replace(/\d+$/, 0)
-            this.userInfo = userInfo
+			await sleep(300)
 
-            const {
-                data: {
-                    result
-                }
-            } = await decodeAvatar(userInfo.headimgurl)
-            this.did = result
+			const { data: userInfo } = await getWechatUser(code)
+			userInfo.headimgurl = userInfo.headimgurl.replace(/\d+$/, 0)
+			this.userInfo = userInfo
 
-            if (result.length === 6) {
-                this.did = await convert(result, 'index')
-            }
-        })
-    }
+			const {
+				data: {
+					result
+				}
+			} = await decodeAvatar(userInfo.headimgurl)
+			this.did = result
+
+			if (result.length === 6) {
+				this.did = await convert(result, 'index')
+			}
+		})
+	}
 }
 </script>
 <style lang="scss">
 	@import '../../assets/css/variables.scss';
 	.decode-card {
-    font-size: $baseFontSize;
-    padding: $mediumGutter;
+	font-size: $baseFontSize;
+	padding: $mediumGutter;
 		.decode {
 			width: 30%;
 		}
-    .my-did {
-      margin: $mediumGutter 0;
-    }
+	.my-did {
+	  margin: $mediumGutter 0;
+	}
 	}
 </style>

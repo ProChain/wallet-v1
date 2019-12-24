@@ -52,6 +52,7 @@
 <script>
 import { mapState } from 'vuex'
 import { getAvatarStyle, encodeAvatar, getTeamLogo, getTeamInfo, uploadImg } from '@/util/api'
+import { sleep } from '@/util/common'
 export default {
 	name: 'walletAvatar',
 	data() {
@@ -90,7 +91,7 @@ export default {
 	mounted() {
 		this.$nextTick(async() => {
 			this.avatar = this.$route.query.avatar
-
+			await sleep(300)
 			const rs = await getTeamInfo(this.walletInfo.did)
 			this.teamInfo = rs.data || {}
 
@@ -138,10 +139,8 @@ export default {
 			return true
 		},
 		async handleSuccess(res) {
-			console.log(res)
 			const data = new FormData()
 			data.append('file', res.file)
-
 			const rs = await uploadImg(data)
 			this.avatar = `https://static.chain.pro/${rs.data}`
 		}

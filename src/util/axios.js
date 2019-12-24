@@ -1,6 +1,41 @@
 import axios from 'axios'
 import store from '@/vuex'
-import { getLanguage } from '../util/common'
+import { getLanguage } from './common'
+
+let needLoadingRequestCount = 0
+
+const startLoading = () => {
+	console.log('showLoading =============')
+	store.commit('showLoading')
+}
+
+const endLoading = () => {
+	console.log('hideLoading==========')
+	store.commit('hideLoading')
+}
+
+const tryCloseLoading = () => {
+	if (needLoadingRequestCount === 0) {
+		endLoading()
+	}
+}
+
+const showFullScreenLoading = () => {
+	if (needLoadingRequestCount === 0) {
+		startLoading()
+	}
+	needLoadingRequestCount++
+}
+
+const tryHideFullScreenLoading = () => {
+	if (needLoadingRequestCount <= 0) return
+	needLoadingRequestCount--
+	if (needLoadingRequestCount === 0) {
+		setTimeout(() => {
+			tryCloseLoading()
+		}, 300)
+	}
+}
 
 // 设置 POST 请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -26,26 +61,49 @@ const baseUrl = 'https://chain.pro';
 
 // 创建axios实例
 let instance = axios.create({
-    baseURL: baseUrl
+	baseURL: baseUrl
 });
 
 // Add a request interceptor
 instance.interceptors.request.use(config => {
-    if (store.state.token) {
-        config.headers.Authorization = `Bearer ${store.state.token}`
-    }
-    return config
+	if (store.state.token) {
+		config.headers.Authorization = `Bearer ${store.state.token}`
+	}
+	if (!config.hideLoading) {
+		showFullScreenLoading()
+	}
+	return config
 }, (error) => {
-    store.commit('hideLoading')
-    return Promise.reject(error)
+	tryHideFullScreenLoading()
+	return Promise.reject(error)
 })
 
 // Add a response interceptor
 instance.interceptors.response.use(response => {
-    return response.data
+	if (!response.config.hideLoading) {
+		tryHideFullScreenLoading()
+	}
+	return response.data
 }, error => {
-    store.commit('hideLoading')
-    return Promise.reject(error)
-});
+	tryHideFullScreenLoading()
+	return Promise.reject(error)
+})
 
 export default instance
+// export default {
+// 	get: (url, config) => instance.get(url, { ...defaultConfig,
+// 		...config
+// 	}),
+// 	put: (url, data, config) => instance.put(url, data, { ...defaultConfig,
+// 		...config
+// 	}),
+// 	post: (url, data, config) => instance.post(url, data, { ...defaultConfig,
+// 		...config
+// 	}),
+// 	patch: (url, data, config) => instance.patch(url, data, { ...defaultConfig,
+// 		...config
+// 	}),
+// 	delete: (url, data, config) => instance.delete(url, { ...defaultConfig,
+// 		...config
+// 	})
+// }
