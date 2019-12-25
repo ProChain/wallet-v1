@@ -14,33 +14,32 @@ import './vee-validate'
 Vue.config.productionTip = false
 
 Vue.use(new VueSocketIO({
-    debug: true,
-    // connection: 'wss://substrate.chain.pro',
-    // options: { path: '/sign/socket.io/' },
-    connection: 'http://localhost:8091',
-    vuex: {
-        store,
-        actionPrefix: 'SOCKET_',
-        mutationPrefix: 'SOCKET_'
-    }
+	debug: process.env.NODE_ENV === 'development',
+	connection: process.env.VUE_APP_SUBSTRATE_HOST,
+	options: process.env.NODE_ENV === 'development' ? {} : { path: '/sign/socket.io/' },
+	vuex: {
+		store,
+		actionPrefix: 'SOCKET_',
+		mutationPrefix: 'SOCKET_'
+	}
 }))
 
 FastClick.prototype.onTouchEnd = function(event) {
-    if (event.target.hasAttribute('type') && event.target.getAttribute('type') === 'text') {
-        event.preventDefault()
-        event.target.focus()
-        return false
-    }
+	if (event.target.hasAttribute('type') && event.target.getAttribute('type') === 'text') {
+		event.preventDefault()
+		event.target.focus()
+		return false
+	}
 }
 FastClick.attach(document.body)
 
 Object.keys(filters).forEach(k => Vue.filter(k, filters[k]))
 
 export default new Vue({
-    el: '#app',
-    i18n,
-    router,
-    store,
-    components: { App },
-    template: '<App/>'
+	el: '#app',
+	i18n,
+	router,
+	store,
+	components: { App },
+	template: '<App/>'
 })

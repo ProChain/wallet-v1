@@ -1,26 +1,23 @@
 import axios from './axios'
 
-const apiEndPoint = 'https://block.chain.pro/discovery-ad'
+const apiChainAuth = '/api/v1/mainnet/auth'
+const apiChainBind = '/api/v1/mainnet/bind'
+const apiChainSn = '/api/v1/mainnet/bind_sn'
+const apiAccessToken = '/api/v1/mainnet/wechat_user_info'
+const apiAvatarStyle = '/api/v1/mainnet/avatar_style'
+const apiEncodeAvatar = '/api/v1/mainnet/encode_avatar'
+const apiDecodeAvatar = '/api/v1/mainnet/decode_avatar'
+const apiUpdateAvatar = '/api/v1/mainnet/update_avatar'
+const apiUploadImg = '/api/v1/mainnet/upload_avatar'
+const apiGifts = '/api/v1/lottery/gifts'
+const apiDraw = '/api/v1/lottery/draw'
+const apiLotteryRecord = '/api/v1/lottery/records'
 
-// testnet
-const apiChainAuth = `${apiEndPoint}/api/v1/mainnet/auth`
-const apiChainBind = `${apiEndPoint}/api/v1/mainnet/bind`
-const apiChainSn = `${apiEndPoint}/api/v1/mainnet/bind_sn`
-const apiAccessToken = `${apiEndPoint}/api/v1/mainnet/wechat_user_info`
-const apiAvatarStyle = `${apiEndPoint}/api/v1/mainnet/avatar_style`
-const apiEncodeAvatar = `${apiEndPoint}/api/v1/mainnet/encode_avatar`
-const apiDecodeAvatar = `${apiEndPoint}/api/v1/mainnet/decode_avatar`
-const apiUpdateAvatar = `${apiEndPoint}/api/v1/mainnet/update_avatar`
-const apiUploadImg = `${apiEndPoint}/api/v1/mainnet/upload_avatar`
-const apiGifts = `${apiEndPoint}/api/v1/lottery/gifts`
-const apiDraw = `${apiEndPoint}/api/v1/lottery/draw`
-const apiLotteryRecord = `${apiEndPoint}/api/v1/lottery/records`
-
-const apiGroupName = `${apiEndPoint}/api/v1/mainnet/build_team`
-const apiGroupLogo = `${apiEndPoint}/api/v1/mainnet/get_team_logo`
-const apiTeamInfo = `${apiEndPoint}/api/v1/mainnet/team_info`
-const apiUpdateTeamInfo = `${apiEndPoint}/api/v1/mainnet/update_team_info`
-const apiGetMembers = `${apiEndPoint}/api/v1/mainnet/members`
+const apiGroupName = '/api/v1/mainnet/build_team'
+const apiGroupLogo = '/api/v1/mainnet/get_team_logo'
+const apiTeamInfo = '/api/v1/mainnet/team_info'
+const apiUpdateTeamInfo = '/api/v1/mainnet/update_team_info'
+const apiGetMembers = '/api/v1/mainnet/members'
 
 export async function chainAuth(wxcode) {
 	return axios.get(apiChainAuth, {

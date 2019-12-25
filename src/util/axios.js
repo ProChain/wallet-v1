@@ -56,12 +56,10 @@ axios.defaults.timeout = 5000
 // 拦截器的说明
 // 1、interceptor必须在请求前设置才有效。
 // 2、直接为axios全局对象创建interceptor， 会导致全局的axios发出的请求或接收的响应都会被拦截到， 所以应该使用axios.create() 来创建单独的axios实例。
-// 设置地址
-const baseUrl = 'https://chain.pro';
 
 // 创建axios实例
 let instance = axios.create({
-	baseURL: baseUrl
+	baseURL: process.env.VUE_APP_END_POINT
 });
 
 // Add a request interceptor
