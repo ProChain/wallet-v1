@@ -10,6 +10,7 @@ const state = {
 	},
 	teamInfo: {},
 	showLoading: true,
+	token: '',
 	locale: 'zh'
 };
 

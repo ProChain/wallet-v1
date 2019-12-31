@@ -1,3 +1,4 @@
+export const SET_TOKEN = 'setToken'
 export const SET_WALLET_INFO = 'setWalletInfo'
 export const SET_TEAM_INFO = 'setTeamInfo'
 export const SOCKET_CONNECT = 'SOCKET_connect'

@@ -177,6 +177,18 @@ const router = new VueRouter({
 				keepAlive: true,
 				requireAuth: false
 			}
+		},
+		/* common */
+		{
+			path: '/register',
+			name: 'register',
+			component: () => lazyLoadView(import('@/views/register')),
+			meta: {
+				index: 3,
+				title: 'meta.register',
+				keepAlive: true,
+				requireAuth: false
+			}
 		}
 	]
 });

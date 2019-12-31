@@ -4,7 +4,7 @@ import { extend } from 'vee-validate'
 import zh_CN from 'vee-validate/dist/locale/zh_CN.json'
 
 localize({
-    zh_CN
+	zh_CN
 })
 
 localize('zh_CN')
@@ -12,12 +12,12 @@ localize('zh_CN')
 extend('required', required)
 
 extend('min_value', {
-    ...min_value,
-    validate(value, args) {
-        return value >= args.number
-    },
-    message: '最少{number}个PRA',
-    params: ['number']
+	...min_value,
+	validate(value, args) {
+		return value >= args.number
+	},
+	message: '最少{number}个PRA',
+	params: ['number']
 });
 
 // extend('positive', value => {

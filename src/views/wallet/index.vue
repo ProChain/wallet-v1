@@ -71,7 +71,7 @@ import { chainBindSn, chainAuth } from '@/util/api'
 import { clipAddress, sleep } from '@/util/common'
 import ClipboardJS from 'clipboard'
 import { convert, getMetadata } from '@/util/chain'
-import { SET_WALLET_INFO } from '@/vuex/constants'
+import { SET_WALLET_INFO, SET_TOKEN } from '@/vuex/constants'
 import Account from '@/components/wallet/account'
 
 export default {
@@ -148,19 +148,21 @@ export default {
 			//   wxid: 'wxid_7h9gf2umzeja22'
 			// }
 
-		  if (data) {
-			this.avatar = data.avatar
-			const { result: didHash } = await convert(data.wxid, 'wxid')
-			const { data: metadata } = await getMetadata(didHash)
-			this[SET_WALLET_INFO](metadata)
-		  }
-		  const { data: snData } = await chainBindSn(code)
-		  this.bindSn = snData ? snData.result : ''
+			if (data) {
+				this.avatar = data.avatar
+				const { result: didHash } = await convert(data.wxid, 'wxid')
+				const { data: metadata } = await getMetadata(didHash)
+				this[SET_WALLET_INFO](metadata)
+				this[SET_TOKEN](data.token)
+			  }
+			  const { data: snData } = await chainBindSn(code)
+			  this.bindSn = snData ? snData.result : ''
 
-		  if (this.bindSn) this.showBindingTutorial = true
+			  if (this.bindSn) this.showBindingTutorial = true
 	  },
 	  ...mapActions([
-		SET_WALLET_INFO
+		SET_WALLET_INFO,
+		SET_TOKEN
 	  ])
   }
 }

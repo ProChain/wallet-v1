@@ -15,6 +15,7 @@ module.exports = {
 		teamCreate: '创建团队',
 		teamUpdate: '修改团队信息',
 		teamLogo: '修改团队logo',
-		teamMember: '团队成员'
+		teamMember: '团队成员',
+		register: '注册Prochain DID'
 	}
 };

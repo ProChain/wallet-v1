@@ -4,6 +4,9 @@ import { formatHexNumber } from '../util/common'
 import vm from '../main'
 
 export const actions = {
+	[Actions.SET_TOKEN]: async({ commit }, token) => {
+		commit(Actions.SET_TOKEN, token)
+	},
 	[Actions.SET_WALLET_INFO]: async({ commit }, walletInfo) => {
 		// set client name
 		vm.$socket.emit('setName', {

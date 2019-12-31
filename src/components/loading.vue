@@ -1,37 +1,37 @@
 <template>
   <div class="loading">
-    <div class="loadingio-spinner-bean-eater-hulfm8jq0s6"><div class="ldio-3qvneqds6ge">
-    <div><div></div><div></div><div></div></div><div><div></div><div></div><div></div></div>
-    </div></div>
+	<div class="loadingio-spinner-bean-eater-hulfm8jq0s6"><div class="ldio-3qvneqds6ge">
+	<div><div></div><div></div><div></div></div><div><div></div><div></div><div></div></div>
+	</div></div>
   </div>
 </template>
 <script>
 export default {
-    name: 'globalLoading'
+	name: 'globalLoading'
 }
 </script>
 <style lang="scss" scoped>
   .loading{
-      position: fixed;
-      top:0;
-      left:0;
-      z-index:121;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      display: table-cell;
-      vertical-align: middle;
-      text-align: center;
-    }
+	  position: fixed;
+	  top:0;
+	  left:0;
+	  z-index:121;
+	  width: 100%;
+	  height: 100%;
+	  background: rgba(0,0,0,0.5);
+	  display: table-cell;
+	  vertical-align: middle;
+	  text-align: center;
+	}
 </style>
 <style type="text/css">
 @keyframes ldio-3qvneqds6ge-1 {
-    0% { transform: rotate(0deg) }
+	0% { transform: rotate(0deg) }
    50% { transform: rotate(-45deg) }
   100% { transform: rotate(0deg) }
 }
 @keyframes ldio-3qvneqds6ge-2 {
-    0% { transform: rotate(180deg) }
+	0% { transform: rotate(180deg) }
    50% { transform: rotate(225deg) }
   100% { transform: rotate(180deg) }
 }
@@ -56,7 +56,7 @@ export default {
   transform: rotate(-90deg);
   animation: none;
 }@keyframes ldio-3qvneqds6ge-3 {
-    0% { transform: translate(95px,0); opacity: 0 }
+	0% { transform: translate(95px,0); opacity: 0 }
    20% { opacity: 1 }
   100% { transform: translate(35px,0); opacity: 1 }
 }
