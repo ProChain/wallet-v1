@@ -45,7 +45,9 @@
 </template>
 <script>
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
-import { encodeAddress } from '@polkadot/util-crypto/address'
+import { encodeAddress } from '@polkadot/util-crypto'
+import { u8aToU8a, stringToHex } from '@polkadot/util'
+import { didToHex } from '@/util/common'
 export default {
 	name: 'register',
 	data() {
@@ -67,10 +69,18 @@ export default {
 		async handleSubmit() {
 			// pubkey to address
 			const address = encodeAddress(this.registerForm.pubkey)
+			const superior = didToHex(this.registerForm.superior)
+			const didType = stringToHex('1')
 			console.log(address, 'address----')
 
-			// this.$socket.emit('sign', data)
-			// this.$store.commit('showLoading')
+			const data = JSON.stringify({
+				address: this.walletInfo.address,
+				method: 'create',
+				params: [this.registerForm.pubkey, address, didType, superior, u8aToU8a([]), u8aToU8a([])]
+			});
+
+			this.$socket.emit('sign', data)
+			this.$store.commit('showLoading')
 		},
 		onConfirm(value) {
 			this.registerForm.type = value

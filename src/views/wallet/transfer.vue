@@ -62,22 +62,6 @@ export default {
 		ValidationObserver
 	},
 	methods: {
-		handleConfirm(ref) {
-			const receiver = didToHex(this.transferForm.receiver)
-			const amount = formatNumber(this.transferForm.amount)
-			const memo = this.transferForm.memo || 'transfer'
-
-			const data = JSON.stringify({
-				address: this.walletInfo.address,
-				method: 'transfer',
-				params: [receiver, amount, memo]
-			})
-
-			console.log(data, 'sign data')
-			this.$socket.emit('sign', data)
-
-			this.$refs[ref].resetFields()
-		},
 		async handleSubmit() {
 			this.$dialog.confirm({
 				title: '请确认您的转账信息',
