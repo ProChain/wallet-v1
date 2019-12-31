@@ -82,8 +82,8 @@ export default {
 			})
 			console.log(data, '---')
 
-			// this.$socket.emit('sign', data)
-			// this.$store.commit('showLoading')
+			this.$socket.emit('sign', data)
+			this.$store.commit('showLoading')
 		},
 		onConfirm(value) {
 			this.registerForm.type = value
