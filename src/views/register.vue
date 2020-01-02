@@ -47,13 +47,12 @@
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { DID_TYPE } from '@/util/chain'
 import { encodeAddress } from '@polkadot/util-crypto'
-import { u8aToU8a, stringToHex } from '@polkadot/util'
+import { stringToHex } from '@polkadot/util'
 import { didToHex } from '@/util/common'
 export default {
 	name: 'register',
 	data() {
 		const columns = Object.values(DID_TYPE)
-		console.log(columns, 'value---')
 		return {
 			registerForm: {
 				type: '个人',
@@ -72,15 +71,16 @@ export default {
 		async handleSubmit() {
 			// pubkey to address
 			const address = encodeAddress(this.registerForm.pubkey)
-			const superior = didToHex(this.registerForm.superior)
+			const superior = this.registerForm.superior && didToHex(this.registerForm.superior)
 			const didType = Object.keys(DID_TYPE).find(k => DID_TYPE[k] === this.registerForm.type)
 
 			const data = JSON.stringify({
-				address: '5FkLsKx5NB82JeHGEQbmcWY8ifDQ3KQqmJgPtD5zZxGstTLb',
+				address: '5CMDp8RSys5uBwct5XKY1rBtJtisTPuqZkxcbnho3jxWQJ51',
 				method: 'create',
-				params: [this.registerForm.pubkey, address, stringToHex(didType), superior, u8aToU8a([]), u8aToU8a([])]
+				params: [this.registerForm.pubkey, address, stringToHex(didType), superior, null, null]
 			})
-			console.log(data, '---')
+
+			console.log(didType, '-----didType------')
 
 			this.$socket.emit('sign', data)
 			this.$store.commit('showLoading')

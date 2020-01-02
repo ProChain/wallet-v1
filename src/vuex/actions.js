@@ -132,5 +132,6 @@ export const actions = {
 			subordinate_count: subordinateCount
 		}
 		commit(Actions.SET_WALLET_INFO, walletInfo)
+		commit('hideLoading')
 	},
 };
