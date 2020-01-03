@@ -43,7 +43,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
-import { SET_TEAM_INFO } from '@/vuex/constants'
+import { SET_TEAM_INFO, DISPATCH_SIGN } from '@/vuex/constants'
 import { setGroupName } from '@/util/api'
 export default {
 	name: 'teamName',
@@ -71,21 +71,16 @@ export default {
 	},
 	methods: {
 		async handleSubmit() {
-			this.$store.commit('showLoading')
-
 			const params = Object.assign({}, { did: this.walletInfo.did }, this.didForm)
-			const rs = await setGroupName(params)
-			if (rs.hasErrors) {
-				this.$store.commit('hideLoading')
-				return this.$toast(rs.message)
-			}
-			const data = JSON.stringify({
+			await setGroupName(params)
+
+			const data = {
 				address: this.walletInfo.address,
 				method: 'setGroupName',
 				params: [this.didForm.name]
-			})
+			}
 
-			this.$socket.emit('sign', data)
+			this[DISPATCH_SIGN](data)
 
 			const teamInfo = {
 				...this.teamInfo,
@@ -94,7 +89,8 @@ export default {
 			this[SET_TEAM_INFO](teamInfo)
 		},
 		...mapActions([
-			SET_TEAM_INFO
+			SET_TEAM_INFO,
+			DISPATCH_SIGN
 		])
 	}
 };

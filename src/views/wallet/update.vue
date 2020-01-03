@@ -20,7 +20,7 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
-import { SET_WALLET_INFO } from '@/vuex/constants'
+import { SET_WALLET_INFO, DISPATCH_SIGN } from '@/vuex/constants'
 import { stringToHex } from '@polkadot/util'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
 export default {
@@ -66,17 +66,16 @@ export default {
 				address = stringToHex(this.address.toLowerCase().replace('0x', ''))
 			}
 
-			const data = JSON.stringify({
+			const data = {
 				address: this.walletInfo.address,
 				method: 'addExternalAddress',
 				params: [stringToHex(addressType), address]
-			})
-
-			this.$socket.emit('sign', data)
-			this.$store.commit('showLoading')
+			}
+			this[DISPATCH_SIGN](data)
 		},
 		...mapActions([
-			SET_WALLET_INFO
+			SET_WALLET_INFO,
+			DISPATCH_SIGN
 		])
 	}
 };

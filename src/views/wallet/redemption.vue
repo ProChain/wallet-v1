@@ -38,7 +38,8 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import { DISPATCH_SIGN } from '@/vuex/constants'
 import { formatNumber } from '@/util/common'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
 export default {
@@ -64,15 +65,17 @@ export default {
 		async handleSubmit() {
 
 			const amount = formatNumber(this.amount)
-			const data = JSON.stringify({
+			const data = {
 				address: this.walletInfo.address,
 				method: 'unlock',
 				params: [amount]
-			});
+			}
 
-			this.$store.commit('showLoading')
-			this.$socket.emit('sign', data)
-		}
+			this[DISPATCH_SnpmIGN](data)
+		},
+		...mapActions([
+			DISPATCH_SIGN
+		])
 	}
 };
 </script>

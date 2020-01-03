@@ -34,7 +34,8 @@
 </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import { DISPATCH_SIGN } from '@/vuex/constants'
 import { didToHex, formatNumber } from '@/util/common'
 import { decodeAvatar } from '@/util/api'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
@@ -72,14 +73,13 @@ export default {
 				const amount = formatNumber(this.transferForm.amount)
 				const memo = this.transferForm.memo || 'transfer'
 
-				const data = JSON.stringify({
+				const data = {
 					address: this.walletInfo.address,
 					method: 'transfer',
 					params: [receiver, amount, memo]
-				});
+				}
 
-				this.$socket.emit('sign', data)
-				this.$store.commit('showLoading')
+				this[DISPATCH_SIGN](data)
 			}).catch(console.log)
 		},
 		beforeUpload(file) {
@@ -103,7 +103,10 @@ export default {
 			} else {
 				this.transferForm.receiver = result;
 			}
-		}
+		},
+		...mapActions([
+			DISPATCH_SIGN
+		])
 	}
 };
 </script>

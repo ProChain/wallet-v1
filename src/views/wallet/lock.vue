@@ -40,7 +40,8 @@
 </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import { DISPATCH_SIGN } from '@/vuex/constants'
 import { formatNumber } from '@/util/common'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
 export default {
@@ -72,15 +73,17 @@ export default {
 		async handleSubmit() {
 			const period = this.lockForm.period * 60 * 60 * 24
 			const amount = formatNumber(this.lockForm.amount)
-			const data = JSON.stringify({
+			const data = {
 				address: this.walletInfo.address,
 				method: 'lock',
 				params: [amount, period]
-			});
+			}
 
-			this.$store.commit('showLoading')
-			this.$socket.emit('sign', data)
-		}
+			this[DISPATCH_SIGN](data)
+		},
+		...mapActions([
+			DISPATCH_SIGN
+		])
 	}
 };
 </script>

@@ -77,7 +77,7 @@
 import { mapState, mapActions } from 'vuex'
 import { getTeamInfo, getMembers } from '@/util/api'
 import { didToHex, clipAddress, formatNumber, sleep } from '@/util/common'
-import { SET_TEAM_INFO, SET_WALLET_INFO } from '@/vuex/constants'
+import { SET_TEAM_INFO, SET_WALLET_INFO, DISPATCH_SIGN } from '@/vuex/constants'
 export default {
 	name: 'teamIndex',
 	data() {
@@ -125,18 +125,19 @@ export default {
 			}).then(() => {
 				const period = 30 * 60 * 60 * 24
 				const amount = formatNumber(50)
-				const data = JSON.stringify({
+				const data = {
 					address: self.walletInfo.address,
 					method: 'lock',
 					params: [amount, period]
-				});
+				}
 				console.log(data, 'lock data')
-				self.$socket.emit('sign', data)
+				self[DISPATCH_SIGN](data)
 			}).catch(console.log)
 		},
 		...mapActions([
 			SET_TEAM_INFO,
-			SET_WALLET_INFO
+			SET_WALLET_INFO,
+			DISPATCH_SIGN
 		])
 	}
 };

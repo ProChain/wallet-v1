@@ -2,6 +2,7 @@ module.exports = {
 	productionSourceMap: process.env.NODE_ENV === 'development',
     lintOnSave: true,
     devServer: {
+		disableHostCheck: true,
 	    overlay: {
 	      warnings: true,
 	      errors: true

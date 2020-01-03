@@ -17,6 +17,8 @@
   </div>
 </template>
 <script>
+import { mapState, mapActions } from 'vuex'
+import { DISPATCH_SIGN } from '@/vuex/constants'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
 export default {
 	name: 'walletUpdatePubkey',
@@ -29,18 +31,24 @@ export default {
 		ValidationProvider,
 		ValidationObserver
 	},
+	computed: {
+		...mapState([
+			'walletInfo'
+		])
+	},
 	methods: {
 		async handleUpdatePubkey() {
-			const data = JSON.stringify({
-				address: this.metadata.address,
+			const data = {
+				address: this.walletInfo.address,
 				method: 'update',
 				params: [this.pubkey]
-			})
-
-			this.$store.commit('showLoading')
-			this.$socket.emit('sign', data)
+			}
+			this[DISPATCH_SIGN](data)
 		}
-	}
+	},
+	...mapActions([
+		DISPATCH_SIGN
+	])
 };
 </script>
 <style lang="scss">

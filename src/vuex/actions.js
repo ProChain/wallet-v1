@@ -134,4 +134,12 @@ export const actions = {
 		commit(Actions.SET_WALLET_INFO, walletInfo)
 		commit('hideLoading')
 	},
+	[Actions.DISPATCH_SIGN]: ({ state, commit }, data) => {
+		const params = Object.assign({}, data, {
+			token: state.token
+		})
+		console.log(params, 'new params------')
+		vm.$socket.emit('sign', JSON.stringify(params))
+		commit('showLoading')
+	},
 };
