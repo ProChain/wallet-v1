@@ -15,7 +15,7 @@ Vue.config.productionTip = false
 
 Vue.use(new VueSocketIO({
 	debug: process.env.NODE_ENV === 'development',
-	connection: process.env.VUE_APP_SIGN_HOST,
+	connection: process.env.VUE_APP_SIGN_HOST_WSS,
 	options: process.env.NODE_ENV === 'development' ? {} : { path: '/sign/socket.io/' },
 	vuex: {
 		store,
