@@ -20,6 +20,14 @@ const apiUpdateTeamInfo = '/api/v1/mainnet/update_team_info'
 const apiGetMembers = '/api/v1/mainnet/members'
 
 export async function chainAuth(wxcode) {
+	// wxid_uhjz2timrfdv21 -> fy wxid_7h9gf2umzeja22 -> pratest1111
+	if (process.env.VUE_APP_TEST_WX) {
+		return {
+			data: {
+				wxid: process.env.VUE_APP_TEST_WX
+			}
+		}
+	}
 	return axios.get(apiChainAuth, {
 		params: {
 			wxcode

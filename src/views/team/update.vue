@@ -62,8 +62,6 @@ export default {
 	},
 	methods: {
 		async handleSubmit() {
-			this.$store.commit('showLoading')
-
 			const rs = await updateTeamInfo(this.walletInfo.did, this.didForm.url, this.didForm.symbol)
 			if (rs.hasErrors) {
 				this.$store.commit('hideLoading')
@@ -74,7 +72,6 @@ export default {
 				...this.didForm
 			}
 			this[SET_TEAM_INFO](teamInfo)
-			this.$store.commit('hideLoading')
 			this.$router.push(('/team'))
 		},
 		...mapActions([

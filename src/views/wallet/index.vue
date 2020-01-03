@@ -138,32 +138,24 @@ export default {
 			const url = window.location.href
 			const part1 = url.split('&state')[0]
 			const code = part1.split('code=')[1]
-
 			const { data } = await chainAuth(code)
-			// wxid_uhjz2timrfdv21 -> fy wxid_7h9gf2umzeja22 -> pratest1111
-			/* eslint-disable */
-			// const { data: testData } = await chainAuth('888888')
-			// const data = {
-			//   wxid: 'wxid_7h9gf2umzeja22'
-			// }
-
 			if (data) {
 				this.avatar = data.avatar
 				const { result: didHash } = await convert(data.wxid, 'wxid')
 				const { data: metadata } = await getMetadata(didHash)
 				this[SET_WALLET_INFO](metadata)
 				this[SET_TOKEN](data.token)
-			  }
-			  const { data: snData } = await chainBindSn(code)
-			  this.bindSn = snData ? snData.result : ''
+			}
+			const { data: snData } = await chainBindSn(code)
+			this.bindSn = snData ? snData.result : ''
 
-			  if (this.bindSn) this.showBindingTutorial = true
-	  },
-	  ...mapActions([
-		SET_WALLET_INFO,
-		SET_TOKEN
-	  ])
-  }
+			if (this.bindSn) this.showBindingTutorial = true
+		},
+		...mapActions([
+			SET_WALLET_INFO,
+			SET_TOKEN
+		])
+	}
 }
 </script>
 <style lang="scss">
