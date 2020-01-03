@@ -131,7 +131,6 @@ export default {
 			await this.getUserMetadata()
 		} catch (e) {
 			console.log(e)
-			this.$toast('request error')
 		}
 	},
 	methods: {
