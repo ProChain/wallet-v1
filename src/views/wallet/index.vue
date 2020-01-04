@@ -142,9 +142,11 @@ export default {
 			if (data) {
 				this.avatar = data.avatar
 				const { result: didHash } = await convert(data.wxid, 'wxid')
-				const { data: metadata } = await getMetadata(didHash)
-				this[SET_WALLET_INFO](metadata)
-				this[SET_TOKEN](data.token)
+				if (didHash) {
+					const { data: metadata } = await getMetadata(didHash)
+					this[SET_WALLET_INFO](metadata)
+					this[SET_TOKEN](data.token)
+				}
 			}
 			const { data: snData } = await chainBindSn(code)
 			this.bindSn = snData ? snData.result : ''
