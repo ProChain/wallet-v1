@@ -37,24 +37,22 @@ export const actions = {
 	[Actions.SOCKET_RECONNECT]: () => {
 		console.log('reconnect------')
 	},
-	[Actions.SOCKET_BALANCE_CHANGE]: ({ commit, state }, msg) => {
-		const { balance } = JSON.parse(msg)
+	[Actions.SOCKET_BALANCE_CHANGE]: ({ commit, state }, payload) => {
 		const walletInfo = {
 			...state.walletInfo,
-			free_balance: balance
+			free_balance: payload.balance
 		}
 		commit(Actions.SET_WALLET_INFO, walletInfo)
 	},
-	[Actions.SOCKET_FAILED]: ({ commit }, msg) => {
-		const { msg: errorMsg } = JSON.parse(msg)
-		vm.$toast(errorMsg)
+	[Actions.SOCKET_FAILED]: ({ commit }, payload) => {
+		vm.$toast(payload.msg)
 		commit('hideLoading')
 	},
 	[Actions.SOCKET_TRANSFERED]: ({ commit }) => {
 		commit('hideLoading')
 	},
-	[Actions.SOCKET_LOCKED]: ({ state, commit }, msg) => {
-		const [, lockedFunds, lockedTime, lockedPeriod, rewardsRatio, maxQuota] = JSON.parse(msg)
+	[Actions.SOCKET_LOCKED]: ({ state, commit }, payload) => {
+		const [, lockedFunds, lockedTime, lockedPeriod, rewardsRatio, maxQuota] = JSON.parse(payload.msg)
 		const lockedRecords = {
 			locked_funds: formatHexNumber(lockedFunds),
 			locked_time: lockedTime,
@@ -69,8 +67,8 @@ export const actions = {
 		commit(Actions.SET_WALLET_INFO, walletInfo)
 		commit('hideLoading')
 	},
-	[Actions.SOCKET_UNLOCKED]: ({ state: { walletInfo }, commit }, msg) => {
-		const [, amount, unlockedTime] = JSON.parse(msg)
+	[Actions.SOCKET_UNLOCKED]: ({ state: { walletInfo }, commit }, payload) => {
+		const [, amount, unlockedTime] = JSON.parse(payload.msg)
 		const unlockedRecords = walletInfo.unlocked_records
 		const unlockedFunds = formatHexNumber(amount)
 		let newUnlockedFunds = (unlockedRecords.unlocked_funds || 0) + unlockedFunds
@@ -102,8 +100,8 @@ export const actions = {
 		commit(Actions.SET_WALLET_INFO, newWalletInfo)
 		commit('hideLoading')
 	},
-	[Actions.SOCKET_ADDRESS_ADDED]: ({ state: { walletInfo }, commit }, msg) => {
-		let [, addressType, address] = JSON.parse(msg)
+	[Actions.SOCKET_ADDRESS_ADDED]: ({ state: { walletInfo }, commit }, payload) => {
+		let [, addressType, address] = JSON.parse(payload.msg)
 		const externalAddress = walletInfo.external_address
 
 		addressType = hexToString(addressType)
@@ -139,7 +137,7 @@ export const actions = {
 			token: state.token
 		})
 		console.log(params, 'new params------')
-		vm.$socket.emit('sign', JSON.stringify(params))
+		vm.$socket.emit('sign', params)
 		commit('showLoading')
 	},
 };
