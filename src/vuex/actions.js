@@ -1,4 +1,4 @@
-import { hexToString } from '@polkadot/util'
+import { hexToString, hexAddPrefix } from '@polkadot/util'
 import * as Actions from './constants'
 import { formatHexNumber } from '../util/common'
 import vm from '../main'
@@ -106,6 +106,7 @@ export const actions = {
 
 		addressType = hexToString(addressType)
 		address = hexToString(address)
+		if (addressType === 'eth') address = hexAddPrefix(address)
 		const newWalletInfo = {
 			...walletInfo,
 			external_address: {
