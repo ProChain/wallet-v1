@@ -3,7 +3,7 @@
 	<div class="reward-con">
 	  <h2>
 		我的余额
-		<van-button size="small" type="default" class="colocation" @click="showHelp = true">托管模式</van-button>
+		<van-button size="small" type="default" class="colocation" to="/help">托管模式</van-button>
 		<div>{{ metadata.free_balance | money }}</div>
 	  </h2>
 	  <div class="handle-btns">

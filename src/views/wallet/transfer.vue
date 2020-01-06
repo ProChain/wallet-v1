@@ -1,5 +1,4 @@
 <template>
-<div>
   <div class="transfer-card">
 	<ValidationObserver v-slot="{ invalid }">
 	  <van-cell-group title="收款账号" :border="false">
@@ -7,7 +6,14 @@
 		  <van-field
 		  v-model="transferForm.receiver"
 		  :error-message="errors[0]"
-		  placeholder="请输入收款账号" />
+		  placeholder="请输入收款账号">
+		  <van-uploader
+		  slot="right-icon"
+		  class="upload"
+		  :before-read="beforeUpload"
+		  :preview-image="false"
+		  :after-read="handleSuccess" />
+		  </van-field>
 		</ValidationProvider>
 	  </van-cell-group>
 	  <van-cell-group title="转账数量" :border="false">
@@ -31,13 +37,12 @@
 	  :disabled="invalid" @click="handleSubmit">确认转账</van-button>
 	</ValidationObserver>
   </div>
-</div>
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
 import { DISPATCH_SIGN } from '@/vuex/constants'
 import { didToHex, formatNumber } from '@/util/common'
-import { decodeAvatar } from '@/util/api'
+import { uploadImg, decodeAvatar } from '@/util/api'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
 export default {
 	name: 'walletTransfer',
@@ -49,9 +54,8 @@ export default {
 				receiver: '',
 				amount: '',
 				memo: ''
-			},
-			avatar: ''
-		};
+			}
+		}
 	},
 	computed: {
 		...mapState([
@@ -83,25 +87,30 @@ export default {
 			}).catch(console.log)
 		},
 		beforeUpload(file) {
-			console.log(file);
 			const maxFileSize = 1024 * 1024 * 10;
-			if (!/.(gif|jpg|jpeg|png|gif|jpg|png)$/.test(file.name)) {
-				this.$toast('图片类型必须是gif,jpeg,jpg,png中的一种');
-				return false;
+			if (!/\.(gif|jpg|jpeg|png|GIF|JPG|JPEG|PNG)$/.test(file.name)) {
+				this.$toast('图片类型必须是gif,jpeg,jpg,png中的一种')
+				return false
 			}
 			if (file.size > maxFileSize) {
-				this.$toast('图片尺寸超过10M了');
+				this.$toast('图片尺寸超过10M了')
 				return false;
 			}
+			return true
 		},
 		async handleSuccess(res) {
-			console.log(res);
-			const src = `https://static.chain.pro/${res.data}`
-			const { data: { result }} = await decodeAvatar(src)
-			if (!result) {
-				this.$toast('无法解析您选择的区块链头像')
-			} else {
-				this.transferForm.receiver = result;
+			try {
+				const data = new FormData()
+				data.append('file', res.file)
+				const rs = await uploadImg(data)
+				const { data: { result }} = await decodeAvatar(`https://static.chain.pro/${rs.data}`)
+				if (!result) {
+					this.$toast('无法解析您选择的区块链头像')
+				} else {
+					this.transferForm.receiver = result
+				}
+			} catch (e) {
+				console.log(e, 'decode error')
 			}
 		},
 		...mapActions([
@@ -116,6 +125,15 @@ export default {
   .transfer-card {
 	button {
 	  margin-top: 80px;
+	}
+	.van-uploader {
+		display: block;
+		.van-uploader__upload  {
+			width: auto;
+			height: auto;
+			border: none;
+			margin: 0;
+		}
 	}
   }
 </style>

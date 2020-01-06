@@ -189,6 +189,17 @@ const router = new VueRouter({
 				keepAlive: true,
 				requireAuth: false
 			}
+		},
+		{
+			path: '/help',
+			name: 'help',
+			component: () => lazyLoadView(import('@/views/help')),
+			meta: {
+				index: 3,
+				title: 'meta.help',
+				keepAlive: true,
+				requireAuth: false
+			}
 		}
 	]
 });

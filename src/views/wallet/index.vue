@@ -11,7 +11,7 @@
 		  </div>
 		  <div class="account">
 			<van-cell-group title="我的DID" :border="false">
-			  <van-cell v-if="walletInfo.did" :title="did || '未绑定'" label="创建区块链头像" is-link
+			  <van-cell v-if="walletInfo.did" :title="did || '未绑定'" label="创建区块身份头像" is-link
 			  :center="true"
 			  :to="{ path: '/avatar', query: { avatar } }"
 			  >
@@ -24,9 +24,6 @@
 			<van-cell-group title="社交账号" :border="false">
 			  <van-cell title="微信账号" :center="true" :value="walletInfo.did ? '已绑定' : '未绑定'">
 				<i class="icon wechat" :class="{ 'grey': !walletInfo.did }" slot="icon"></i>
-			  </van-cell>
-			  <van-cell title="推特账号" :center="true" :value="walletInfo.twitter ? '已绑定' : '未绑定'">
-				<i class="icon twitter" :class="{ 'grey': !walletInfo.twitter }" slot="icon"></i>
 			  </van-cell>
 			</van-cell-group>
 			<van-cell-group title="资产账号" :border="false" class="external-account">
