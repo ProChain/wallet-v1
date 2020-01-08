@@ -75,6 +75,8 @@ export default {
 				}
 			}
 		}
-
+		.van-cell:nth-last-child(3)::after {
+			display: none;
+		}
 	}
 </style>
