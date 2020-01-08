@@ -185,7 +185,7 @@ export default {
 					width: 28px;
 					height: 28px;
 					background-repeat: no-repeat;
-					background-size: 90%;
+					background-size: 80%;
 					background-position: center;
 					vertical-align: middle;
 					margin-right: $smallGutter;
