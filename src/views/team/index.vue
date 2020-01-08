@@ -19,8 +19,8 @@
 			<div class="team">
 					<div class="mysuperior">
 						<h3>我的推荐人</h3>
-						<p v-if="superior">
-							{{ superior }}
+						<p v-if="walletInfo.superior">
+							{{ walletInfo.superior | clip }}
 						</p>
 						<p v-else>
 							您还没有推荐人
@@ -76,7 +76,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { getTeamInfo, getMembers } from '@/util/api'
-import { didToHex, clipAddress, formatNumber, sleep } from '@/util/common'
+import { didToHex, formatNumber, sleep } from '@/util/common'
 import { SET_TEAM_INFO, SET_WALLET_INFO, DISPATCH_SIGN } from '@/vuex/constants'
 export default {
 	name: 'teamIndex',
@@ -102,10 +102,6 @@ export default {
 		}
 	},
 	computed: {
-		superior() {
-			const superior = this.walletInfo.superior;
-			return superior && clipAddress(superior, 18, -10)
-		},
 		lockedRecords() {
 			return this.walletInfo.locked_records || {}
 		},

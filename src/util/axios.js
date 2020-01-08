@@ -68,7 +68,7 @@ instance.interceptors.request.use(config => {
 	if (store.state.token) {
 		config.headers.Authorization = `Bearer ${store.state.token}`
 	}
-	if (!config.hideLoading) {
+	if (!config['headers']['Hide-Loading']) {
 		showFullScreenLoading()
 	}
 	return config

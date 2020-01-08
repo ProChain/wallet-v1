@@ -16,6 +16,7 @@
     "core-js": "^3.6.1",
     "css-loader": "^3.4.0",
     "fastclick": "^1.0.6",
+    "moment": "^2.24.0",
     "px2rem-loader": "^0.1.9",
     "vee-validate": "^3.2.1",
     "vue-i18n": "^8.15.3",

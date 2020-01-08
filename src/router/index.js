@@ -110,6 +110,17 @@ const router = new VueRouter({
 				requireAuth: false
 			}
 		},
+		{
+			path: '/profile',
+			name: 'profile',
+			component: () => lazyLoadView(import('@/views/wallet/profile')),
+			meta: {
+				index: 3,
+				title: 'meta.profile',
+				keepAlive: true,
+				requireAuth: false
+			}
+		},
 		/* acticity */
 		{
 			path: '/activity/lucky-wheel',

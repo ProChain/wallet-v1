@@ -18,6 +18,7 @@ const apiGroupLogo = '/api/v1/mainnet/get_team_logo'
 const apiTeamInfo = '/api/v1/mainnet/team_info'
 const apiUpdateTeamInfo = '/api/v1/mainnet/update_team_info'
 const apiGetMembers = '/api/v1/mainnet/members'
+const apiGetTransactions = 'https://dana.prabox.net/api/v1/transfer'
 
 export async function chainAuth(wxcode) {
 	if (process.env.VUE_APP_TEST_WX) {
@@ -31,7 +32,7 @@ export async function chainAuth(wxcode) {
 		params: {
 			wxcode
 		}
-	});
+	})
 }
 
 export async function chainBindSn(wxcode) {
@@ -39,14 +40,14 @@ export async function chainBindSn(wxcode) {
 		params: {
 			wxcode
 		}
-	});
+	})
 }
 
 export async function chainBind(sn, wxid) {
 	return axios.post(apiChainBind, {
 		sn,
 		wxid
-	});
+	})
 }
 
 export async function getWechatUser(wxcode) {
@@ -54,7 +55,7 @@ export async function getWechatUser(wxcode) {
 		params: {
 			wxcode
 		}
-	});
+	})
 }
 
 export async function getAvatarStyle(avatar) {
@@ -62,7 +63,7 @@ export async function getAvatarStyle(avatar) {
 		params: {
 			avatar
 		}
-	});
+	})
 }
 
 export async function encodeAvatar(avatar, bgcolor, did, teamName) {
@@ -84,7 +85,7 @@ export async function decodeAvatar(avatar) {
 		params: {
 			avatar
 		}
-	});
+	})
 }
 
 export async function updateAvatar(wxid, avatar) {
@@ -93,7 +94,7 @@ export async function updateAvatar(wxid, avatar) {
 			avatar,
 			wxid
 		}
-	});
+	})
 }
 
 export async function uploadImg(data) {
@@ -108,11 +109,11 @@ export async function drawLottery(did) {
 		params: {
 			did
 		}
-	});
+	})
 }
 
 export async function getGift() {
-	return axios.get(apiGifts);
+	return axios.get(apiGifts)
 }
 
 export async function getLotteryRecord(did) {
@@ -120,7 +121,7 @@ export async function getLotteryRecord(did) {
 		params: {
 			did
 		}
-	});
+	})
 }
 
 export async function setGroupName({ did, name, symbol, description, url, website }) {
@@ -131,7 +132,7 @@ export async function setGroupName({ did, name, symbol, description, url, websit
 		description,
 		url,
 		website
-	});
+	})
 }
 
 export async function getTeamLogo(did) {
@@ -139,7 +140,7 @@ export async function getTeamLogo(did) {
 		params: {
 			superior_did: did
 		}
-	});
+	})
 }
 
 export async function getMembers(didHash, page) {
@@ -148,7 +149,7 @@ export async function getMembers(didHash, page) {
 			did_hash: didHash,
 			page
 		}
-	});
+	})
 }
 
 export async function getTeamInfo(did) {
@@ -156,7 +157,7 @@ export async function getTeamInfo(did) {
 		params: {
 			did
 		}
-	});
+	})
 }
 
 export async function updateTeamInfo(did, url, symbol) {
@@ -164,5 +165,13 @@ export async function updateTeamInfo(did, url, symbol) {
 		did,
 		url,
 		symbol
-	});
+	})
+}
+
+export async function getTransaction(did, page = 1, size = 10) {
+	return axios.get(`${apiGetTransactions}/${did}?page[number]=${page}&page[size]=${size}`, {
+		headers: {
+			'Hide-Loading': true
+		}
+	})
 }

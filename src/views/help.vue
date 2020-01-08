@@ -24,7 +24,7 @@ export default {
 	  .help {
 	    padding: 15px;
 	    p {
-			color: $greyColor;
+			color: $grey;
 			margin-bottom: 20px;
 	    }
 	    h3 {

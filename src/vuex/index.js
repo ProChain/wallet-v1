@@ -8,6 +8,7 @@ const state = {
 		locked_records: {},
 		unlocked_records: {}
 	},
+	avatar: '',
 	teamInfo: {},
 	showLoading: true,
 	token: '',

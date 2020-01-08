@@ -96,7 +96,7 @@ export default {
 		}
 		.logo-icon {
 		  font-size: 100px;
-		  color: $greyColor;
+		  color: $grey;
 		}
 		.ivu-upload {
 		  position: absolute;

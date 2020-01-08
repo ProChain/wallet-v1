@@ -114,7 +114,7 @@ export default {
 	  padding: 15px;
 	  font-size: $mediumFontSize;
 	  p {
-		color: $greyColor;
+		color: $grey;
 	  }
 	  h3 {
 		margin: 15px 0 5px;

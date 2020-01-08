@@ -48,7 +48,7 @@ export function getRect(el) {
 	}
 }
 
-export async function sleep(timeout) {
+export async function sleep(timeout = 200) {
 	await new Promise(resolve => {
 		setTimeout(() => {
 			resolve();
@@ -190,9 +190,4 @@ export function hexToDid(hex) {
 		did = `did:pra:${address}`
 	}
 	return did
-}
-
-export function clipAddress(address, start, end) {
-	let result = `${address.slice(0, start)}...${address.slice(end)}`
-	return result
 }

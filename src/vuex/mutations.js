@@ -10,6 +10,9 @@ export const mutations = {
 	[Mutations.SET_TEAM_INFO]: (state, teamInfo) => {
 		state.teamInfo = teamInfo
 	},
+	[Mutations.SET_AVATAR]: (state, avatar) => {
+		state.avatar = avatar
+	},
 	showLoading: (state) => {
 		state.showLoading = true
 	},

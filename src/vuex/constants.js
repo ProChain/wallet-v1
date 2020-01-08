@@ -1,6 +1,7 @@
 export const SET_TOKEN = 'setToken'
 export const SET_WALLET_INFO = 'setWalletInfo'
 export const SET_TEAM_INFO = 'setTeamInfo'
+export const SET_AVATAR = 'setAvatar'
 export const SOCKET_CONNECT = 'SOCKET_connect'
 export const SOCKET_DISCONNECT = 'SOCKET_disconnect'
 export const SOCKET_RECONNECT = 'SOCKET_reconnect'

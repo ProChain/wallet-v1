@@ -184,7 +184,7 @@ export default {
 	  }
 	  .avatar-icon {
 		font-size: 100px;
-		color: $greyColor;
+		color: $grey;
 	  }
 	  .upload {
 		position: absolute;

@@ -18,6 +18,9 @@ export const actions = {
 	[Actions.SET_TEAM_INFO]: async({ commit }, teamInfo) => {
 		commit(Actions.SET_TEAM_INFO, teamInfo)
 	},
+	[Actions.SET_AVATAR]: async({ commit }, avatar) => {
+		commit(Actions.SET_AVATAR, avatar)
+	},
 	/**
 	 * @@@
 	 * all socket relevant state
