@@ -96,7 +96,7 @@ export default {
 				}
 			}
 			const { data: snData } = await chainBindSn(code)
-			if (snData) {
+			if (snData && snData.result) {
 				this.showBindingTutorial = true
 				this.bindSn = snData.result
 			}
