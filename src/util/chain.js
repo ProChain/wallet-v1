@@ -4,7 +4,6 @@ const baseUrl = process.env.VUE_APP_SIGN_HOST
 const apiMetadata = `${baseUrl}/api/did`
 const apiConvertion = `${baseUrl}/api/convertion`
 export const DID_TYPE = {
-	'1': '个人',
 	'2': '交易所',
 	'3': '设备',
 	'4': '应用',
