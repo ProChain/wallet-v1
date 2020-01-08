@@ -13,8 +13,9 @@
 				:label="item.datetime | date">
 					<span v-if="item.from_did === metadata.did" slot="title">{{ item.to_did | clip }}</span>
 					<span v-else slot="title">{{ item.from_did | clip }}</span>
-					<van-icon v-if="item.from_did === metadata.did" name="after-sale" slot="icon" />
-					<van-icon v-else name="refund-o" slot="icon" />
+					<!-- <van-icon v-if="item.from_did === metadata.did" name="after-sale" slot="icon" />
+					<van-icon v-else name="refund-o" slot="icon" /> -->
+					<i class="icon" :class="{income: item.from_did === metadata.did}" slot="icon"></i>
 				</van-cell>
 			  </van-list>
 		  </van-tab>
@@ -76,6 +77,20 @@ export default {
 			&.receive {
 				.van-icon-refund-o, .van-cell__value {
 					color: $blue;
+				}
+			}
+			.icon {
+				width: 30px;
+				height: 30px;
+				background-repeat: no-repeat;
+				background-position: center;
+				background-size: 90%;
+				margin-right: $smallGutter;
+				background-image: url(../../assets/images/income.svg);
+				&.income {
+					width: 28px;
+					height: 28px;
+					background-image: url(../../assets/images/spense.svg);
 				}
 			}
 		}

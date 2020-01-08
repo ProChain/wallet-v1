@@ -58,27 +58,21 @@ export default {
 				background-position: center;
 				background-size: 90%;
 				margin-right: 10px;
-
 				&.wechat {
 					background-image: url(../../assets/images/wechat.svg);
 				}
-
 				&.twitter {
 					background-image: url(../../assets/images/twitter.svg);
 				}
-
 				&.pra {
 					background-image: url(../../assets/images/logo.jpg);
 				}
-
 				&.eos {
 					background-image: url(../../assets/images/eos.svg);
 				}
-
 				&.eth {
 					background-image: url(../../assets/images/eth.svg);
 				}
-
 				&.btc {
 					background-image: url(../../assets/images/btc.png);
 				}

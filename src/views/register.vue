@@ -69,6 +69,9 @@ export default {
 		ValidationProvider,
 		ValidationObserver
 	},
+	mounted() {
+		this.$store.commit('hideLoading')
+	},
 	methods: {
 		async handleSubmit() {
 			// pubkey to address
@@ -93,5 +96,5 @@ export default {
 			DISPATCH_SIGN
 		])
 	}
-};
+}
 </script>
