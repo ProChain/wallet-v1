@@ -19,8 +19,8 @@
 			<div class="team">
 					<div class="mysuperior">
 						<h3>我的推荐人</h3>
-						<p v-if="walletInfo.superior">
-							{{ walletInfo.superior | clip }}
+						<p v-if="superior">
+							{{ superior | clip(18, -10) }}
 						</p>
 						<p v-else>
 							您还没有推荐人
@@ -76,6 +76,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { getTeamInfo, getMembers } from '@/util/api'
+import { convert } from '@/util/chain'
 import { didToHex, formatNumber, sleep } from '@/util/common'
 import { SET_TEAM_INFO, SET_WALLET_INFO, DISPATCH_SIGN } from '@/vuex/constants'
 export default {
@@ -83,12 +84,17 @@ export default {
 	data() {
 		return {
 			teamInfo: {},
+			superior: '',
 			num: 0
 		}
 	},
 	async mounted() {
 		try {
 			await sleep()
+			// 上级did
+			const { result } = await convert(this.walletInfo.superior, 'hash')
+			this.superior = result
+
 			const didHash = didToHex(this.walletInfo.did)
 			const { data: { page }} = await getMembers(didHash)
 			this.num = page.dataTotal
