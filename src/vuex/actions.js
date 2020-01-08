@@ -53,6 +53,7 @@ export const actions = {
 	},
 	[Actions.SOCKET_TRANSFERED]: ({ commit }) => {
 		commit('hideLoading')
+		vm.$toast('已转账')
 	},
 	[Actions.SOCKET_LOCKED]: ({ state, commit }, payload) => {
 		const [, lockedFunds, lockedTime, lockedPeriod, rewardsRatio, maxQuota] = JSON.parse(payload.msg)
@@ -69,6 +70,7 @@ export const actions = {
 		}
 		commit(Actions.SET_WALLET_INFO, walletInfo)
 		commit('hideLoading')
+		vm.$toast('已抵押')
 	},
 	[Actions.SOCKET_UNLOCKED]: ({ state: { walletInfo }, commit }, payload) => {
 		const [, amount, unlockedTime] = JSON.parse(payload.msg)
@@ -102,6 +104,7 @@ export const actions = {
 		}
 		commit(Actions.SET_WALLET_INFO, newWalletInfo)
 		commit('hideLoading')
+		vm.$toast('已赎回')
 	},
 	[Actions.SOCKET_ADDRESS_ADDED]: ({ state: { walletInfo }, commit }, payload) => {
 		let [, addressType, address] = JSON.parse(payload.msg)
@@ -126,6 +129,7 @@ export const actions = {
 	},
 	[Actions.SOCKET_UPDATED]: ({ commit }) => {
 		commit('hideLoading')
+		vm.$toast('已更新公钥')
 	},
 	[Actions.SOCKET_CREATED]: ({ state, commit }) => {
 		const subordinateCount = state.walletInfo.subordinate_count + 1

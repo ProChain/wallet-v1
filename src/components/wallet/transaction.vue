@@ -2,22 +2,24 @@
 	<div class="transaction">
 		<van-tabs v-model="active" :border="false" sticky>
 		  <van-tab title="交易记录">
-			  <van-list v-model="loading" :finished="finished" :offset="100" finished-text="没有更多了" @load="onLoad">
-			  	<van-cell v-for="(item, index) in list"
-				class="copy"
-				:key="index"
-				:class="{ sent: item.from_did === metadata.did, receive: item.from_did !== metadata.did }"
-				:data-clipboard-text="item.from_did === metadata.did ? item.to_did : item.from_did"
-				:center="true"
-				:value="item.balance | money"
-				:label="item.datetime | date">
-					<span v-if="item.from_did === metadata.did" slot="title">{{ item.to_did | clip }}</span>
-					<span v-else slot="title">{{ item.from_did | clip }}</span>
-					<!-- <van-icon v-if="item.from_did === metadata.did" name="after-sale" slot="icon" />
-					<van-icon v-else name="refund-o" slot="icon" /> -->
-					<i class="icon" :class="{income: item.from_did === metadata.did}" slot="icon"></i>
-				</van-cell>
-			  </van-list>
+			  <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
+			    <van-list v-model="loading" :finished="finished" :offset="100" finished-text="没有更多了" @load="onLoad">
+			    	<van-cell v-for="(item, index) in list"
+					class="copy"
+					:key="index"
+					:class="{ sent: item.from_did === metadata.did, receive: item.from_did !== metadata.did }"
+					:data-clipboard-text="item.from_did === metadata.did ? item.to_did : item.from_did"
+					:center="true"
+					:value="item.balance | money"
+					:label="item.datetime | date">
+						<span v-if="item.from_did === metadata.did" slot="title">{{ item.to_did | clip }}</span>
+						<span v-else slot="title">{{ item.from_did | clip }}</span>
+						<!-- <van-icon v-if="item.from_did === metadata.did" name="after-sale" slot="icon" />
+						<van-icon v-else name="refund-o" slot="icon" /> -->
+						<i class="icon" :class="{income: item.from_did === metadata.did}" slot="icon"></i>
+					</van-cell>
+			    </van-list>
+			  </van-pull-refresh>
 		  </van-tab>
 		  <van-tab disabled></van-tab>
 		  <van-tab disabled></van-tab>
@@ -36,7 +38,8 @@ export default {
 			loading: false,
 			finished: false,
 			active: 0,
-			page: 1
+			page: 1,
+			isRefreshing: false
 		}
 	},
 	methods: {
@@ -56,6 +59,17 @@ export default {
 			const result = data.map(v => v.attributes)
 
 			return result
+		},
+		onRefresh() {
+			setTimeout(async() => {
+				const result = await this.queryData(this.metadata.did, 1)
+				this.list = result.filter(v => v.to_did)
+				this.page = 2
+				this.loading = false
+				this.finished = false
+				this.isRefreshing = false
+				this.$toast('刷新成功')
+			}, 500)
 		}
 	}
 }
