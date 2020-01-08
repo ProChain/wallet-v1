@@ -12,7 +12,9 @@
 		  class="upload"
 		  :before-read="beforeUpload"
 		  :preview-image="false"
-		  :after-read="handleSuccess" />
+		  :after-read="handleSuccess">
+			选择头像
+		  </van-uploader>
 		  </van-field>
 		</ValidationProvider>
 	  </van-cell-group>

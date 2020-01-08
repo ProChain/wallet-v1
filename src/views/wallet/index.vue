@@ -81,7 +81,7 @@ export default {
 			this.clipboard.on('error', function(e) {
 				console.error('Action:', e.action)
 			})
-			await sleep(300)
+			await sleep()
 			await this.getUserMetadata()
 		} catch (e) {
 			console.log(e)

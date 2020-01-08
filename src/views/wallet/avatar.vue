@@ -88,16 +88,14 @@ export default {
 			}
 		}
 	},
-	mounted() {
-		this.$nextTick(async() => {
-			this.avatar = this.$route.query.avatar
-			await sleep(300)
-			const rs = await getTeamInfo(this.walletInfo.did)
-			this.teamInfo = rs.data || {}
+	async mounted() {
+		this.avatar = this.$route.query.avatar
+		await sleep()
+		const rs = await getTeamInfo(this.walletInfo.did)
+		this.teamInfo = rs.data || {}
 
-			const { data: { list }} = await getTeamLogo(this.walletInfo.did)
-			this.logos = list
-		});
+		const { data: { list }} = await getTeamLogo(this.walletInfo.did)
+		this.logos = list
 	},
 	methods: {
 		async handleCreateAvatar(color, logo, avatar) {

@@ -88,7 +88,7 @@ export default {
 	},
 	async mounted() {
 		try {
-			await sleep(300)
+			await sleep()
 			const didHash = didToHex(this.walletInfo.did)
 			const { data: { page }} = await getMembers(didHash)
 			this.num = page.dataTotal

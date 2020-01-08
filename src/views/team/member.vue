@@ -43,7 +43,7 @@ export default {
 	},
 	async mounted() {
 		try {
-			await sleep(300)
+			await sleep()
 			this.didHash = didToHex(this.walletInfo.did)
 			this.queryRecord()
 		} catch (e) {

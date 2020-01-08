@@ -39,7 +39,7 @@ export default {
 			const part1 = url.split('&state')[0]
 			const code = part1.split('code=')[1]
 
-			await sleep(300)
+			await sleep()
 
 			const { data: userInfo } = await getWechatUser(code)
 			userInfo.headimgurl = userInfo.headimgurl.replace(/\d+$/, 0)
