@@ -66,21 +66,21 @@ export default {
 		Transaction
 	},
 	async mounted() {
+		this.clipboard = new ClipboardJS('.copy', {
+			text(e) {
+				return e.getAttribute('data-clipboard-text')
+			}
+		})
+		this.clipboard.on('success', (e) => {
+			if (e.action === 'copy') {
+				this.$toast('复制成功')
+			}
+			e.clearSelection()
+		})
+		this.clipboard.on('error', function(e) {
+			console.error('Action:', e.action)
+		})
 		try {
-			this.clipboard = new ClipboardJS('.copy', {
-				text(e) {
-					return e.getAttribute('data-clipboard-text')
-				}
-			});
-			this.clipboard.on('success', (e) => {
-				if (e.action === 'copy') {
-					this.$toast('复制成功')
-				}
-				e.clearSelection()
-			});
-			this.clipboard.on('error', function(e) {
-				console.error('Action:', e.action)
-			})
 			await sleep()
 			await this.getUserMetadata()
 		} catch (e) {

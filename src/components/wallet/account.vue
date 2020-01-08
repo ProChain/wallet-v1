@@ -8,7 +8,7 @@
 	  </h2>
 	  <div class="handle-btns">
 		<van-button icon="exchange" square type="default" class="btn-text" to="/transfer">转账</van-button>
-		<van-button icon="down" square type="default" class="receive btn-text" :data-clipboard-text="metadata.did">收款</van-button>
+		<van-button icon="down" square type="default" class="copy btn-text" :data-clipboard-text="metadata.did">收款</van-button>
 	  </div>
 	</div>
 	<van-popup v-model="showHelp"
@@ -29,7 +29,6 @@
   </div>
 </template>
 <script>
-import ClipboardJS from 'clipboard'
 export default {
 	name: 'account',
 	props: ['metadata'],
@@ -38,22 +37,6 @@ export default {
 			menuName: '托管模式',
 			showHelp: false
 		};
-	},
-	mounted() {
-		this.clipboard = new ClipboardJS('.receive', {
-			text(e) {
-				return e.getAttribute('data-clipboard-text')
-			}
-		});
-		this.clipboard.on('success', (e) => {
-			if (e.action === 'copy') {
-				this.$toast('复制DID成功')
-			}
-			e.clearSelection()
-		});
-		this.clipboard.on('error', function(e) {
-			console.error('Action:', e.action)
-		})
 	}
 }
 </script>

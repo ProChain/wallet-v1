@@ -3,12 +3,16 @@
 		<van-tabs v-model="active" :border="false" sticky>
 		  <van-tab title="交易记录">
 			  <van-list v-model="loading" :finished="finished" :offset="100" finished-text="没有更多了" @load="onLoad">
-			  	<van-cell v-for="(item, index) in list" :key="index"
+			  	<van-cell v-for="(item, index) in list"
+				class="copy"
+				:key="index"
 				:class="{ sent: item.from_did === metadata.did, receive: item.from_did !== metadata.did }"
+				:data-clipboard-text="item.from_did === metadata.did ? item.to_did : item.from_did"
 				:center="true"
-				:title="item.to_did | clip"
 				:value="item.balance | money"
 				:label="item.datetime | date">
+					<span v-if="item.from_did === metadata.did" slot="title">{{ item.to_did | clip }}</span>
+					<span v-else slot="title">{{ item.from_did | clip }}</span>
 					<van-icon v-if="item.from_did === metadata.did" name="after-sale" slot="icon" />
 					<van-icon v-else name="refund-o" slot="icon" />
 				</van-cell>
