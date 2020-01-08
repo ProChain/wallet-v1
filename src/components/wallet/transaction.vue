@@ -7,7 +7,7 @@
 				:class="{ sent: item.from_did === metadata.did, receive: item.from_did !== metadata.did }"
 				:center="true"
 				:title="item.to_did | clip"
-				:value="item.fee | money"
+				:value="item.balance | money"
 				:label="item.datetime | date">
 					<van-icon v-if="item.from_did === metadata.did" name="after-sale" slot="icon" />
 					<van-icon v-else name="refund-o" slot="icon" />
