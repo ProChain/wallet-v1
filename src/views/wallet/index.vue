@@ -9,7 +9,14 @@
 					<van-grid-item icon="replay" text="更新" to="/update-pubkey" />
 				</van-grid>
 			</div>
-			<transaction :metadata="walletInfo" v-if="walletInfo.did"></transaction>
+			<van-skeleton
+			  title
+			  avatar
+			  :row="2"
+			  :loading="!walletInfo.did"
+			>
+			  <transaction :metadata="walletInfo"></transaction>
+			</van-skeleton>
 		</div>
 		<van-overlay :show="showBindingTutorial">
 			<div class="wrapper">
@@ -114,7 +121,9 @@ export default {
 
 	.wallet {
 		height: 100% !important;
-
+		.van-skeleton {
+			margin-top: $mediumGutter;
+		}
 		.lock-btns {
 			text-align: center;
 		}
