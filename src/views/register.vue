@@ -20,13 +20,13 @@
 	  		  placeholder="请输入您的公钥" />
 	  		</ValidationProvider>
 	  </van-cell-group>
-	  <van-cell-group title="上级" :border="false">
+	  <!-- <van-cell-group title="上级" :border="false">
 		<ValidationProvider v-slot="{ errors }" name="pubkeysuperior">
 		  <van-field v-model="registerForm.pubkeysuperior"
 		  :error-message="errors[0]"
 		  placeholder="请输入您的上级" />
 		</ValidationProvider>
-	  </van-cell-group>
+	  </van-cell-group> -->
 	  <van-button type="primary" square
 	  class="btn-submit"
 	  size="large"
@@ -57,7 +57,7 @@ export default {
 		const columns = Object.values(DID_TYPE)
 		return {
 			registerForm: {
-				type: '个人',
+				type: '交易所',
 				superior: '',
 				pubkey: ''
 			},
