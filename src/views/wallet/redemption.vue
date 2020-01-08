@@ -71,7 +71,7 @@ export default {
 				params: [amount]
 			}
 
-			this[DISPATCH_SnpmIGN](data)
+			this[DISPATCH_SIGN](data)
 		},
 		...mapActions([
 			DISPATCH_SIGN

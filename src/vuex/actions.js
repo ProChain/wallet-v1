@@ -74,7 +74,7 @@ export const actions = {
 		const [, amount, unlockedTime] = JSON.parse(payload.msg)
 		const unlockedRecords = walletInfo.unlocked_records
 		const unlockedFunds = formatHexNumber(amount)
-		let newUnlockedFunds = (unlockedRecords.unlocked_funds || 0) + unlockedFunds
+		let newUnlockedFunds = (unlockedRecords ? unlockedRecords.unlocked_funds : 0) + unlockedFunds
 
 		// update locked data
 		const lockedRecords = walletInfo.locked_records
