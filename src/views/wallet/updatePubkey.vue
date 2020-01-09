@@ -1,6 +1,6 @@
 <template>
   <div class="update-pubkey">
-	  <ValidationObserver v-slot="{ invalid }">
+	  <ValidationObserver v-slot="{ invalid }" ref="form">
 	    <van-cell-group title="更换公钥" :border="false">
 	  	<ValidationProvider v-slot="{ errors }" rules="required" name="pubkey">
 	  	  <van-field
@@ -44,6 +44,8 @@ export default {
 				params: [this.pubkey]
 			}
 			this[DISPATCH_SIGN](data)
+			this.pubkey = ''
+			this.$refs.form.reset()
 		}
 	},
 	...mapActions([

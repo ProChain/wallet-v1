@@ -1,7 +1,7 @@
 <template>
 <div class="lock-component">
   <div class="lock-card">
-	<ValidationObserver v-slot="{ invalid }">
+	<ValidationObserver v-slot="{ invalid }" ref="form">
 	  <van-cell-group title="抵押PRA" :border="false">
 		<ValidationProvider v-slot="{ errors }" rules="required|min_value:10" name="amount">
 		  <van-field
@@ -44,6 +44,10 @@ import { mapState, mapActions } from 'vuex'
 import { DISPATCH_SIGN } from '@/vuex/constants'
 import { formatNumber } from '@/util/common'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
+const intialFormData = {
+	amount: '',
+	period: '7'
+}
 export default {
 	name: 'walletLock',
 	data() {
@@ -51,10 +55,7 @@ export default {
 			qrcode: null,
 			lockLoading: false,
 			lockedFunds: 0,
-			lockForm: {
-				amount: '',
-				period: '7'
-			}
+			lockForm: Object.assign({}, intialFormData)
 		};
 	},
 	computed: {
@@ -80,6 +81,9 @@ export default {
 			}
 
 			this[DISPATCH_SIGN](data)
+			// reset
+			this.lockForm = Object.assign({}, intialFormData)
+			this.$refs.form.reset()
 		},
 		...mapActions([
 			DISPATCH_SIGN

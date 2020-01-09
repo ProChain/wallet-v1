@@ -1,7 +1,7 @@
 <template>
 <div class="team-update-component">
   <div class="team-update">
-	<ValidationObserver v-slot="{ invalid }">
+	<ValidationObserver v-slot="{ invalid }" ref="form">
 	  <van-cell-group title="团队标识" :border="false">
 		<ValidationProvider v-slot="{ errors }" rules="required" name="symbol">
 		  <van-field
@@ -37,14 +37,15 @@ import { mapState, mapActions } from 'vuex'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { SET_TEAM_INFO } from '@/vuex/constants'
 import { updateTeamInfo } from '@/util/api'
+const intialFormData = {
+	symbol: '',
+	url: ''
+}
 export default {
 	name: 'teamUpdate',
 	data() {
 		return {
-			didForm: {
-				symbol: '',
-				url: ''
-			}
+			didForm: Object.assign({}, intialFormData)
 		}
 	},
 	computed: {
@@ -56,9 +57,6 @@ export default {
 	components: {
 		ValidationProvider,
 		ValidationObserver
-	},
-	mounted() {
-		this.didForm.symbol = this.teamInfo.symbol
 	},
 	methods: {
 		async handleSubmit() {
@@ -72,6 +70,9 @@ export default {
 				...this.didForm
 			}
 			this[SET_TEAM_INFO](teamInfo)
+			// reset
+			this.didForm = Object.assign({}, intialFormData)
+			this.$refs.form.reset()
 			this.$router.push(('/team'))
 		},
 		...mapActions([

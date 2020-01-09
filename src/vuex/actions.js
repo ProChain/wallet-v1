@@ -54,6 +54,9 @@ export const actions = {
 	[Actions.SOCKET_TRANSFERED]: ({ commit }) => {
 		commit('hideLoading')
 		vm.$toast('已转账')
+		setTimeout(() => {
+			vm.$router.push(('/'))
+		}, 500)
 	},
 	[Actions.SOCKET_LOCKED]: ({ state, commit }, payload) => {
 		const [, lockedFunds, lockedTime, lockedPeriod, rewardsRatio, maxQuota] = JSON.parse(payload.msg)

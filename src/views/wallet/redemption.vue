@@ -1,7 +1,7 @@
 <template>
   <div class="unlock-component">
 	<div class="unlock-card">
-	  <ValidationObserver v-slot="{ invalid }">
+	  <ValidationObserver v-slot="{ invalid }" ref="form">
 		<van-cell-group title="赎回PRA" :border="false">
 		  <ValidationProvider v-slot="{ errors }" rules="required" name="amount">
 			<van-field
@@ -72,6 +72,8 @@ export default {
 			}
 
 			this[DISPATCH_SIGN](data)
+			this.amount = null
+			this.$refs.form.reset()
 		},
 		...mapActions([
 			DISPATCH_SIGN

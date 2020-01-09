@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="team-creationn">
-	<ValidationObserver v-slot="{ invalid }">
+	<ValidationObserver v-slot="{ invalid }" ref="form">
 	  <van-cell-group title="团队名称" :border="false">
 		<ValidationProvider v-slot="{ errors }" rules="required" name="name">
 		  <van-field
@@ -45,18 +45,19 @@ import { mapState, mapActions } from 'vuex'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { SET_TEAM_INFO, DISPATCH_SIGN } from '@/vuex/constants'
 import { setGroupName } from '@/util/api'
+const intialFormData = {
+	name: '',
+	symbol: '',
+	description: '',
+	website: ''
+}
 export default {
 	name: 'teamName',
 	data() {
 		return {
 			qrcode: null,
 			reqType: 'create',
-			didForm: {
-				name: '',
-				symbol: '',
-				description: '',
-				website: ''
-			},
+			didForm: Object.assign({}, intialFormData)
 		}
 	},
 	computed: {
@@ -87,6 +88,9 @@ export default {
 				...this.didForm
 			}
 			this[SET_TEAM_INFO](teamInfo)
+			// reset
+			this.didForm = Object.assign({}, intialFormData)
+			this.$refs.form.reset()
 		},
 		...mapActions([
 			SET_TEAM_INFO,

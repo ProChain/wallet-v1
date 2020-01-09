@@ -1,6 +1,6 @@
 <template>
   <div class="transfer-card">
-	<ValidationObserver v-slot="{ invalid }">
+	<ValidationObserver v-slot="{ invalid }" ref="form">
 	  <van-cell-group title="收款账号" :border="false">
 		<ValidationProvider v-slot="{ errors }" rules="required" name="receiver">
 		  <van-field
@@ -46,17 +46,18 @@ import { DISPATCH_SIGN } from '@/vuex/constants'
 import { didToHex, formatNumber } from '@/util/common'
 import { uploadImg, decodeAvatar } from '@/util/api'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
+const intialFormData = {
+	receiver: '',
+	amount: '',
+	memo: ''
+}
 export default {
 	name: 'walletTransfer',
 	data() {
 		return {
 			qrcode: null,
 			showDetail: false,
-			transferForm: {
-				receiver: '',
-				amount: '',
-				memo: ''
-			}
+			transferForm: Object.assign({}, intialFormData)
 		}
 	},
 	computed: {
@@ -86,6 +87,9 @@ export default {
 				}
 
 				this[DISPATCH_SIGN](data)
+				// reset
+				this.transferForm = Object.assign({}, intialFormData)
+				this.$refs.form.reset()
 			}).catch(console.log)
 		},
 		beforeUpload(file) {

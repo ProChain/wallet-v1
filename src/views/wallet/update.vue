@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="did-update-card">
-	<ValidationObserver v-slot="{ invalid }">
+	<ValidationObserver v-slot="{ invalid }" ref="form">
 	  <van-cell-group :title="`绑定${addressType}账号`" :border="false">
 		<ValidationProvider v-slot="{ errors }" rules="required" name="address">
 		  <van-field
@@ -72,6 +72,8 @@ export default {
 				params: [stringToHex(addressType), address]
 			}
 			this[DISPATCH_SIGN](data)
+			this.address = ''
+			this.$refs.form.reset()
 		},
 		...mapActions([
 			SET_WALLET_INFO,
