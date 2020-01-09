@@ -11,20 +11,29 @@
 					<li>
 						已赎回
 						<p>
-							{{ unlockRecords.unlock_funds | money  }}
+							{{ unlockRecords.unlocked_funds | money  }}
 						</p>
 					</li>
 				</ul>
 			</div>
 			<div class="team">
 					<div class="mysuperior">
-						<h3>我的推荐人</h3>
-						<p v-if="superior">
-							{{ superior | clip(18, -10) }}
-						</p>
-						<p v-else>
-							您还没有推荐人
-						</p>
+						<div>
+							<h3>我的推荐人</h3>
+							<p v-if="superior">
+								{{ superior | clip(18, -10) }}
+							</p>
+							<p v-else>
+								您还没有推荐人
+							</p>
+						</div>
+						<div v-if="teamInfo.tags && teamInfo.tags.length > 0" class="group-tags">
+							<h3>团队标签</h3>
+							<p>
+								<van-tag v-for="(tag, idx) in teamInfo.tags" round type="success" size="medium"
+								  :key="idx">{{ tag }}</van-tag>
+							</p>
+						</div>
 					</div>
 					<div class="myteam">
 						<h3>我的团队</h3>
@@ -36,7 +45,7 @@
 						</p>
 						<p v-else-if="lockedRecords.locked_funds >= 25 && !teamInfo.name">
 							您尚未创建团队
-							<van-button size="large" type="primary" :to="{ path: '/team/create' }">
+							<van-button size="large" type="primary" :to="{ path: '/team/update?type=create' }">
 								立即创建团队
 							</van-button>
 						</p>
@@ -44,7 +53,7 @@
 							<van-cell title="团队名称" :border="false" :label="teamInfo.name" :center="true" is-link to="/team/update" />
 							<van-cell title="团队规模" :border="false" :value="`${lockedRecords.max_quota || 0}人`" />
 							<van-cell title="团队成员" :border="false" :label="`${num}人`" :center="true" is-link to="/team/member" />
-							<van-cell title="团队logo" :border="false" is-link :to="{ path: '/team/logo', query: { url: teamInfo.url } }">
+							<van-cell title="团队logo" :border="false" is-link :to="{path: '/team/logo', query: {url: teamInfo.url}}">
 								<i i class="icon" :style="{ backgroundImage: `url(${teamInfo.url})`}" slot="icon"></i>
 							</van-cell>
 							<div class="btns">
@@ -83,7 +92,6 @@ export default {
 	name: 'teamIndex',
 	data() {
 		return {
-			teamInfo: {},
 			superior: '',
 			num: 0
 		}
@@ -101,8 +109,7 @@ export default {
 
 			const rs = await getTeamInfo(this.walletInfo.did)
 			if (rs.hasErrors) return this.$toast.error(rs.message)
-			this.teamInfo = rs.data || {}
-			this[SET_TEAM_INFO](this.teamInfo)
+			this[SET_TEAM_INFO](rs.data)
 		} catch (error) {
 			console.log(error);
 		}
@@ -115,7 +122,8 @@ export default {
 			return this.walletInfo.unlocked_records || {}
 		},
 		...mapState([
-			'walletInfo'
+			'walletInfo',
+			'teamInfo'
 		])
 	},
 	methods: {
@@ -204,9 +212,14 @@ export default {
 					}
 				}
 			}
+			.group-tags {
+				.van-tag {
+					margin: 0 5px;
+				}
+			}
 			.btns {
 				text-align: center;
-				margin-top: 150px;
+				margin-top: 50px;
 				button {
 					min-width: 100px;
 					margin: 0 15px;

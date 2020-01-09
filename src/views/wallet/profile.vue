@@ -4,7 +4,7 @@
 			<van-cell-group title="我的DID" :border="false">
 				<van-cell v-if="walletInfo.did" :title="walletInfo.did | clip(18, -10)" label="创建区块身份头像" is-link
 				:center="true"
-				:to="{ path: '/avatar', query: { avatar } }">
+				:to="{path: '/avatar', query: {avatar}}">
 					<i class="icon pra" slot="icon"></i>
 				</van-cell>
 				<van-cell v-else title="未绑定" :center="true">
@@ -17,13 +17,13 @@
 				</van-cell>
 			</van-cell-group>
 			<van-cell-group title="资产账号" :border="false" class="external-account">
-				<van-cell title="BTC收款账号" :center="true" :label="externalAddress.btc || '未绑定'" is-link :to="{ path: '/update', query: { btc: 1 } }">
+				<van-cell title="BTC收款账号" :center="true" :label="externalAddress.btc || '未绑定'" is-link :to="{path: '/update', query: {btc: 1}}">
 					<i class="icon btc" :class="{ 'grey': !externalAddress.btc }" slot="icon"></i>
 				</van-cell>
-				<van-cell title="ETH收款账号" :center="true" :label="`${externalAddress.eth}` || '未绑定'" is-link :to="{ path: '/update', query: { eth: 1 } }">
+				<van-cell title="ETH收款账号" :center="true" :label="`${externalAddress.eth}` || '未绑定'" is-link :to="{path: '/update', query: {eth: 1}}">
 					<i class="icon eth" :class="{ 'grey': !externalAddress.eth }" slot="icon"></i>
 				</van-cell>
-				<van-cell title="EOS收款账号" :center="true" :label="externalAddress.eos || '未绑定'" is-link :to="{ path: '/update', query: { eos: 1 } }">
+				<van-cell title="EOS收款账号" :center="true" :label="externalAddress.eos || '未绑定'" is-link :to="{path: '/update', query: {eos: 1}}">
 					<i class="icon eos" :class="{ 'grey': !externalAddress.eos }" slot="icon"></i>
 				</van-cell>
 			</van-cell-group>

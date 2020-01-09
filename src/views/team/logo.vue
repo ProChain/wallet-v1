@@ -16,7 +16,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import { uploadImg, updateTeamInfo } from '@/util/api'
+import { uploadImg, buildTeam } from '@/util/api'
 export default {
 	name: 'teamLogo',
 	data() {
@@ -53,12 +53,12 @@ export default {
 		async handleSubmit() {
 			console.log('submit')
 			if (!this.logo) return this.$toast('请选择logo')
-			const rs = await updateTeamInfo(this.walletInfo.did, this.logo)
+			const rs = await buildTeam({ did: this.walletInfo.did, logo: this.logo })
 			if (rs.hasErrors) this.$toast.error(rs.message)
-			this.$router.push(('/team'))
+			this.$router.push('/team')
 		}
 	}
-};
+}
 </script>
 
 <style lang="scss">

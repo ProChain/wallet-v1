@@ -16,6 +16,7 @@ module.exports = {
 		teamUpdate: '修改团队信息',
 		teamLogo: '修改团队logo',
 		teamMember: '团队成员',
+		tags: '团队标签',
 		profile: '我的DID',
 		register: '注册Prochain DID',
 		help: '帮助'

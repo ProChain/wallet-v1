@@ -157,17 +157,6 @@ const router = new VueRouter({
 			}
 		},
 		{
-			path: '/team/create',
-			name: 'teamCreate',
-			component: () => lazyLoadView(import('@/views/team/create')),
-			meta: {
-				index: 3,
-				title: 'meta.teamCreate',
-				keepAlive: true,
-				requireAuth: false
-			}
-		},
-		{
 			path: '/team/update',
 			name: 'teamUpdate',
 			component: () => lazyLoadView(import('@/views/team/update')),
@@ -185,6 +174,17 @@ const router = new VueRouter({
 			meta: {
 				index: 3,
 				title: 'meta.teamMember',
+				keepAlive: true,
+				requireAuth: false
+			}
+		},
+		{
+			path: '/team/tags',
+			name: 'tags',
+			component: () => lazyLoadView(import('@/views/team/tags')),
+			meta: {
+				index: 4,
+				title: 'meta.tags',
 				keepAlive: true,
 				requireAuth: false
 			}

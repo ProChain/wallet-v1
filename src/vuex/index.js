@@ -9,7 +9,9 @@ const state = {
 		unlocked_records: {}
 	},
 	avatar: '',
-	teamInfo: {},
+	teamInfo: {
+		tags: []
+	},
 	showLoading: true,
 	token: '',
 	locale: 'zh'

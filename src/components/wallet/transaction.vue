@@ -56,17 +56,19 @@ export default {
 	    },
 		async queryData(did, page) {
 			const { data } = await getTransaction(did, page)
-			const result = data.map(v => v.attributes)
 
-			return result
+			return data.map(v => v.attributes)
+		},
+		async pullData() {
+			const result = await this.queryData(this.metadata.did, 1)
+			this.list = result.filter(v => v.to_did)
+			this.page = 2
+			this.loading = false
+			this.finished = false
 		},
 		onRefresh() {
 			setTimeout(async() => {
-				const result = await this.queryData(this.metadata.did, 1)
-				this.list = result.filter(v => v.to_did)
-				this.page = 2
-				this.loading = false
-				this.finished = false
+				await this.pullData()
 				this.isRefreshing = false
 				this.$toast('刷新成功')
 			}, 500)

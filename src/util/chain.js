@@ -1,8 +1,8 @@
 import axios from './axios';
 
 const baseUrl = process.env.VUE_APP_SIGN_HOST
-const apiMetadata = `${baseUrl}/api/did`
-const apiConvertion = `${baseUrl}/api/convertion`
+const apiMetadata = `${baseUrl}/api/v1/did`
+const apiConvertion = `${baseUrl}/api/v1/convert`
 export const DID_TYPE = {
 	'2': '交易所',
 	'3': '设备',

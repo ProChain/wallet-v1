@@ -55,7 +55,7 @@ export const actions = {
 		commit('hideLoading')
 		vm.$toast('已转账')
 		setTimeout(() => {
-			vm.$router.push(('/'))
+			vm.$router.push('/')
 		}, 500)
 	},
 	[Actions.SOCKET_LOCKED]: ({ state, commit }, payload) => {
@@ -125,7 +125,7 @@ export const actions = {
 		}
 		commit(Actions.SET_WALLET_INFO, newWalletInfo)
 		commit('hideLoading')
-		vm.$router.push(('/'))
+		vm.$router.push('/')
 	},
 	[Actions.SOCKET_GROUPNAME_SET]: ({ commit }) => {
 		commit('hideLoading')

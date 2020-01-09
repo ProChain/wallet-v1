@@ -13,12 +13,13 @@ const apiGifts = '/api/v1/lottery/gifts'
 const apiDraw = '/api/v1/lottery/draw'
 const apiLotteryRecord = '/api/v1/lottery/records'
 
-const apiGroupName = '/api/v1/mainnet/build_team'
+const apiBuildTeam = '/api/v1/mainnet/build_team'
 const apiGroupLogo = '/api/v1/mainnet/get_team_logo'
 const apiTeamInfo = '/api/v1/mainnet/team_info'
 const apiUpdateTeamInfo = '/api/v1/mainnet/update_team_info'
 const apiGetMembers = '/api/v1/mainnet/members'
 const apiGetTransactions = 'https://dana.prabox.net/api/v1/transfer'
+const apiTeamTags = '/api/v1/mainnet/get_team_tags'
 
 export async function chainAuth(wxcode) {
 	if (process.env.VUE_APP_TEST_WX) {
@@ -124,14 +125,15 @@ export async function getLotteryRecord(did) {
 	})
 }
 
-export async function setGroupName({ did, name, symbol, description, url, website }) {
-	return axios.post(apiGroupName, {
+export async function buildTeam({ did, name, symbol, description, url, website, tags }) {
+	return axios.post(apiBuildTeam, {
 		did,
 		name,
 		symbol,
 		description,
 		url,
-		website
+		website,
+		tags
 	})
 }
 
@@ -160,11 +162,12 @@ export async function getTeamInfo(did) {
 	})
 }
 
-export async function updateTeamInfo(did, url, symbol) {
+export async function updateTeamInfo(did, url, symbol, tags) {
 	return axios.post(apiUpdateTeamInfo, {
 		did,
 		url,
-		symbol
+		symbol,
+		tags
 	})
 }
 
@@ -174,4 +177,8 @@ export async function getTransaction(did, page = 1, size = 10) {
 			'Hide-Loading': true
 		}
 	})
+}
+
+export async function getTeamTags() {
+	return axios.get(apiTeamTags)
 }
