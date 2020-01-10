@@ -71,6 +71,9 @@ instance.interceptors.request.use(config => {
 	if (!config['headers']['Hide-Loading']) {
 		showFullScreenLoading()
 	}
+	if (config.method === 'post') {
+		config.headers['Content-Type'] = 'application/json;text/plain'
+	}
 	return config
 }, (error) => {
 	tryHideFullScreenLoading()
