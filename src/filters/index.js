@@ -25,5 +25,5 @@ export function clip(address, start = 14, end = -6) {
 }
 
 export function date(date) {
-	return moment.utc(date).local().format('YYYY-MM-DD HH:mm::ss')
+	return moment.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
 }
