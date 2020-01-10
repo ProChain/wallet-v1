@@ -65,7 +65,7 @@ let instance = axios.create({
 
 // Add a request interceptor
 instance.interceptors.request.use(config => {
-	if (store.state.token) {
+	if (store.state.token && !config['headers']['Hide-Loading']) {
 		config.headers.Authorization = `Bearer ${store.state.token}`
 	}
 	if (!config['headers']['Hide-Loading']) {
