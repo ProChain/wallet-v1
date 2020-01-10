@@ -65,14 +65,11 @@ let instance = axios.create({
 
 // Add a request interceptor
 instance.interceptors.request.use(config => {
-	if (store.state.token && !config['headers']['Hide-Loading']) {
+	if (store.state.token && !config.url.includes('dana.prabox')) {
 		config.headers.Authorization = `Bearer ${store.state.token}`
 	}
-	if (!config['headers']['Hide-Loading']) {
+	if (!config.url.includes('dana.prabox')) {
 		showFullScreenLoading()
-	} else {
-		console.log(config.method, 'method---')
-		config.headers['Content-Type'] = 'application/json;text/plain'
 	}
 	return config
 }, (error) => {
