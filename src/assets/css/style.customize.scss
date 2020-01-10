@@ -35,6 +35,16 @@
 		height: 100%;
 	}
 }
+.van-tag {
+	&::after {
+		content: '，';
+		display: inline-block;
+		width: 0;
+		overflow: hidden;
+		user-select: none;
+		opacity: 0;
+	}
+}
 .no-content {
 	text-align: center;
 	padding: 100px 30px;
