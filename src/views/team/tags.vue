@@ -54,10 +54,7 @@ export default {
 			}
 		},
 		confirm() {
-			sessionStorage.setItem('tags', JSON.stringify({
-				...this.$route.query,
-				selected: this.selected
-			}))
+			sessionStorage.setItem('tags', JSON.stringify(this.selected))
 			this.$router.go(-1)
 		}
 	}

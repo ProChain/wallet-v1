@@ -79,23 +79,21 @@ export default {
 	},
 	created() {
 		this.debouncedSearch = debounce(this.handleInputChange)
+		const { type } = this.$route.query
+		if (type === 'create') {
+			this.btnText = '创建团队'
+		} else {
+			this.didForm = {
+				...intialFormData,
+				...this.teamInfo
+			}
+		}
+		this.pageType = type
 	},
 	activated() {
 		const tags = sessionStorage.getItem('tags')
 		if (tags) {
-			const { type, selected } = JSON.parse(tags)
-			if (type === 'create') {
-				this.btnText = '创建团队'
-			} else {
-				this.didForm = {
-					...intialFormData,
-					...this.teamInfo
-				}
-			}
-			if (selected) {
-				this.didForm.tags = selected
-			}
-			this.pageType = type
+			this.didForm.tags = JSON.parse(tags)
 		}
 	},
 	methods: {
@@ -127,9 +125,6 @@ export default {
 			}
 			this[SET_TEAM_INFO](teamInfo)
 
-			// reset
-			this.didForm = Object.assign({}, intialFormData)
-			this.$refs.form.reset()
 			this.$router.go(-1)
 		},
 		async handleInputChange(symbol) {
