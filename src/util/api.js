@@ -172,11 +172,7 @@ export async function updateTeamInfo(did, url, symbol, tags) {
 }
 
 export async function getTransaction(did, page = 1, size = 10) {
-	return axios.get(`${apiGetTransactions}/${did}?page[number]=${page}&page[size]=${size}`, {
-		headers: {
-			'Hide-Loading': true
-		}
-	})
+	return axios.get(`${apiGetTransactions}/${did}?page[number]=${page}&page[size]=${size}`)
 }
 
 export async function getTeamTags() {
