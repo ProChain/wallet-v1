@@ -15,6 +15,7 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 import { getTeamTags } from '@/util/api'
 import { sleep } from '@/util/common'
 export default {
@@ -25,17 +26,20 @@ export default {
 			selected: []
 		};
 	},
+	computed: {
+		...mapState([
+			'teamInfo'
+		])
+	},
 	async mounted() {
 		try {
 			await sleep()
 			const { data } = await getTeamTags()
 			this.tagList = data
+			this.selected = this.teamInfo.tags
 		} catch (e) {
 			console.log(e)
 		}
-	},
-	deactivated() {
-		this.selected = []
 	},
 	methods: {
 		handleClose(idx) {

@@ -16,7 +16,6 @@ const apiLotteryRecord = '/api/v1/lottery/records'
 const apiBuildTeam = '/api/v1/mainnet/build_team'
 const apiGroupLogo = '/api/v1/mainnet/get_team_logo'
 const apiTeamInfo = '/api/v1/mainnet/team_info'
-const apiUpdateTeamInfo = '/api/v1/mainnet/update_team_info'
 const apiGetMembers = '/api/v1/mainnet/members'
 const apiGetTransactions = 'https://dana.prabox.net/api/v1/transfer'
 const apiTeamTags = '/api/v1/mainnet/get_team_tags'
@@ -159,15 +158,6 @@ export async function getTeamInfo(did) {
 		params: {
 			did
 		}
-	})
-}
-
-export async function updateTeamInfo(did, url, symbol, tags) {
-	return axios.post(apiUpdateTeamInfo, {
-		did,
-		url,
-		symbol,
-		tags
 	})
 }
 

@@ -15,8 +15,9 @@
 	</div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { uploadImg, buildTeam } from '@/util/api'
+import { SET_TEAM_INFO } from '@/vuex/constants'
 export default {
 	name: 'teamLogo',
 	data() {
@@ -27,12 +28,12 @@ export default {
 	},
 	computed: {
 		...mapState([
-			'walletInfo'
+			'walletInfo',
+			'teamInfo'
 		])
 	},
 	mounted() {
-		const { url } = this.$route.query
-		if (url) this.logo = url
+		this.logo = this.teamInfo.url
 	},
 	methods: {
 		async handleUpload() {
@@ -51,12 +52,18 @@ export default {
 			this.logo = `https://static.chain.pro/${rs.data}`
 		},
 		async handleSubmit() {
-			console.log('submit')
 			if (!this.logo) return this.$toast('请选择logo')
-			const rs = await buildTeam({ did: this.walletInfo.did, logo: this.logo })
+			const rs = await buildTeam({ did: this.walletInfo.did, url: this.logo })
 			if (rs.hasErrors) this.$toast.error(rs.message)
+			this[SET_TEAM_INFO]({
+				...this.teamInfo,
+				url: this.logo
+			})
 			this.$router.go(-1)
-		}
+		},
+		...mapActions([
+			SET_TEAM_INFO
+		])
 	}
 }
 </script>

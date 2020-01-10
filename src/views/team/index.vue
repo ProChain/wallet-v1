@@ -53,7 +53,7 @@
 							<van-cell title="团队名称" :border="false" :label="teamInfo.name" :center="true" is-link to="/team/update" />
 							<van-cell title="团队规模" :border="false" :value="`${lockedRecords.max_quota || 0}人`" />
 							<van-cell title="团队成员" :border="false" :label="`${num}人`" :center="true" is-link to="/team/member" />
-							<van-cell title="团队logo" :border="false" is-link :to="{path: '/team/logo', query: {url: teamInfo.url}}">
+							<van-cell title="团队logo" :border="false" is-link to="/team/logo">
 								<i i class="icon" :style="{ backgroundImage: `url(${teamInfo.url})`}" slot="icon"></i>
 							</van-cell>
 							<div class="btns">
@@ -198,7 +198,7 @@ export default {
 					vertical-align: middle;
 					margin-right: $smallGutter;
 					border-radius: 100%;
-					background-color: #999;
+					background-color: #c1bdbd;
 				}
 				li {
 					line-height: 30px;
