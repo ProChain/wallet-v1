@@ -10,9 +10,14 @@
 				</van-cell-group>
 				<van-cell-group title="团队标识" :border="false">
 					<ValidationProvider v-slot="{ errors }" rules="required" name="symbol">
-						<van-field v-model="didForm.symbol" :error-message="errors[0]" placeholder="请设置您的团队标识" />
+						<van-field v-model="didForm.symbol" :error-message="errors[0]" placeholder="请设置您的团队标识" @input="debouncedSearch" />
 					</ValidationProvider>
 				</van-cell-group>
+				<van-image v-if="symbolPic" :src="symbolPic" width="1rem" height="1rem" round>
+				  <template v-slot:loading>
+				    <van-loading type="spinner" size="20" />
+				  </template>
+				</van-image>
 				<van-cell-group title="描述信息" :border="false">
 					<ValidationProvider v-slot="{ errors }" name="description">
 						<van-field v-model="didForm.description" :error-message="errors[0]" placeholder="请输入描述" />
@@ -24,7 +29,7 @@
 					</ValidationProvider>
 				</van-cell-group>
 				<van-cell-group title="团队标签" :border="false">
-					<van-cell is-link :to="{path: '/team/tags', query: {...$route.query}}" :replace="true" title-class="tag-title">
+					<van-cell is-link :to="{path: '/team/tags', query: {...$route.query}}" title-class="tag-title">
 						<div v-if="didForm.tags.length > 0" slot="title">
 							<span v-for="item in didForm.tags">
 								{{ item }}
@@ -42,7 +47,8 @@
 import { mapState, mapActions } from 'vuex'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { SET_TEAM_INFO, DISPATCH_SIGN } from '@/vuex/constants'
-import { buildTeam } from '@/util/api'
+import { getPicBySymbol, buildTeam } from '@/util/api'
+import { debounce } from '@/util/common'
 const intialFormData = {
 	name: '',
 	symbol: '',
@@ -57,7 +63,8 @@ export default {
 		return {
 			pageType: '',
 			didForm: Object.assign({}, intialFormData),
-			btnText: '更新团队'
+			btnText: '更新团队',
+			symbolPic: ''
 		}
 	},
 	computed: {
@@ -70,19 +77,25 @@ export default {
 		ValidationProvider,
 		ValidationObserver
 	},
+	created() {
+		this.debouncedSearch = debounce(this.handleInputChange)
+	},
 	activated() {
-		const { type, selected } = this.$route.query
-		this.pageType = type
-		if (this.pageType === 'create') {
-			this.btnText = '创建团队'
-		} else {
-			this.didForm = {
-				...intialFormData,
-				...this.teamInfo
+		const tags = sessionStorage.getItem('tags')
+		if (tags) {
+			const { type, selected } = JSON.parse(tags)
+			if (type === 'create') {
+				this.btnText = '创建团队'
+			} else {
+				this.didForm = {
+					...intialFormData,
+					...this.teamInfo
+				}
 			}
-		}
-		if (selected) {
-			this.didForm.tags = selected
+			if (selected) {
+				this.didForm.tags = selected
+			}
+			this.pageType = type
 		}
 	},
 	methods: {
@@ -119,6 +132,10 @@ export default {
 			this.$refs.form.reset()
 			this.$router.go(-1)
 		},
+		async handleInputChange(symbol) {
+			const { data } = await getPicBySymbol(symbol)
+			this.symbolPic = data.result
+		},
 		...mapActions([
 			SET_TEAM_INFO,
 			DISPATCH_SIGN
@@ -126,8 +143,15 @@ export default {
 	}
 }
 </script>
-<style>
-	.tag-title {
-		color: #969799;
+<style lang="scss">
+	@import '../../assets/css/variables.scss';
+	.team-update-component {
+		.tag-title {
+			color: #969799;
+		}
+		.van-image {
+			background-color: #c1bdbd;
+			margin: $mediumGutter 0 0 $mediumGutter;
+		}
 	}
 </style>

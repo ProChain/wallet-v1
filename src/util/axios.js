@@ -3,6 +3,10 @@ import store from '@/vuex'
 import { getLanguage } from './common'
 import vm from '../main'
 
+const WHITELIST = [
+	'get_team_logo_by_symbol',
+	'dana.prabox.net'
+]
 let needLoadingRequestCount = 0
 
 const startLoading = () => {
@@ -19,6 +23,17 @@ const tryCloseLoading = () => {
 	if (needLoadingRequestCount === 0) {
 		endLoading()
 	}
+}
+
+const checkWhitelist = (url) => {
+	let isWhitelisted = false
+	for (let i in WHITELIST) {
+		if (url.includes(WHITELIST[i])) {
+			isWhitelisted = true
+			break
+		}
+	}
+	return isWhitelisted
 }
 
 const showFullScreenLoading = () => {
@@ -65,10 +80,10 @@ let instance = axios.create({
 
 // Add a request interceptor
 instance.interceptors.request.use(config => {
-	if (store.state.token && !config.url.includes('dana.prabox')) {
+	if (store.state.token && !checkWhitelist(config.url)) {
 		config.headers.Authorization = `Bearer ${store.state.token}`
 	}
-	if (!config.url.includes('dana.prabox')) {
+	if (!checkWhitelist(config.url)) {
 		showFullScreenLoading()
 	}
 	return config

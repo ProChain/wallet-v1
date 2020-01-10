@@ -10,7 +10,7 @@
 		  :key="idx"
 		  :closeable="true"
 		  @close="handleClose(idx)">{{ tag }}</van-tag>
-		  <van-button type="primary" slot="footer" size="large" :to="{path: '/team/update', query: {...$route.query, selected}}" :replace="true">确认选择</van-button>
+		  <van-button type="primary" slot="footer" size="large" @click="confirm">确认选择</van-button>
 	  </van-panel>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
 			await sleep()
 			const { data } = await getTeamTags()
 			this.tagList = data
-			this.selected = this.teamInfo.tags
+			this.selected = [...this.teamInfo.tags]
 		} catch (e) {
 			console.log(e)
 		}
@@ -52,6 +52,13 @@ export default {
 			if (!this.selected.includes(tag)) {
 				this.selected.push(tag)
 			}
+		},
+		confirm() {
+			sessionStorage.setItem('tags', JSON.stringify({
+				...this.$route.query,
+				selected: this.selected
+			}))
+			this.$router.go(-1)
 		}
 	}
 }
