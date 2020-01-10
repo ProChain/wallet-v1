@@ -55,7 +55,7 @@ export default {
 			if (!this.logo) return this.$toast('请选择logo')
 			const rs = await buildTeam({ did: this.walletInfo.did, logo: this.logo })
 			if (rs.hasErrors) this.$toast.error(rs.message)
-			this.$router.push('/team')
+			this.$router.go(-1)
 		}
 	}
 }

@@ -73,11 +73,16 @@ export default {
 	activated() {
 		const { type, selected } = this.$route.query
 		this.pageType = type
-		if (selected) {
-			this.didForm.tags = selected
-		}
 		if (this.pageType === 'create') {
 			this.btnText = '创建团队'
+		} else {
+			this.didForm = {
+				...intialFormData,
+				...this.teamInfo
+			}
+		}
+		if (selected) {
+			this.didForm.tags = selected
 		}
 	},
 	methods: {

@@ -30,7 +30,7 @@
 						<div v-if="teamInfo.tags && teamInfo.tags.length > 0" class="group-tags">
 							<h3>团队标签</h3>
 							<p>
-								<van-tag v-for="(tag, idx) in teamInfo.tags" round type="success" size="medium"
+								<van-tag v-for="(tag, idx) in teamInfo.tags" round type="success" size="large"
 								  :key="idx">{{ tag }}</van-tag>
 							</p>
 						</div>

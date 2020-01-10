@@ -1,22 +1,16 @@
 <template>
   <div class="tags-component">
 	  <van-panel v-for="(item, index) in tagList" :key="index" :title="item.group">
-		  <van-tag v-for="(tag, idx) in item.tags" round type="primary" size="medium"
+		  <van-tag v-for="(tag, idx) in item.tags" round type="primary" size="large"
 		  :key="idx"
 		  @click="handleClick(tag)">{{ tag }}</van-tag>
 	  </van-panel>
-	  <van-panel v-if="selected.length > 0" title="已选标签" status="确认选择">
-		<van-tag v-for="(tag, idx) in selected" round type="success" size="medium"
+	  <van-panel v-if="selected.length > 0" title="已选标签">
+		<van-tag v-for="(tag, idx) in selected" round type="success" size="large"
 		  :key="idx"
 		  :closeable="true"
 		  @close="handleClose(idx)">{{ tag }}</van-tag>
-		  <van-cell title="已选标签" slot="header" :to="{path: '/team/update', query: {...$route.query, selected}}" :replace="true">
-			  <van-icon
-			  color="#07c160"
-			  slot="right-icon"
-			  size="0.5rem"
-			  name="success"/>
-		 </van-cell>
+		  <van-button type="primary" slot="footer" size="large" :to="{path: '/team/update', query: {...$route.query, selected}}" :replace="true">确认选择</van-button>
 	  </van-panel>
   </div>
 </template>
@@ -69,6 +63,13 @@ export default {
 				flex-wrap: wrap;
 				.van-tag {
 					margin: 5px;
+				}
+			}
+			.van-panel__footer {
+				padding: 0;
+				margin: $largeGutter 0;
+				&::after, &::before {
+					display: none;
 				}
 			}
 		}
