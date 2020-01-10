@@ -70,9 +70,9 @@ instance.interceptors.request.use(config => {
 	}
 	if (!config['headers']['Hide-Loading']) {
 		showFullScreenLoading()
-	}
-	if (config.method === 'post') {
-		config.headers['Content-Type'] = 'application/json;text/plain'
+	} else {
+		console.log(config.method, 'method---')
+		config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
 	}
 	return config
 }, (error) => {
