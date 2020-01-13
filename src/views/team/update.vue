@@ -112,7 +112,8 @@
 
 				const rs = await buildTeam({
 					...this.didForm,
-					did: this.walletInfo.did
+					did: this.walletInfo.did,
+					url: ''
 				})
 				if (rs.hasErrors) {
 					return this.$toast.error(rs.message)
@@ -123,6 +124,7 @@
 					...this.teamInfo,
 					...this.didForm
 				}
+				if (this.symbolPic) teamInfo.url = this.symbolPic
 				this[SET_TEAM_INFO](teamInfo)
 
 				this.$router.go(-1)
