@@ -2,9 +2,7 @@
 	<div class="profile">
 		<div class="account">
 			<van-cell-group title="我的DID" :border="false">
-				<van-cell v-if="walletInfo.did" :title="walletInfo.did | clip(18, -10)" label="创建区块身份头像" is-link
-				:center="true"
-				:to="{path: '/avatar', query: {avatar}}">
+				<van-cell v-if="walletInfo.did" :title="walletInfo.did | clip(18, -10)" label="创建区块身份头像" is-link :center="true" :to="{path: '/avatar', query: {avatar}}">
 					<i class="icon pra" slot="icon"></i>
 				</van-cell>
 				<van-cell v-else title="未绑定" :center="true">
@@ -31,22 +29,23 @@
 	</div>
 </template>
 <script>
-import { mapState } from 'vuex'
-export default {
-	name: 'profile',
-	computed: {
-		externalAddress() {
-			return this.walletInfo.external_address
-		},
-		...mapState([
-			'walletInfo',
-			'avatar'
-		])
+	import { mapState } from 'vuex'
+	export default {
+		name: 'profile',
+		computed: {
+			externalAddress() {
+				return this.walletInfo.external_address
+			},
+			...mapState([
+				'walletInfo',
+				'avatar'
+			])
+		}
 	}
-}
 </script>
 <style lang="scss">
 	@import '../../assets/css/variables.scss';
+
 	.profile {
 		.van-cell-group {
 			.van-cell {}
@@ -58,21 +57,27 @@ export default {
 				background-position: center;
 				background-size: 90%;
 				margin-right: 10px;
+
 				&.wechat {
 					background-image: url(../../assets/images/wechat.svg);
 				}
+
 				&.twitter {
 					background-image: url(../../assets/images/twitter.svg);
 				}
+
 				&.pra {
 					background-image: url(../../assets/images/logo.jpg);
 				}
+
 				&.eos {
 					background-image: url(../../assets/images/eos.svg);
 				}
+
 				&.eth {
 					background-image: url(../../assets/images/eth.svg);
 				}
+
 				&.btc {
 					background-image: url(../../assets/images/btc.png);
 				}

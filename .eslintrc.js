@@ -109,7 +109,7 @@ module.exports = {
         ],
         'max-len': [
             1,
-            160,
+            1600,
             2
         ],
         'max-nested-callbacks': [
@@ -198,6 +198,19 @@ module.exports = {
         ],
         'arrow-parens': 0,
         'generator-star-spacing': 0,
-        'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
-    }
-};
+        'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+		"vue/script-indent": ["error", "tab", {  // script标签缩进设置
+			"baseIndent": 1,
+			"switchCase": 0,
+			"ignores": []
+		}]
+    },
+	overrides: [
+	    {
+	      "files": ["*.vue"],
+	      "rules": {
+	        "indent": "off",
+	      }
+	    }
+	]
+}

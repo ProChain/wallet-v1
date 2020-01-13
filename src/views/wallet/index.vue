@@ -4,18 +4,13 @@
 			<account :metadata="walletInfo" />
 			<div class="lock-btns">
 				<van-grid :border="false" :column-num="3">
-					<van-grid-item icon="manager-o" text="DID" to="/profile"/>
+					<van-grid-item icon="manager-o" text="DID" to="/profile" />
 					<van-grid-item icon="balance-o" text="挖矿" to="/team" />
 					<van-grid-item icon="replay" text="更新" to="/update-pubkey" />
 				</van-grid>
 			</div>
-			<van-skeleton
-			  title
-			  avatar
-			  :row="2"
-			  :loading="!walletInfo.did"
-			>
-			  <transaction :metadata="walletInfo"></transaction>
+			<van-skeleton title avatar :row="2" :loading="!walletInfo.did">
+				<transaction :metadata="walletInfo"></transaction>
 			</van-skeleton>
 		</div>
 		<van-overlay :show="showBindingTutorial">
@@ -39,91 +34,93 @@
 	</div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
-import { chainBindSn, chainAuth } from '@/util/api'
-import { sleep } from '@/util/common'
-import ClipboardJS from 'clipboard'
-import { convert, getMetadata } from '@/util/chain'
-import { SET_WALLET_INFO, SET_AVATAR, SET_TOKEN } from '@/vuex/constants'
-import Account from '@/components/wallet/account'
-import Transaction from '@/components/wallet/transaction'
-export default {
-	name: 'walletHome',
-	data() {
-		return {
-			code: '',
-			showBindingTutorial: false,
-			bindSn: ''
-		}
-	},
-	computed: {
-		...mapState([
-			'walletInfo'
-		])
-	},
-	components: {
-		Account,
-		Transaction
-	},
-	async mounted() {
-		this.clipboard = new ClipboardJS('.copy', {
-			text(e) {
-				return e.getAttribute('data-clipboard-text')
-			}
-		})
-		this.clipboard.on('success', (e) => {
-			if (e.action === 'copy') {
-				this.$toast('复制成功')
-			}
-			e.clearSelection()
-		})
-		this.clipboard.on('error', function(e) {
-			console.error('Action:', e.action)
-		})
-		try {
-			await sleep()
-			await this.getUserMetadata()
-		} catch (e) {
-			console.log(e)
-		}
-	},
-	methods: {
-		async getUserMetadata() {
-			const url = window.location.href
-			const part1 = url.split('&state')[0]
-			const code = part1.split('code=')[1]
-			const { data } = await chainAuth(code)
-			if (data) {
-				this[SET_AVATAR](data.avatar)
-				const { result: didHash } = await convert(data.wxid, 'wxid')
-				if (didHash) {
-					const { data: metadata } = await getMetadata(didHash)
-					this[SET_WALLET_INFO](metadata)
-					this[SET_TOKEN](data.token)
-				}
-			}
-			const { data: snData } = await chainBindSn(code)
-			if (snData && snData.result) {
-				this.showBindingTutorial = true
-				this.bindSn = snData.result
+	import { mapState, mapActions } from 'vuex'
+	import { chainBindSn, chainAuth } from '@/util/api'
+	import { sleep } from '@/util/common'
+	import ClipboardJS from 'clipboard'
+	import { convert, getMetadata } from '@/util/chain'
+	import { SET_WALLET_INFO, SET_AVATAR, SET_TOKEN } from '@/vuex/constants'
+	import Account from '@/components/wallet/account'
+	import Transaction from '@/components/wallet/transaction'
+	export default {
+		name: 'walletHome',
+		data() {
+			return {
+				code: '',
+				showBindingTutorial: false,
+				bindSn: ''
 			}
 		},
-		...mapActions([
-			SET_WALLET_INFO,
-			SET_AVATAR,
-			SET_TOKEN
-		])
+		computed: {
+			...mapState([
+				'walletInfo'
+			])
+		},
+		components: {
+			Account,
+			Transaction
+		},
+		async mounted() {
+			this.clipboard = new ClipboardJS('.copy', {
+				text(e) {
+					return e.getAttribute('data-clipboard-text')
+				}
+			})
+			this.clipboard.on('success', (e) => {
+				if (e.action === 'copy') {
+					this.$toast('复制成功')
+				}
+				e.clearSelection()
+			})
+			this.clipboard.on('error', function(e) {
+				console.error('Action:', e.action)
+			})
+			try {
+				await sleep()
+				await this.getUserMetadata()
+			} catch (e) {
+				console.log(e)
+			}
+		},
+		methods: {
+			async getUserMetadata() {
+				const url = window.location.href
+				const part1 = url.split('&state')[0]
+				const code = part1.split('code=')[1]
+				const { data } = await chainAuth(code)
+				if (data) {
+					this[SET_AVATAR](data.avatar)
+					const { result: didHash } = await convert(data.wxid, 'wxid')
+					if (didHash) {
+						const { data: metadata } = await getMetadata(didHash)
+						this[SET_WALLET_INFO](metadata)
+						this[SET_TOKEN](data.token)
+					}
+				}
+				const { data: snData } = await chainBindSn(code)
+				if (snData && snData.result) {
+					this.showBindingTutorial = true
+					this.bindSn = snData.result
+				}
+			},
+			...mapActions([
+				SET_WALLET_INFO,
+				SET_AVATAR,
+				SET_TOKEN
+			])
+		}
 	}
-}
 </script>
 <style lang="scss">
 	@import '../../assets/css/variables.scss';
 
 	.wallet {
 		height: 100% !important;
+
 		.van-skeleton {
 			margin-top: $mediumGutter;
 		}
+
 		.lock-btns {
 			text-align: center;
 		}
