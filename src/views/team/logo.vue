@@ -21,7 +21,8 @@
 
 <script>
 	import { mapState, mapActions } from 'vuex'
-	import { uploadImg, buildTeam } from '@/util/api'
+	import { uploadImg, getPicBySymbol, buildTeam } from '@/util/api'
+	import { sleep } from '@/util/common'
 	import { SET_TEAM_INFO } from '@/vuex/constants'
 	export default {
 		name: 'teamLogo',
@@ -38,8 +39,11 @@
 				'avatar'
 			])
 		},
-		mounted() {
+		async mounted() {
 			this.logo = this.teamInfo.url
+			await sleep()
+			const { data } = await getPicBySymbol(this.teamInfo.symbol)
+			this.owner = data && data.owner_did
 		},
 		methods: {
 			async handleUpload() {
@@ -58,6 +62,7 @@
 				this.logo = `https://static.chain.pro/${rs.data}`
 			},
 			async handleSubmit() {
+				if (this.walletInfo.did !== this.owner) return this.$toast(`您没有权限修改${this.teamInfo.symbol}的LOGO`)
 				if (!this.logo) return this.$toast('请选择logo')
 				const rs = await buildTeam({
 					did: this.walletInfo.did,

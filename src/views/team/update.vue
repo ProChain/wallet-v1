@@ -14,9 +14,9 @@
 					</ValidationProvider>
 				</van-cell-group>
 				<van-image v-if="symbolPic" :src="symbolPic" width="1rem" height="1rem" round>
-				  <template v-slot:loading>
-				    <van-loading type="spinner" size="20" />
-				  </template>
+					<template v-slot:loading>
+						<van-loading type="spinner" size="20" />
+					</template>
 				</van-image>
 				<van-cell-group title="描述信息" :border="false">
 					<ValidationProvider v-slot="{ errors }" name="description">
@@ -44,106 +44,108 @@
 	</div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
-import { ValidationObserver, ValidationProvider } from 'vee-validate'
-import { SET_TEAM_INFO, DISPATCH_SIGN } from '@/vuex/constants'
-import { getPicBySymbol, buildTeam } from '@/util/api'
-import { debounce } from '@/util/common'
-const intialFormData = {
-	name: '',
-	symbol: '',
-	url: '',
-	website: '',
-	description: '',
-	tags: []
-}
-export default {
-	name: 'teamUpdate',
-	data() {
-		return {
-			pageType: '',
-			didForm: Object.assign({}, intialFormData),
-			btnText: '更新团队',
-			symbolPic: ''
-		}
-	},
-	computed: {
-		...mapState([
-			'walletInfo',
-			'teamInfo'
-		])
-	},
-	components: {
-		ValidationProvider,
-		ValidationObserver
-	},
-	created() {
-		this.debouncedSearch = debounce(this.handleInputChange)
-		const { type } = this.$route.query
-		if (type === 'create') {
-			this.btnText = '创建团队'
-		} else {
-			this.didForm = {
-				...intialFormData,
-				...this.teamInfo
-			}
-		}
-		this.pageType = type
-	},
-	activated() {
-		const tags = sessionStorage.getItem('tags')
-		if (tags) {
-			this.didForm.tags = JSON.parse(tags)
-		}
-	},
-	methods: {
-		async handleSubmit() {
-			// register name to chain
-			if (this.pageType === 'create') {
-				const data = {
-					address: this.walletInfo.address,
-					method: 'setGroupName',
-					params: [this.didForm.name]
-				}
-				this[DISPATCH_SIGN](data)
-			} else {
-				this.didForm.name = this.teamInfo.name
-			}
-
-			const rs = await buildTeam({
-				...this.didForm,
-				did: this.walletInfo.did
-			})
-			if (rs.hasErrors) {
-				return this.$toast.error(rs.message)
-			}
-
-			// update team info
-			const teamInfo = {
-				...this.teamInfo,
-				...this.didForm
-			}
-			this[SET_TEAM_INFO](teamInfo)
-
-			this.$router.go(-1)
-		},
-		async handleInputChange(symbol) {
-			const { data } = await getPicBySymbol(symbol)
-			this.symbolPic = data.result
-		},
-		...mapActions([
-			SET_TEAM_INFO,
-			DISPATCH_SIGN
-		])
+	import { mapState, mapActions } from 'vuex'
+	import { ValidationObserver, ValidationProvider } from 'vee-validate'
+	import { SET_TEAM_INFO, DISPATCH_SIGN } from '@/vuex/constants'
+	import { getPicBySymbol, buildTeam } from '@/util/api'
+	import { debounce } from '@/util/common'
+	const intialFormData = {
+		name: '',
+		symbol: '',
+		url: '',
+		website: '',
+		description: '',
+		tags: []
 	}
-}
+	export default {
+		name: 'teamUpdate',
+		data() {
+			return {
+				pageType: '',
+				didForm: Object.assign({}, intialFormData),
+				btnText: '更新团队',
+				symbolPic: ''
+			}
+		},
+		computed: {
+			...mapState([
+				'walletInfo',
+				'teamInfo'
+			])
+		},
+		components: {
+			ValidationProvider,
+			ValidationObserver
+		},
+		created() {
+			this.debouncedSearch = debounce(this.handleInputChange)
+			const { type } = this.$route.query
+			if (type === 'create') {
+				this.btnText = '创建团队'
+			} else {
+				this.didForm = {
+					...intialFormData,
+					...this.teamInfo
+				}
+			}
+			this.pageType = type
+		},
+		activated() {
+			const tags = sessionStorage.getItem('tags')
+			if (tags) {
+				this.didForm.tags = JSON.parse(tags)
+			}
+		},
+		methods: {
+			async handleSubmit() {
+				// register name to chain
+				if (this.pageType === 'create') {
+					const data = {
+						address: this.walletInfo.address,
+						method: 'setGroupName',
+						params: [this.didForm.name]
+					}
+					this[DISPATCH_SIGN](data)
+				} else {
+					this.didForm.name = this.teamInfo.name
+				}
+
+				const rs = await buildTeam({
+					...this.didForm,
+					did: this.walletInfo.did
+				})
+				if (rs.hasErrors) {
+					return this.$toast.error(rs.message)
+				}
+
+				// update team info
+				const teamInfo = {
+					...this.teamInfo,
+					...this.didForm
+				}
+				this[SET_TEAM_INFO](teamInfo)
+
+				this.$router.go(-1)
+			},
+			async handleInputChange(symbol) {
+				const { data } = await getPicBySymbol(symbol)
+				this.symbolPic = data && data.url
+			},
+			...mapActions([
+				SET_TEAM_INFO,
+				DISPATCH_SIGN
+			])
+		}
+	}
 </script>
 <style lang="scss">
 	@import '../../assets/css/variables.scss';
+
 	.team-update-component {
 		.tag-title {
 			color: #969799;
 		}
+
 		.van-image {
 			background-color: #c1bdbd;
 			margin: $mediumGutter 0 0 $mediumGutter;
