@@ -10,7 +10,7 @@
 				</div>
 				<div class="preview">
 					<img class="preview" src="../../assets/images/avatar.jpg" alt="avatar">
-					<van-image v-if="logo" round width="0.85rem" height="0.85rem" :src="logo" />
+					<van-image v-if="logo" round width="0.8rem" height="0.8rem" :src="logo" />
 					<p>效果预览</p>
 				</div>
 			</div>
@@ -70,7 +70,7 @@
 				})
 				this.$dialog.confirm({
 					title: '温馨提示',
-					message: '团队LOGO已更新\n是否去生成区块身份头像？',
+					message: `团队LOGO已更新！\n立即去生成${this.teamInfo.symbol}的区块身份头像？`,
 				}).then(() => {
 					this.$router.replace({ path: '/avatar', query: { teamname: this.teamInfo.name }})
 				}).catch(console.log)
@@ -122,7 +122,7 @@
 				.van-image--round {
 					position: absolute;
 					right: 0;
-					top: 67px;
+					top: 70px;
 				}
 			}
 
