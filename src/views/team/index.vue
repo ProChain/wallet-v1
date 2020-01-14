@@ -40,7 +40,7 @@
 				<van-cell-group v-else title="我的团队" :border="false" class="team-info">
 					<van-cell title="团队名称" :label="teamInfo.name" :center="true" is-link to="/team/update" />
 					<van-cell title="团队规模" :value="`${lockedRecords.max_quota || 0}人`" />
-					<van-cell title="团队成员" :label="`${num}人`" :center="true" is-link to="/team/member" />
+					<van-cell :title="`团队成员（${num}人）`" :center="true" is-link to="/team/member" />
 					<van-cell title="团队logo" is-link to="/team/logo">
 						<i i class="icon" :style="{ backgroundImage: `url(${teamInfo.url})`}" slot="icon"></i>
 					</van-cell>

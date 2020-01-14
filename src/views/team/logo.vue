@@ -1,6 +1,9 @@
 <template>
 	<div class="team-logo">
-		<van-panel :title="`${teamInfo.symbol}的LOGO`">
+		<van-panel>
+			<div class="van-cell van-panel__header" slot="header">
+				<b>{{ teamInfo.symbol }}</b>的LOGO
+			</div>
 			<div class="container">
 				<div class="choose-logo">
 					<van-image v-if="logo" round width="2rem" height="2rem" :src="logo" />
@@ -77,7 +80,7 @@
 					title: '温馨提示',
 					message: `团队LOGO已更新！\n立即去生成${this.teamInfo.symbol}的区块身份头像？`,
 				}).then(() => {
-					this.$router.replace({ path: '/avatar', query: { teamname: this.teamInfo.name }})
+					this.$router.replace({ path: '/avatar', query: { teamname: this.teamInfo.name } })
 				}).catch(console.log)
 			},
 			...mapActions([
@@ -92,7 +95,13 @@
 
 	.team-logo {
 		font-size: $baseFontSize;
-
+		.van-panel__header {
+			b {
+				font-size: $largeFontSize;
+				margin-right: $smallGutter;
+				color: $red;
+			}
+		}
 		.container {
 			display: flex;
 			justify-content: space-around;
@@ -105,12 +114,15 @@
 				margin-top: 10px;
 				color: $grey;
 			}
+
 			.van-image--round {
 				background-color: $dark;
+
 				img {
 					transform: scale(0.8);
 				}
 			}
+
 			.choose-logo {
 				position: relative;
 
