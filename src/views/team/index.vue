@@ -1,72 +1,53 @@
 <template>
 	<div class="team-component">
-		<div class="sumary">
-			<ul>
-				<li>
-					已抵押
-					<p>
-						{{ lockedRecords.locked_funds | money }}
-					</p>
-				</li>
-				<li>
-					已赎回
-					<p>
-						{{ unlockRecords.unlocked_funds | money  }}
-					</p>
-				</li>
-			</ul>
-		</div>
+		<van-row type="flex" class="sumary">
+			<van-col span="12">
+				已抵押
+				<p>
+					{{ lockedRecords.locked_funds | money }}
+				</p>
+			</van-col>
+			<van-col span="12">
+				最近赎回
+				<p>
+					{{ unlockRecords.unlocked_funds | money  }}
+				</p>
+			</van-col>
+		</van-row>
+		<van-panel v-if="teamInfo.tags && teamInfo.tags.length > 0">
+			<div class="van-cell-group__title mp-0" slot="header">团队标签</div>
+			<van-tag v-for="(tag, idx) in teamInfo.tags" round type="success" size="large" :key="idx">{{ tag }}</van-tag>
+		</van-panel>
+		<van-cell-group title="我的推荐人" :border="false">
+			<van-cell :title="superior || '您没有推荐人'" />
+		</van-cell-group>
 		<div class="team">
-			<div class="mysuperior">
-				<div>
-					<h3>我的推荐人</h3>
-					<p v-if="superior">
-						{{ superior | clip(18, -10) }}
-					</p>
-					<p v-else>
-						您还没有推荐人
-					</p>
-				</div>
-				<div v-if="teamInfo.tags && teamInfo.tags.length > 0" class="group-tags">
-					<h3>团队标签</h3>
-					<p>
-						<van-tag v-for="(tag, idx) in teamInfo.tags" round type="success" size="large" :key="idx">{{ tag }}</van-tag>
-					</p>
-				</div>
-			</div>
 			<div class="myteam">
-				<h3>我的团队</h3>
-				<p v-if="!lockedRecords.locked_funds">
-					您尚未抵押足够的PRA
+				<van-panel v-if="!lockedRecords.locked_funds">
+					<div class="van-cell-group__title van-hairline--bottom page-bg" slot="header">我的团队</div>
+					<p>您尚未抵押足够的币</p>
 					<van-button size="large" type="primary" @click="becomePartner">
 						立刻成为共识合伙人
 					</van-button>
-				</p>
-				<p v-else-if="lockedRecords.locked_funds >= 25 && !teamInfo.name">
-					您尚未创建团队
+				</van-panel>
+				<van-panel v-if="lockedRecords.locked_funds >= 25 && !teamInfo.name">
+					<div class="van-cell-group__title van-hairline--bottom page-bg" slot="header">我的团队</div>
+					<p>您尚未创建团队</p>
 					<van-button size="large" type="primary" :to="{ path: '/team/update?type=create' }">
 						立即创建团队
 					</van-button>
-				</p>
-				<div v-else class="team-info">
-					<van-cell title="团队名称" :border="false" :label="teamInfo.name" :center="true" is-link to="/team/update" />
-					<van-cell title="团队规模" :border="false" :value="`${lockedRecords.max_quota || 0}人`" />
-					<van-cell title="团队成员" :border="false" :label="`${num}人`" :center="true" is-link to="/team/member" />
-					<van-cell title="团队logo" :border="false" is-link to="/team/logo">
+				</van-panel>
+				<van-cell-group v-else title="我的团队" :border="false" class="team-info">
+					<van-cell title="团队名称" :label="teamInfo.name" :center="true" is-link to="/team/update" />
+					<van-cell title="团队规模" :value="`${lockedRecords.max_quota || 0}人`" />
+					<van-cell title="团队成员" :label="`${num}人`" :center="true" is-link to="/team/member" />
+					<van-cell title="团队logo" is-link to="/team/logo">
 						<i i class="icon" :style="{ backgroundImage: `url(${teamInfo.url})`}" slot="icon"></i>
 					</van-cell>
-					<div class="btns">
-						<van-button type="primary" to="/redemption">
-							赎回
-						</van-button>
-						<van-button type="primary" to="/lock">
-							抵押
-						</van-button>
-					</div>
-				</div>
+				</van-cell-group>
 			</div>
-			<div v-if="!lockedRecords.locked_funds" class="desc">
-				<h3>成为共识合伙人，您将拥有以下特权</h3>
+			<van-panel v-if="!lockedRecords.locked_funds" class="desc">
+				<div class="van-cell-group__title page-bg" slot="header">成为共识合伙人，您将拥有以下特权</div>
 				<p>
 					·定制社群名称和logo，并在区块链上登记。<br>
 					·绑定社群成员关系，为社群成员带去福利，同时获得成员福利分成。<br>
@@ -77,8 +58,16 @@
 					注：成为共识合伙人需要50PRA<br>
 					我的当前余额 <b>{{ walletInfo.free_balance | money }}</b>
 				</p>
-			</div>
+			</van-panel>
 		</div>
+		<van-row class="footer">
+			<van-col span="12">
+				<van-button square type="primary" size="large" to="/lock">抵押</van-button>
+			</van-col>
+			<van-col span="12">
+				<van-button square color="#ccc" size="large" to="/redemption">赎回</van-button>
+			</van-col>
+		</van-row>
 	</div>
 </template>
 <script>
@@ -92,7 +81,8 @@
 		data() {
 			return {
 				superior: '',
-				num: 0
+				num: 0,
+				active: 0
 			}
 		},
 		async mounted() {
@@ -103,7 +93,7 @@
 				this.superior = result
 
 				const didHash = didToHex(this.walletInfo.did)
-				const { data: { page }} = await getMembers(didHash)
+				const { data: { page } } = await getMembers(didHash)
 				this.num = page.dataTotal
 
 				const rs = await getTeamInfo(this.walletInfo.did)
@@ -160,43 +150,37 @@
 
 		.sumary {
 			padding: 25px 0;
-			background: #19be6b;
+			background: $green;
 			color: #fff;
-			overflow: hidden;
+			text-align: center;
 
-			li {
-				float: left;
-				width: 50%;
-				text-align: center;
-				line-height: 40px;
+			p {
+				margin-top: $largeGutter;
+				font-size: $largeFontSize*1.3;
+			}
+		}
 
-				p {
-					font-size: $largeFontSize*1.3;
-				}
+		.van-panel {
+			.van-panel__content {
+				padding: $smallGutter;
+			}
+
+			.van-tag {
+				margin: $smallGutter;
 			}
 		}
 
 		.team {
-			padding: 18px;
+			padding-bottom: $largeGutter*2.5;
 
-			h3 {
-				margin-bottom: $smallGutter;
-			}
-
-			p {
-				padding-bottom: $largeGutter;
-			}
-
-			button {
-				margin: $mediumGutter 0;
+			.myteam {
+				p {
+					color: $grey;
+					padding: $mediumGutter;
+				}
 			}
 
 			.team-info {
-				.van-cell {
-					background: transparent;
-					padding: 5px 0;
-				}
-
 				.icon {
 					display: inline-block;
 					width: 28px;
@@ -207,49 +191,33 @@
 					vertical-align: middle;
 					margin-right: $smallGutter;
 					border-radius: 100%;
-					background-color: #c1bdbd;
+					background-color: $grey;
 				}
 
-				li {
-					line-height: 30px;
-					height: 30px;
-					overflow: hidden;
-
-					button {
-						margin-top: 8px;
-						float: right;
-						font-size: $mediumFontSize;
-						padding: 0;
-					}
-				}
-			}
-
-			.group-tags {
-				.van-tag {
-					margin: 0 5px;
-				}
-			}
-
-			.btns {
-				text-align: center;
-				margin-top: 50px;
-
-				button {
-					min-width: 100px;
-					margin: 0 15px;
+				.van-button {
+					margin-top: $mediumGutter;
 				}
 			}
 
 			.desc {
+				line-height: 25px;
+
+				p {
+					padding: $mediumGutter;
+				}
+
 				.tips {
 					margin-top: 30px;
 					font-weight: bold;
 				}
-
-				button {
-					margin-top: 100px;
-				}
 			}
+		}
+
+		.footer {
+			width: 100%;
+			position: fixed;
+			left: 0;
+			bottom: 0;
 		}
 	}
 </style>

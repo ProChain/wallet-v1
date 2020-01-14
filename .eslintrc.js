@@ -143,8 +143,8 @@ module.exports = {
             2,
             'always',
             {
-                objectsInObjects: false,
-                arraysInObjects: false
+                objectsInObjects: true,
+                arraysInObjects: true
             }
         ],
         'arrow-spacing': 2,
