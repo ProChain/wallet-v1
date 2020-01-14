@@ -18,7 +18,7 @@
 				</div>
 			</div>
 		</van-panel>
-		<van-button square size="large" type="primary" @click="handleSubmit">确认修改</van-button>
+		<van-button square size="large" type="primary" :disabled="walletInfo.did !== owner" @click="handleSubmit">确认修改</van-button>
 	</div>
 </template>
 
@@ -32,7 +32,8 @@
 		data() {
 			return {
 				logo: '',
-				file: null
+				file: null,
+				owner: ''
 			}
 		},
 		computed: {
@@ -65,7 +66,6 @@
 				this.logo = `https://static.chain.pro/${rs.data}`
 			},
 			async handleSubmit() {
-				if (this.walletInfo.did !== this.owner) return this.$toast(`您没有权限修改${this.teamInfo.symbol}的LOGO`)
 				if (!this.logo) return this.$toast('请选择logo')
 				const rs = await buildTeam({
 					did: this.walletInfo.did,

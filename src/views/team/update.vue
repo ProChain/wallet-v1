@@ -151,6 +151,9 @@
 		.van-image {
 			background-color: #c1bdbd;
 			margin: $mediumGutter 0 0 $mediumGutter;
+			img {
+				transform: scale(0.8);
+			}
 		}
 	}
 </style>

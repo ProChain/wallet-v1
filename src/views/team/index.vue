@@ -19,9 +19,7 @@
 			<van-tag v-for="(tag, idx) in teamInfo.tags" round type="success" size="large" :key="idx">{{ tag }}</van-tag>
 		</van-panel>
 		<van-cell-group title="我的推荐人" :border="false">
-			<van-cell :title="superior | clip(18, -10) || '您没有推荐人'" :center="true">
-				<i class="icon pra" :class="{grey: !superior}" slot="icon"></i>
-			</van-cell>
+			<van-cell :title="superior | clip(18, -10) || '您没有推荐人'" :center="true" />
 		</van-cell-group>
 		<div class="team">
 			<div class="myteam">
