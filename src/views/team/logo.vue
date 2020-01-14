@@ -18,7 +18,7 @@
 				</div>
 			</div>
 		</van-panel>
-		<van-button size="large" type="primary" @click="handleSubmit">确认修改</van-button>
+		<van-button square size="large" type="primary" @click="handleSubmit">确认修改</van-button>
 	</div>
 </template>
 

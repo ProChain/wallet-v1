@@ -19,7 +19,9 @@
 			<van-tag v-for="(tag, idx) in teamInfo.tags" round type="success" size="large" :key="idx">{{ tag }}</van-tag>
 		</van-panel>
 		<van-cell-group title="我的推荐人" :border="false">
-			<van-cell :title="superior || '您没有推荐人'" />
+			<van-cell :title="superior | clip(18, -10) || '您没有推荐人'" :center="true">
+				<i class="icon pra" :class="{grey: !superior}" slot="icon"></i>
+			</van-cell>
 		</van-cell-group>
 		<div class="team">
 			<div class="myteam">
@@ -39,8 +41,8 @@
 				</van-panel>
 				<van-cell-group v-else title="我的团队" :border="false" class="team-info">
 					<van-cell title="团队名称" :label="teamInfo.name" :center="true" is-link to="/team/update" />
-					<van-cell title="团队规模" :label="lockedRecords.max_quota | person" is-link to="/team/member" />
-					<van-cell title="团队logo" is-link to="/team/logo">
+					<van-cell title="团队规模" :center="true" :label="lockedRecords.max_quota | person" is-link to="/team/member" />
+					<van-cell title="团队logo" :center="true" is-link to="/team/logo">
 						<i i class="icon" :style="{ backgroundImage: `url(${teamInfo.url})`}" slot="icon"></i>
 					</van-cell>
 				</van-cell-group>
@@ -181,14 +183,9 @@
 
 			.team-info {
 				.icon {
-					display: inline-block;
 					width: 28px;
 					height: 28px;
-					background-repeat: no-repeat;
 					background-size: 80%;
-					background-position: center;
-					vertical-align: middle;
-					margin-right: $smallGutter;
 					border-radius: 100%;
 					background-color: $grey;
 				}

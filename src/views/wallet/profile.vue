@@ -47,43 +47,6 @@
 	@import '../../assets/css/variables.scss';
 
 	.profile {
-		.van-cell-group {
-			.van-cell {}
-
-			.icon {
-				width: 38px;
-				height: 38px;
-				background-repeat: no-repeat;
-				background-position: center;
-				background-size: 90%;
-				margin-right: 10px;
-
-				&.wechat {
-					background-image: url(../../assets/images/wechat.svg);
-				}
-
-				&.twitter {
-					background-image: url(../../assets/images/twitter.svg);
-				}
-
-				&.pra {
-					background-image: url(../../assets/images/logo.jpg);
-				}
-
-				&.eos {
-					background-image: url(../../assets/images/eos.svg);
-				}
-
-				&.eth {
-					background-image: url(../../assets/images/eth.svg);
-				}
-
-				&.btc {
-					background-image: url(../../assets/images/btc.png);
-				}
-			}
-		}
-
 		.external-account {
 			margin-bottom: 20px;
 		}
