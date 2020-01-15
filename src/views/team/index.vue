@@ -23,29 +23,29 @@
 		</van-cell-group>
 		<div class="team">
 			<div class="myteam">
-				<van-panel v-if="!lockedRecords.locked_funds">
-					<div class="van-cell-group__title van-hairline--bottom page-bg" slot="header">我的团队</div>
-					<p>您尚未抵押足够的币</p>
-					<van-button size="large" type="primary" @click="becomePartner">
-						立刻成为共识合伙人
-					</van-button>
-				</van-panel>
-				<van-panel v-if="lockedRecords.locked_funds >= 25 && !teamInfo.name">
-					<div class="van-cell-group__title van-hairline--bottom page-bg" slot="header">我的团队</div>
-					<p>您尚未创建团队</p>
-					<van-button size="large" type="primary" :to="{ path: '/team/update?type=create' }">
-						立即创建团队
-					</van-button>
-				</van-panel>
-				<van-cell-group v-else title="我的团队" :border="false" class="team-info">
+				<van-cell-group v-if="walletInfo.is_partner" title="我的团队" :border="false" class="team-info">
 					<van-cell title="团队名称" :label="teamInfo.name" :center="true" is-link to="/team/update" />
 					<van-cell title="团队规模" :center="true" :label="lockedRecords.max_quota | person" is-link to="/team/member" />
 					<van-cell title="团队logo" :center="true" is-link to="/team/logo">
 						<i i class="icon" :style="{ backgroundImage: `url(${teamInfo.url})`}" slot="icon"></i>
 					</van-cell>
 				</van-cell-group>
+				<van-panel v-else-if="lockedRecords.locked_funds >= 25 && !teamInfo.name">
+					<div class="van-cell-group__title van-hairline--bottom page-bg" slot="header">我的团队</div>
+					<p>您尚未创建团队</p>
+					<van-button size="large" type="primary" :to="{ path: '/team/update?type=create' }">
+						立即创建团队
+					</van-button>
+				</van-panel>
+				<van-panel v-else>
+					<div class="van-cell-group__title van-hairline--bottom page-bg" slot="header">我的团队</div>
+					<p>您尚未抵押足够的币</p>
+					<van-button size="large" type="primary" @click="becomePartner">
+						立刻成为共识合伙人
+					</van-button>
+				</van-panel>
 			</div>
-			<van-panel v-if="!lockedRecords.locked_funds" class="desc">
+			<van-panel v-if="!walletInfo.is_partner" class="desc">
 				<div class="van-cell-group__title page-bg" slot="header">成为共识合伙人，您将拥有以下特权</div>
 				<p>
 					·定制社群名称和logo，并在区块链上登记。<br>
