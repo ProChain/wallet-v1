@@ -20,6 +20,7 @@ const apiGetMembers = '/api/v1/mainnet/members'
 const apiGetTransactions = 'https://dana.prabox.net/api/v1/transfer'
 const apiTeamTags = '/api/v1/mainnet/get_team_tags'
 const apiSymbolPic = '/api/v1/mainnet/get_team_logo_by_symbol'
+const apiBalance = '/api/v1/lottery/balance'
 
 export async function chainAuth(wxcode) {
 	if (process.env.VUE_APP_TEST_WX) {
@@ -176,4 +177,8 @@ export async function getPicBySymbol(symbol) {
 			symbol
 		}
 	})
+}
+
+export async function getLotteryBalance() {
+	return axios.get(apiBalance)
 }
