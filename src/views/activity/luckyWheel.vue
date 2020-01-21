@@ -27,9 +27,9 @@
 			<div class="main-bg"></div>
 			<div class="bg-p"></div>
 			<div class="content">
-				<p class="did">{{ did || '未识别到您的DID' }}</p>
+				<p class="did">{{ did | clip(18, -10) || '未识别到您的DID' }}</p>
 				<div class="lotteryTicket">免费抽奖次数： {{ lotteryTicket }}</div>
-				<div>奖池余额：{{ lotteryBalance | money }}</div>
+				<div class="lottery-balance">奖池余额：<b>{{ lotteryBalance | money }}</b></div>
 			</div>
 			<div class="tip">
 				<div class="tip-title">活动规则</div>
@@ -393,13 +393,10 @@
 			height: 166px;
 			color: #ffeb39;
 			text-align: center;
-
-			.did {
-				width: 80%;
-				overflow: hidden;
-				margin: 0 auto;
-				white-space: nowrap;
-				text-overflow: ellipsis;
+			.lottery-balance {
+				b {
+					font-size: 15px;
+				}
 			}
 		}
 
