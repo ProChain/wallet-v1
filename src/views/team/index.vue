@@ -23,7 +23,7 @@
 		</van-cell-group>
 		<div class="team">
 			<div class="myteam">
-				<van-cell-group v-if="walletInfo.is_partner" title="我的团队" :border="false" class="team-info">
+				<van-cell-group v-if="walletInfo.is_partner && teamInfo.name" title="我的团队" :border="false" class="team-info">
 					<van-cell title="团队名称" :label="teamInfo.name" :center="true" is-link to="/team/update" />
 					<van-cell title="团队规模" :center="true" :label="lockedRecords.max_quota | person" is-link to="/team/member" />
 					<van-cell title="团队logo" :center="true" is-link to="/team/logo">
