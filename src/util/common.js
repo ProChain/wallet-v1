@@ -228,3 +228,9 @@ export function throttle(fn, interval) {
 		}
 	}
 }
+
+export function blobToFile(blob, fileName) {
+	blob.lastModifiedDate =new Date()
+	blob.name = fileName
+	return blob
+}

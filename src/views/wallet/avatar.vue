@@ -39,12 +39,42 @@
 				</p>
 			</div>
 		</div>
+		<van-popup
+		v-model="show"
+		position="top">
+			<div class="cropper-content">
+				<div class="cropper" style="text-align:center">
+					<van-loading v-if="!option.img" type="spinner" />
+					<vueCropper
+					v-else
+					ref="cropper"
+					:img="option.img"
+					:outputSize="option.size"
+					:outputType="option.outputType"
+					:info="false"
+					:full="option.full"
+					:canMove="option.canMove"
+					:canMoveBox="option.canMoveBox"
+					:original="option.original"
+					:autoCrop="option.autoCrop"
+					:fixed="option.fixed"
+					:fixedNumber="option.fixedNumber"
+					:centerBox="option.centerBox"
+					:infoTrue="option.infoTrue"
+					:fixedBox="option.fixedBox"
+					@realTime="realTime"
+					></vueCropper>
+				</div>
+				<van-button type="primary" size="large" @click="finish">裁剪</van-button>
+			</div>
+		</van-popup>
 	</div>
 </template>
 <script>
 	import { mapState } from 'vuex'
 	import { getAvatarStyle, encodeAvatar, getTeamLogo, getTeamInfo, uploadImg } from '@/util/api'
-	import { sleep } from '@/util/common'
+	import { sleep, blobToFile } from '@/util/common'
+	import { VueCropper }  from 'vue-cropper'
 	export default {
 		name: 'walletAvatar',
 		data() {
@@ -60,13 +90,37 @@
 				logoActive: null,
 				colorActive: null,
 				file: null,
-				current: -1
-			};
+				current: -1,
+				previews: '',
+				filename: '',
+				show: false,
+				option: {
+					img: '', // 裁剪图片的地址
+					info: true, // 裁剪框的大小信息
+					outputSize: 0.8, // 裁剪生成图片的质量
+					outputType: 'jpeg', // 裁剪生成图片的格式
+					canScale: false, // 图片是否允许滚轮缩放
+					autoCrop: true, // 是否默认生成截图框
+					autoCropWidth: 300, // 默认生成截图框宽度
+					autoCropHeight: 200, // 默认生成截图框高度
+					fixedBox: true, // 固定截图框大小 不允许改变
+					fixed: true, // 是否开启截图框宽高固定比例
+					fixedNumber: [1, 1], // 截图框的宽高比例
+					full: true, // 是否输出原图比例的截图
+					canMoveBox: false, // 截图框能否拖动
+					original: false, // 上传图片按照原始比例渲染
+					centerBox: true, // 截图框是否被限制在图片里面
+					infoTrue: true // true 为展示真实输出图片宽高 false 展示看到的截图框宽高
+				}
+			}
 		},
 		computed: {
 			...mapState([
 				'walletInfo'
 			])
+		},
+		components: {
+			VueCropper
 		},
 		watch: {
 			result: {
@@ -97,10 +151,23 @@
 			const { data } = await getTeamInfo(this.walletInfo.did)
 			this.teamInfo = data
 
-			const { data: { list }} = await getTeamLogo(this.walletInfo.did)
+			const { data: { list } } = await getTeamLogo(this.walletInfo.did)
 			this.logos = list
 		},
 		methods: {
+			realTime(data) {
+				const h = 0.5
+
+				this.previewStyle1 = {
+					width: data.w + 'px',
+					height: data.h + 'px',
+					overflow: 'hidden',
+					margin: '0',
+					zoom: h
+				}
+
+				this.previews = data
+			},
 			async handleCreateAvatar(color, logo, avatar) {
 				try {
 					const data = await encodeAvatar(avatar, color, this.walletInfo.did, logo)
@@ -131,7 +198,6 @@
 				this.current = 2
 			},
 			beforeUpload(file) {
-				console.log(file)
 				const maxFileSize = 1024 * 1024 * 10;
 				if (!/\.(gif|jpg|jpeg|png|GIF|JPG|JPEG|PNG)$/.test(file.name)) {
 					this.$toast('图片类型必须是gif,jpeg,jpg,png中的一种')
@@ -141,13 +207,31 @@
 					this.$toast('图片尺寸超过10M了')
 					return false;
 				}
+				this.show = true
 				return true
 			},
+			finish() {
+				this.$refs.cropper.getCropBlob(async blob => {
+					this.show = false
+					this.option.img = ''
+					const file = blobToFile(blob, this.filename)
+					const data = new FormData()
+					data.append('file', file, this.filename)
+					const rs = await uploadImg(data)
+					this.avatar = `https://static.chain.pro/${rs.data}`
+				})
+			},
 			async handleSuccess(res) {
-				const data = new FormData()
-				data.append('file', res.file)
-				const rs = await uploadImg(data)
-				this.avatar = `https://static.chain.pro/${rs.data}`
+				const self = this
+				console.log(res.file, 'url')
+				this.filename = res.file.name
+				let imgFile = new FileReader()
+				imgFile.readAsDataURL(res.file)
+				imgFile.onload = function() {
+					setTimeout(() => {
+						self.option.img = this.result
+					}, 500)
+				}
 			}
 		}
 	};
@@ -308,6 +392,16 @@
 			.avatar-tip {
 				color: $red;
 			}
+		}
+	}
+	.van-loading {
+		top: 50%;
+		transform: translateY(-50%);
+	}
+	.cropper-content {
+		.cropper {
+			width: auto;
+			height: 300px;
 		}
 	}
 </style>
