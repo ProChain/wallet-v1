@@ -18,5 +18,8 @@ export const mutations = {
 	},
 	hideLoading: (state) => {
 		state.showLoading = false
+	},
+	setNewbie: (state, status) => {
+		state.isNewbie = status
 	}
 }

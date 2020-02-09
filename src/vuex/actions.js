@@ -25,7 +25,7 @@ export const actions = {
 	 * @@@
 	 * all socket relevant state
 	 */
-	[Actions.SOCKET_CONNECT]: ({ state: { walletInfo }}) => {
+	[Actions.SOCKET_CONNECT]: ({ state: { walletInfo } }) => {
 		console.log('connect------')
 		if (walletInfo.did) {
 			vm.$socket.emit('setName', {
@@ -55,7 +55,7 @@ export const actions = {
 		commit('hideLoading')
 		vm.$toast('已转账')
 		setTimeout(() => {
-			vm.$router.push('/')
+			vm.$router.go(-1)
 		}, 500)
 	},
 	[Actions.SOCKET_LOCKED]: ({ state, commit }, payload) => {

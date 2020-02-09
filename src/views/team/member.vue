@@ -1,18 +1,18 @@
 <template>
 	<div class="member-component">
 		<div class="member">
-			<h3>团队成员</h3>
-			<div class="members" v-if="page.dataTotal > 0">
+			<h3>我的团队成员列表</h3>
+			<div class="members" v-if="page.total > 0">
 				<ul class="list">
 					<li v-for="(item, index) in members" :key="index">
-						{{ item }}
+						{{ item.id }}
 					</li>
 				</ul>
-				<van-pagination v-if="page.dataTotal > 20" v-model="currentPage" :total-items="page.dataTotal" :items-per-page="20"
+				<van-pagination v-if="page.total > 20" v-model="currentPage" :total-items="page.total" :items-per-page="20"
 				 mode="simple" @change="handlePageChange" />
 			</div>
 			<p v-else class="no-content">
-				您没有下级
+				您暂时没有团队成员
 			</p>
 		</div>
 	</div>
@@ -46,28 +46,42 @@
 		},
 		methods: {
 			handlePageChange(page) {
-				this.queryRecord(page - 1)
+				this.queryRecord(page)
 			},
-			async queryRecord(pageNum = 0) {
-				// this.$Spin.show()
-				const { data: { list, page }} = await getMembers(this.didHash, pageNum)
-				this.members = list
-				this.page = page
-				// this.$Spin.hide()
+			async queryRecord(pageNum = 1) {
+				const { meta, data } = await getMembers(this.didHash, pageNum)
+				this.members = data
+				this.page = meta
 			}
 		}
 	}
 </script>
 <style lang="scss">
 	@import '../../assets/css/variables.scss';
-
-	.member {
-		padding: $mediumGutter;
-		font-size: $baseFontSize;
-		line-height: $baseLineHeight;
-
-		.list {
-			margin-bottom: $largeGutter;
+	.member-component {
+		background: #fff;
+		.member {
+			font-size: $baseFontSize;
+			line-height: $baseLineHeight;
+			h3 {
+				font-weight:normal;
+				color: $grey;
+				padding: $smallGutter $mediumGutter;
+				margin-top: $mediumGutter;
+			}
+			.list {
+				margin-bottom: $largeGutter;
+				li {
+					line-height: 45px;
+					padding: 0 $mediumGutter;
+					&:nth-of-type(2n+1) {
+						background: #eee;
+					}
+				}
+			}
+		}
+		.van-pagination {
+			padding: 0 $largeGutter;
 		}
 	}
 </style>

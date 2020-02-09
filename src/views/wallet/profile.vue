@@ -26,6 +26,20 @@
 				</van-cell>
 			</van-cell-group>
 		</div>
+		<van-overlay :show="isNewbie">
+			<div class="wrapper">
+				<van-cell v-if="walletInfo.did" :title="walletInfo.did | clip(18, -10)" label="创建区块身份头像" is-link :center="true" :to="{path: '/avatar', query: {avatar}}">
+					<i class="icon pra" slot="icon"></i>
+				</van-cell>
+				<van-cell v-else title="未绑定" :center="true">
+					<i class="icon pra grey" slot="icon"></i>
+				</van-cell>
+				<van-icon name="share" />
+				<div class="tip">
+					点击创建区块链身份头像
+				</div>
+			</div>
+		</van-overlay>
 	</div>
 </template>
 <script>
@@ -38,7 +52,8 @@
 			},
 			...mapState([
 				'walletInfo',
-				'avatar'
+				'avatar',
+				'isNewbie'
 			])
 		}
 	}
@@ -61,6 +76,30 @@
 					right: 0;
 					z-index: 999;
 					font-size: $mediumFontSize;
+				}
+			}
+		}
+		.van-overlay {
+			.wrapper {
+				align-items: flex-start;
+				justify-content: flex-start;
+				align-content: flex-start;
+				flex-wrap: wrap;
+				margin-top: 39PX;
+				.van-cell--center {
+					flex: 0 0 100%;
+				}
+				.van-icon-share {
+					color: #fff;
+					transform: rotate(-90deg);
+					margin: $largeGutter auto 0;
+				}
+				.tip {
+					flex: 0 0 100%;
+					color: #fff;
+					text-align: center;
+					font-size: $mediumFontSize;
+					padding: $largeGutter 0;
 				}
 			}
 		}

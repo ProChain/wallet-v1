@@ -16,7 +16,7 @@ const apiLotteryRecord = '/api/v1/lottery/records'
 const apiBuildTeam = '/api/v1/mainnet/build_team'
 const apiGroupLogo = '/api/v1/mainnet/get_team_logo'
 const apiTeamInfo = '/api/v1/mainnet/team_info'
-const apiGetMembers = '/api/v1/mainnet/members'
+const apiGetMembers = 'https://dana.prabox.net/api/v1/did/members'
 const apiGetTransactions = 'https://dana.prabox.net/api/v1/transfer'
 const apiTeamTags = '/api/v1/mainnet/get_team_tags'
 const apiSymbolPic = '/api/v1/mainnet/get_team_logo_by_symbol'
@@ -146,13 +146,8 @@ export async function getTeamLogo(did) {
 	})
 }
 
-export async function getMembers(didHash, page) {
-	return axios.get(apiGetMembers, {
-		params: {
-			did_hash: didHash,
-			page
-		}
-	})
+export async function getMembers(didHash, page, size = 12) {
+	return axios.get(`${apiGetMembers}/${didHash}?page[number]=${page}&page[size]=${size}`)
 }
 
 export async function getTeamInfo(did) {

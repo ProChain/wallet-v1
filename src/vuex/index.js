@@ -14,6 +14,7 @@ const state = {
 	},
 	showLoading: true,
 	token: '',
+	isNewbie: false,
 	locale: 'zh'
 };
 

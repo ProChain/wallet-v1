@@ -2,7 +2,7 @@
 	<div class="home-page">
 		<div class="wallet">
 			<account :metadata="walletInfo" />
-			<div class="lock-btns">
+			<div class="lock-btns" ref="locks">
 				<van-grid :border="false" :column-num="3">
 					<van-grid-item icon="manager-o" text="DID" to="/profile" />
 					<van-grid-item icon="balance-o" text="挖矿" to="/team" />
@@ -31,12 +31,24 @@
 				</div>
 			</div>
 		</van-overlay>
+		<van-overlay :show="isNewbie">
+			<div v-if="pos.top" class="wrapper" :style="{marginTop: pos.top + 'px'}">
+				<van-grid :border="false" :column-num="1">
+					<van-grid-item icon="manager-o" text="DID" to="/profile" />
+				</van-grid>
+				<van-icon name="share" />
+				<div class="tip">
+					创建您的区块链身份头像，方便微信里领取各种广告奖励
+				</div>
+			</div>
+			<van-button type="default" @click="handleDelay">下次创建</van-button>
+		</van-overlay>
 	</div>
 </template>
 <script>
 	import { mapState, mapActions } from 'vuex'
 	import { chainBindSn, chainAuth } from '@/util/api'
-	import { sleep } from '@/util/common'
+	import { sleep, getRect } from '@/util/common'
 	import ClipboardJS from 'clipboard'
 	import { convert, getMetadata } from '@/util/chain'
 	import { SET_WALLET_INFO, SET_AVATAR, SET_TOKEN } from '@/vuex/constants'
@@ -48,12 +60,14 @@
 			return {
 				code: '',
 				showBindingTutorial: false,
-				bindSn: ''
+				bindSn: '',
+				pos: {}
 			}
 		},
 		computed: {
 			...mapState([
-				'walletInfo'
+				'walletInfo',
+				'isNewbie'
 			])
 		},
 		components: {
@@ -75,6 +89,17 @@
 			this.clipboard.on('error', function(e) {
 				console.error('Action:', e.action)
 			})
+			setTimeout(() => {
+				this.pos = getRect(this.$refs.locks)
+				console.log(this.pos)
+			}, 700)
+			const isNew = localStorage.getItem('isNew')
+			console.log(typeof isNew, isNew)
+			if (isNew !== 'false') {
+				this.$store.commit('setNewbie', true)
+			} else {
+				this.$store.commit('setNewbie', false)
+			}
 			try {
 				await sleep()
 				await this.getUserMetadata()
@@ -102,6 +127,9 @@
 					this.showBindingTutorial = true
 					this.bindSn = snData.result
 				}
+			},
+			handleDelay() {
+				this.$store.commit('setNewbie', false)
 			},
 			...mapActions([
 				SET_WALLET_INFO,
@@ -207,6 +235,42 @@
 
 			b {
 				margin-left: 5px;
+			}
+		}
+	}
+	.home-page {
+		.van-overlay {
+			.wrapper {
+				align-items: flex-start;
+				justify-content: flex-start;
+				.van-grid {
+					flex: 0 0 33.3333%;
+					.van-grid-item {
+						height: 82PX;
+						.van-grid-item__content--center {
+							width: 70PX;
+							height: 70PX;
+							border-radius: 100%;
+							margin: 6PX auto 0;
+						}
+					}
+				}
+				.van-icon-share {
+					color: #fff;
+					transform: rotateY(180deg);
+					margin-top: $largeGutter;
+				}
+				.tip {
+					color: #fff;
+					font-size: $mediumFontSize;
+					padding: $largeGutter;
+					margin-top: $mediumGutter;
+				}
+			}
+			.van-button--normal {
+				position: absolute;
+				right: $largeGutter;
+				bottom: $largeGutter;
 			}
 		}
 	}
