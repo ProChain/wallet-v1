@@ -140,6 +140,7 @@
 		},
 		async mounted() {
 			localStorage.setItem('isNew', false)
+			this.$store.commit('setNewbie', false)
 			await sleep()
 			this.avatar = this.$route.query.avatar
 			const { avatar, teamname } = this.$route.query
