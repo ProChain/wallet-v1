@@ -146,7 +146,7 @@ export async function getTeamLogo(did) {
 	})
 }
 
-export async function getMembers(didHash, page, size = 12) {
+export async function getMembers(didHash, page = 1, size = 12) {
 	return axios.get(`${apiGetMembers}/${didHash}?page[number]=${page}&page[size]=${size}`)
 }
 

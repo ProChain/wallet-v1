@@ -13,7 +13,7 @@
 				<transaction :metadata="walletInfo"></transaction>
 			</van-skeleton>
 		</div>
-		<van-overlay :show="showBindingTutorial">
+		<van-overlay :show="showBindingTutorial" class="van-tutorial">
 			<div class="wrapper">
 				<div class="binding-tutorial">
 					<div class="text">
@@ -31,7 +31,7 @@
 				</div>
 			</div>
 		</van-overlay>
-		<van-overlay :show="isNewbie">
+		<van-overlay :show="isNewbie" class="van-newbie">
 			<div v-if="pos.top" class="wrapper" :style="{marginTop: pos.top + 'px'}">
 				<van-grid :border="false" :column-num="1">
 					<van-grid-item icon="manager-o" text="DID" to="/profile" />
@@ -208,7 +208,9 @@
 			}
 		}
 	}
-
+	.van-tutorial {
+		z-index: 999;
+	}
 	.binding-tutorial {
 		background: #fff;
 		width: 80%;
@@ -239,7 +241,7 @@
 		}
 	}
 	.home-page {
-		.van-overlay {
+		.van-newbie {
 			.wrapper {
 				align-items: flex-start;
 				justify-content: flex-start;

@@ -92,8 +92,8 @@
 				this.superior = result
 
 				const didHash = didToHex(this.walletInfo.did)
-				const { data: { page } } = await getMembers(didHash)
-				this.num = page.dataTotal
+				const { meta } = await getMembers(didHash)
+				this.num = meta.total
 
 				const rs = await getTeamInfo(this.walletInfo.did)
 				if (rs.hasErrors) return this.$toast.error(rs.message)
