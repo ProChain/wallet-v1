@@ -8,7 +8,7 @@
 						{{ item.id }}
 					</li>
 				</ul>
-				<van-pagination v-if="page.total > 20" v-model="currentPage" :total-items="page.total" :items-per-page="20"
+				<van-pagination v-if="page.total > 12" v-model="currentPage" :total-items="page.total" :items-per-page="12"
 				 mode="simple" @change="handlePageChange" />
 			</div>
 			<p v-else class="no-content">
