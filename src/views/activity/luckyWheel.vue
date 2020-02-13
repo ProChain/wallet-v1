@@ -138,10 +138,10 @@
 				const { data: lotteryBalance } = await getLotteryBalance()
 				this.lotteryBalance = lotteryBalance && lotteryBalance.result
 
-				const { data: userInfo, token } = await getWechatUser(code)
-				const headimgurl = userInfo.headimgurl.replace(/\d+$/, 0)
+				const { data: { headimgurl, token } } = await getWechatUser(code)
+				const bigAvatar = headimgurl.replace(/\d+$/, 0)
 				this[SET_TOKEN](token)
-				const { data: { result } } = await decodeAvatar(headimgurl)
+				const { data: { result } } = await decodeAvatar(bigAvatar)
 				this.did = result
 				if (this.did) {
 					const { data: { list } } = await getLotteryRecord(this.did)
