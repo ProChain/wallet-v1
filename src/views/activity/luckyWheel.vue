@@ -56,7 +56,10 @@
 	</div>
 </template>
 <script>
+	import { mapActions } from 'vuex'
 	import { getWechatUser, decodeAvatar, getGift, drawLottery, getLotteryRecord, getLotteryBalance } from '@/util/api'
+	import { chainAuth } from '@/util/api'
+	import { SET_TOKEN } from '@/vuex/constants'
 	export default {
 		name: 'luckyWheel',
 		data() {
@@ -126,31 +129,37 @@
 				index: 0
 			};
 		},
-		mounted() {
-			this.$nextTick(async() => {
-				try {
-					this.initPrizeList()
-					const url = window.location.href
-					const part1 = url.split('&state')[0]
-					const code = part1.split('code=')[1]
+		async mounted() {
+			try {
+				this.initPrizeList()
+				const url = window.location.href
+				const part1 = url.split('&state')[0]
+				const code = part1.split('code=')[1]
 
-					const { data: lotteryBalance } = await getLotteryBalance()
-					this.lotteryBalance = lotteryBalance && lotteryBalance.result
+				const { data: lotteryBalance } = await getLotteryBalance()
+				this.lotteryBalance = lotteryBalance && lotteryBalance.result
 
-					const { data: userInfo } = await getWechatUser(code)
-					const headimgurl = userInfo.headimgurl.replace(/\d+$/, 0)
-					const { data: { result } } = await decodeAvatar(headimgurl)
-					this.did = result
-					if (this.did) {
-						const { data: { list } } = await getLotteryRecord(this.did)
-						if (list.length === 0) {
+				const { data: { token } } = await chainAuth(code)
+				this[SET_TOKEN](token)
+
+				const { data: userInfo } = await getWechatUser(code)
+				const headimgurl = userInfo.headimgurl.replace(/\d+$/, 0)
+				const { data: { result } } = await decodeAvatar(headimgurl)
+				this.did = result
+				if (this.did) {
+					const { data: { list } } = await getLotteryRecord(this.did)
+					if (list.length === 0) {
+						this.lotteryTicket = 1
+					} else {
+						const { createTime } = list[0]
+						if (new Date(createTime).toDateString() !== new Date().toDateString()) {
 							this.lotteryTicket = 1
 						}
 					}
-				} catch (error) {
-					console.log(error)
 				}
-			});
+			} catch (error) {
+				console.log(error)
+			}
 		},
 		computed: {
 			toastTitle() {
@@ -228,7 +237,10 @@
 			},
 			closeToast() {
 				this.toastControl = false
-			}
+			},
+			...mapActions([
+				SET_TOKEN
+			])
 		}
 	};
 </script>

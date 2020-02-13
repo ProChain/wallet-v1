@@ -26,7 +26,8 @@ export async function chainAuth(wxcode) {
 	if (process.env.VUE_APP_TEST_WX) {
 		return {
 			data: {
-				wxid: process.env.VUE_APP_TEST_WX
+				wxid: process.env.VUE_APP_TEST_WX,
+				token: '123456789'
 			}
 		}
 	}
