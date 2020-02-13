@@ -58,7 +58,6 @@
 <script>
 	import { mapActions } from 'vuex'
 	import { getWechatUser, decodeAvatar, getGift, drawLottery, getLotteryRecord, getLotteryBalance } from '@/util/api'
-	import { chainAuth } from '@/util/api'
 	import { SET_TOKEN } from '@/vuex/constants'
 	export default {
 		name: 'luckyWheel',
@@ -139,11 +138,9 @@
 				const { data: lotteryBalance } = await getLotteryBalance()
 				this.lotteryBalance = lotteryBalance && lotteryBalance.result
 
-				const { data: { token } } = await chainAuth(code)
-				this[SET_TOKEN](token)
-
 				const { data: userInfo } = await getWechatUser(code)
 				const headimgurl = userInfo.headimgurl.replace(/\d+$/, 0)
+				this[SET_TOKEN](userInfo.token)
 				const { data: { result } } = await decodeAvatar(headimgurl)
 				this.did = result
 				if (this.did) {
