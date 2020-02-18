@@ -150,7 +150,8 @@ instance.interceptors.response.use(response => {
 		console.log(errorData, 'error msg-----------')
 		vm.$toast(errorData.message)
 	} else {
-		vm.$toast('请求出错,请刷新页面重试')
+		// vm.$toast('请求出错,请刷新页面重试')
+		vm.$toast(error)
 	}
 	return Promise.reject(error)
 })

@@ -31,7 +31,7 @@
 				</div>
 			</div>
 		</van-overlay>
-		<van-overlay :show="isNewbie" class="van-newbie">
+		<van-overlay :show="isNewbie && !showBindingTutorial" class="van-newbie">
 			<div v-if="pos.top" class="wrapper" :style="{marginTop: pos.top + 'px'}">
 				<van-grid :border="false" :column-num="1">
 					<van-grid-item icon="manager-o" text="DID" to="/profile" />
