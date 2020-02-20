@@ -81,7 +81,7 @@ let instance = axios.create({
 // Add a request interceptor
 instance.interceptors.request.use(config => {
 	if (store.state.token && !checkWhitelist(config.url)) {
-		// config.headers.Authorization = `Bearer ${store.state.token}`
+		config.headers.Authorization = `Bearer ${store.state.token}`
 	}
 	if (!checkWhitelist(config.url)) {
 		showFullScreenLoading()
