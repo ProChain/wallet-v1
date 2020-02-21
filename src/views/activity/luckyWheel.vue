@@ -141,6 +141,7 @@
 				const { data: { headimgurl, token } } = await getWechatUser(code)
 				const bigAvatar = headimgurl.replace(/\d+$/, 0)
 				this[SET_TOKEN](token)
+				this.token = token
 				const { data: { result } } = await decodeAvatar(bigAvatar)
 				this.did = result
 				if (this.did) {
@@ -187,7 +188,7 @@
 			},
 			async rotateHandle() {
 				if (!this.did) return this.$toast('没有检测到您的DID，无法参与抽奖');
-				const data = await drawLottery(this.did)
+				const data = await drawLottery(this.token)
 				if (data.hasErrors) {
 					this.$toast(data.message)
 				} else {

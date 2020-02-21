@@ -107,10 +107,10 @@ export async function uploadImg(data) {
 		})
 }
 
-export async function drawLottery(did) {
+export async function drawLottery(token) {
 	return axios.get(apiDraw, {
 		params: {
-			did
+			token
 		}
 	})
 }
