@@ -19,11 +19,17 @@
 					<div class="text">
 						您尚未绑定微信账号，<b>请将以下验证码发送到群中，然后重新打开该页面</b>，验证码不再显示即绑定成功
 					</div>
-					<div class="code-con">
-						<img src="@/assets/images/bind-did.jpg" alt="binding">
-						<div class="code-num">
+					<div class="content-box">
+						<div class="dialog">
 							{{ bindSn }}
 						</div>
+						<img src="@/assets/images/logo.jpg" />
+					</div>
+					<div class="code-con">
+						<img src="@/assets/images/bind-did2.jpg" alt="binding">
+						<!--<div class="code-num">
+							{{ bindSn }}
+						</div>-->
 					</div>
 					<van-button type="primary" size="large" class="bind-code copy" :data-clipboard-text="bindSn">
 						复制激活码<b>{{ bindSn }}</b>
@@ -261,7 +267,7 @@
 
 			img {
 				width: 100%;
-				margin: 10px 0;
+				margin: 0 0 10px;
 			}
 
 			.code-num {
@@ -275,6 +281,39 @@
 			b {
 				margin-left: 5px;
 			}
+		}
+	}
+	.content-box {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		background: #ededed;
+		padding: 10px;
+		margin: $mediumGutter 0 0;
+		overflow: hidden;
+		.dialog {
+			height: 35px;
+			line-height: 35px;
+			padding: 0 20px 0 10px;
+			background: #9fe971;
+			position: relative;
+			margin-right: 15px;
+			border-radius: 5px;
+			&::after {
+				content: '';
+				position: absolute;
+				right: -6px;
+				top: 12px;
+				width:0;
+				height:0;
+				border-top: 4px solid transparent;
+				border-bottom: 4px solid transparent;
+				border-left: 6px solid #9fe971;
+			}
+		}
+		img {
+			width: 40px;
+			height: 40px;
 		}
 	}
 	.home-page {
