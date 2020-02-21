@@ -21,5 +21,8 @@ export const mutations = {
 	},
 	setNewbie: (state, status) => {
 		state.isNewbie = status
+	},
+	initDid: (state, status) => {
+		state.isInit = status
 	}
 }

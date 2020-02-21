@@ -31,7 +31,7 @@
 				</div>
 			</div>
 		</van-overlay>
-		<van-overlay :show="isNewbie && !showBindingTutorial" class="van-newbie">
+		<van-overlay :show="isNewbie && isInit" class="van-newbie">
 			<div v-if="pos.top" class="wrapper" :style="{marginTop: pos.top + 'px'}">
 				<van-grid :border="false" :column-num="1">
 					<van-grid-item icon="manager-o" text="DID" to="/profile" />
@@ -42,6 +42,13 @@
 				</div>
 			</div>
 			<van-button type="default" @click="handleDelay">下次创建</van-button>
+		</van-overlay>
+		<van-overlay :show="!isInit" class="init">
+			<div class="wrapper">
+				<div>
+					<van-loading size="24px" color="#fff" vertical>正在为您创建DID，请稍等片刻...</van-loading>
+				</div>
+			</div>
 		</van-overlay>
 	</div>
 </template>
@@ -67,8 +74,17 @@
 		computed: {
 			...mapState([
 				'walletInfo',
-				'isNewbie'
+				'isNewbie',
+				'isInit'
 			])
+		},
+		watch: {
+			isInit(val) {
+				if (val) {
+					console.log(val, 'is init')
+					this.getUserData(this.walletInfo.did)
+				}
+			}
 		},
 		components: {
 			Account,
@@ -93,40 +109,60 @@
 				this.pos = getRect(this.$refs.locks)
 				console.log(this.pos)
 			}, 700)
-			const isNew = localStorage.getItem('isNew')
-			console.log(typeof isNew, isNew)
-			if (isNew !== 'false') {
-				this.$store.commit('setNewbie', true)
-			} else {
-				this.$store.commit('setNewbie', false)
-			}
+
 			try {
 				await sleep()
-				await this.getUserMetadata()
+				await this.init()
 			} catch (e) {
 				console.log(e)
 			}
 		},
 		methods: {
-			async getUserMetadata() {
+			async init() {
 				const url = window.location.href
 				const part1 = url.split('&state')[0]
 				const code = part1.split('code=')[1]
+
+				// check code
+				const { data: snData } = await chainBindSn(code)
+				if (snData && snData.result) {
+					this.showBindingTutorial = true
+					this.bindSn = snData.result
+					return
+				}
+
+				// get wx data
 				const { data } = await chainAuth(code)
 				if (data) {
 					this[SET_AVATAR](data.avatar)
 					const { result: didHash } = await convert(data.wxid, 'wxid')
 					if (didHash) {
-						const { data: metadata } = await getMetadata(didHash)
-						this[SET_WALLET_INFO](metadata)
 						this[SET_TOKEN](data.token)
+						await this.getUserData(didHash)
+					} else { // create did
+						this.$store.commit('initDid', false)
+						const params = {
+							type: '1',
+							sid: data.wxid,
+							socialSuperior: data.p_wxid
+						}
+
+						this.$socket.emit('create_by_sns', params)
 					}
 				}
-				const { data: snData } = await chainBindSn(code)
-				if (snData && snData.result) {
-					this.showBindingTutorial = true
-					this.bindSn = snData.result
+
+				// user guide
+				const isNew = localStorage.getItem('isNew')
+				console.log(typeof isNew, isNew)
+				if (isNew !== 'false') {
+					this.$store.commit('setNewbie', true)
+				} else {
+					this.$store.commit('setNewbie', false)
 				}
+			},
+			async getUserData(didHash) {
+				const { data: metadata } = await getMetadata(didHash)
+				this[SET_WALLET_INFO](metadata)
 			},
 			handleDelay() {
 				this.$store.commit('setNewbie', false)
@@ -273,6 +309,11 @@
 				position: absolute;
 				right: $largeGutter;
 				bottom: $largeGutter;
+			}
+		}
+		.init {
+			.van-loading__text {
+				color: #fff;
 			}
 		}
 	}

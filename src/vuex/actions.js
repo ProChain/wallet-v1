@@ -1,6 +1,6 @@
 import { hexToString, hexAddPrefix } from '@polkadot/util'
 import * as Actions from './constants'
-import { formatHexNumber } from '../util/common'
+import { formatHexNumber, hexToDid } from '../util/common'
 import vm from '../main'
 
 export const actions = {
@@ -134,7 +134,7 @@ export const actions = {
 		commit('hideLoading')
 		vm.$toast('已更新公钥')
 	},
-	[Actions.SOCKET_CREATED]: ({ state, commit }) => {
+	[Actions.SOCKET_SUB_CREATED]: ({ state, commit }) => {
 		const subordinateCount = state.walletInfo.subordinate_count + 1
 		const walletInfo = {
 			...state.walletInfo,
@@ -142,6 +142,20 @@ export const actions = {
 		}
 		commit(Actions.SET_WALLET_INFO, walletInfo)
 		commit('hideLoading')
+	},
+	[Actions.SOCKET_CREATED]: ({ state, commit }, { msg }) => {
+		if (msg) {
+			let [did] = JSON.parse(msg)
+			const walletInfo = {
+				...state.walletInfo,
+				did: hexToDid(did)
+			}
+			commit(Actions.SET_WALLET_INFO, walletInfo)
+			commit('hideLoading')
+			setTimeout(() => {
+				commit('initDid', true)
+			}, 300)
+		}
 	},
 	[Actions.DISPATCH_SIGN]: ({ state, commit }, data) => {
 		const params = Object.assign({}, data, {

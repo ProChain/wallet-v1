@@ -15,6 +15,7 @@ const state = {
 	showLoading: true,
 	token: '',
 	isNewbie: false,
+	isInit: true,
 	locale: 'zh'
 };
 
