@@ -17,7 +17,7 @@
 			<div class="wrapper">
 				<div class="binding-tutorial">
 					<div class="text">
-						您尚未激活您的PRA账号，请按照下图，在链接所群中发送激活码完成账号激活
+						您尚未绑定微信账号，<b>请将以下验证码发送到群中，然后重新打开该页面</b>（验证码不再显示即绑定成功）
 					</div>
 					<div class="code-con">
 						<img src="@/assets/images/bind-did.jpg" alt="binding">
@@ -25,13 +25,13 @@
 							{{ bindSn }}
 						</div>
 					</div>
-					<van-button type="primary" size="large" class="bind-code copy tiny-height" :data-clipboard-text="bindSn">
+					<van-button type="primary" size="large" class="bind-code copy" :data-clipboard-text="bindSn">
 						复制激活码<b>{{ bindSn }}</b>
 					</van-button>
 				</div>
 			</div>
 		</van-overlay>
-		<van-overlay :show="isNewbie && isInit" class="van-newbie">
+		<van-overlay :show="isNewbie && isInit && !showBindingTutorial" class="van-newbie">
 			<div v-if="pos.top" class="wrapper" :style="{marginTop: pos.top + 'px'}">
 				<van-grid :border="false" :column-num="1">
 					<van-grid-item icon="manager-o" text="DID" to="/profile" />
@@ -250,9 +250,12 @@
 	.binding-tutorial {
 		background: #fff;
 		width: 80%;
-		padding: 10px;
-		font-size: $baseFontSize;
-
+		padding: $largeGutter;
+		font-size: $mediumFontSize;
+		border-radius: $smallGutter;
+		.text b {
+			color: $red;
+		}
 		.code-con {
 			position: relative;
 
@@ -264,13 +267,11 @@
 			.code-num {
 				position: absolute;
 				top: 19px;
-				right: 70px;
+				right: 68px;
 			}
 		}
 
 		.bind-code {
-			font-size: $mediumFontSize;
-
 			b {
 				margin-left: 5px;
 			}
