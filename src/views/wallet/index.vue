@@ -17,7 +17,7 @@
 			<div class="wrapper">
 				<div class="binding-tutorial">
 					<div class="text">
-						您尚未绑定微信账号，<b>请将以下验证码发送到群中，然后重新打开该页面</b>（验证码不再显示即绑定成功）
+						您尚未绑定微信账号，<b>请将以下验证码发送到群中，然后重新打开该页面</b>，验证码不再显示即绑定成功
 					</div>
 					<div class="code-con">
 						<img src="@/assets/images/bind-did.jpg" alt="binding">
