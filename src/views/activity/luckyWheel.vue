@@ -443,6 +443,7 @@
 			text-align: center;
 			width: 90%;
 			margin: 10px auto;
+			display: none;
 			h2 {
 				font-size: $largeFontSize;
 				font-weight: normal;
