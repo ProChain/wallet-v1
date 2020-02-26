@@ -31,6 +31,28 @@
 				<div class="lotteryTicket">免费抽奖次数： {{ lotteryTicket }}</div>
 				<div class="lottery-balance">奖池余额：<b>{{ lotteryBalance | money }}</b></div>
 			</div>
+			<div class="promotion">
+				<h2>推广奖励龙虎榜</h2>
+				<ul>
+					<li>
+						<span>头像</span>
+						<span>昵称</span>
+						<span>DID</span>
+						<span>奖励金</span>
+					</li>
+					<li v-for="(item, index) in rank" v-if="item.nick_name !== 'false' && item.nick_name" :key="index">
+						<span>
+							<van-image
+							  round
+							  width="80%"
+							  :src="item.avatar" />
+						</span>
+						<span>{{ item.nick_name }}</span>
+						<span>{{ item.did }}</span>
+						<span>{{ item.amount }} PRA</span>
+					</li>
+				</ul>
+			</div>
 			<div class="tip">
 				<div class="tip-title">活动规则</div>
 				<div class="tip-content">
@@ -57,7 +79,7 @@
 </template>
 <script>
 	import { mapActions } from 'vuex'
-	import { getWechatUser, decodeAvatar, getGift, drawLottery, getLotteryRecord, getLotteryBalance } from '@/util/api'
+	import { getWechatUser, decodeAvatar, getGift, drawLottery, getLotteryRecord, getLotteryBalance, getInviteRank } from '@/util/api'
 	import { SET_TOKEN } from '@/vuex/constants'
 	export default {
 		name: 'luckyWheel',
@@ -67,6 +89,7 @@
 				lotteryTicket: 0, // 抽奖次数
 				did: '',
 				lotteryBalance: 0,
+				rank: [],
 				prizeList: [{
 						icon: require('../../assets/images/activity/bean_500.png'), // 奖品图片
 						count: 50, // 奖品数量
@@ -128,8 +151,22 @@
 				index: 0
 			};
 		},
+		computed: {
+			toastTitle() {
+				return this.hasPrize ?
+					'恭喜您，获得' + this.prizeList[this.index].count + ' ' + this.prizeList[this.index].name :
+					'未中奖'
+			},
+			toastPictrue() {
+				return this.hasPrize ?
+					require('../../assets/images/activity/congratulation.png') :
+					require('../../assets/images/activity/sorry.png')
+			}
+		},
 		async mounted() {
 			try {
+				const { data: { list: rank } } = await getInviteRank()
+				this.rank = rank
 				this.initPrizeList()
 				const url = window.location.href
 				const part1 = url.split('&state')[0]
@@ -157,18 +194,6 @@
 				}
 			} catch (error) {
 				console.log(error)
-			}
-		},
-		computed: {
-			toastTitle() {
-				return this.hasPrize ?
-					'恭喜您，获得' + this.prizeList[this.index].count + ' ' + this.prizeList[this.index].name :
-					'未中奖'
-			},
-			toastPictrue() {
-				return this.hasPrize ?
-					require('../../assets/images/activity/congratulation.png') :
-					require('../../assets/images/activity/sorry.png')
 			}
 		},
 		methods: {
@@ -412,11 +437,57 @@
 				}
 			}
 		}
-
+		.promotion {
+			position: relative;
+			color: #fccc6e;
+			text-align: center;
+			width: 90%;
+			margin: 10px auto;
+			h2 {
+				font-size: $largeFontSize;
+				font-weight: normal;
+			}
+			ul {
+				color: #fff8c5;
+				li {
+					height: 55px;
+					line-height: 55px;
+					border-bottom: 1px solid #f98470;
+					&:first-of-type {
+						height: 35px;
+						line-height: 35px;
+						font-weight: bold;
+					}
+					&:last-of-type {
+						border: none;
+					}
+					span {
+						display: inline-block;
+						width: 15%;
+						text-align: center;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						&:nth-of-type(2) {
+							width: 35%;
+						}
+						&:nth-of-type(3) {
+							width: 25%;
+						}
+						&:nth-of-type(4) {
+							width: 25%;
+						}
+					}
+					.van-image--round {
+						vertical-align: middle;
+					}
+				}
+			}
+		}
 		.tip {
 			position: relative;
 			margin: 20px auto 0;
-			width: 300px;
+			width: 90%;
 			border: 0.0313rem solid #fbc27f;
 
 			.tip-title {
