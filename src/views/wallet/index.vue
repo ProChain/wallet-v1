@@ -128,6 +128,7 @@
 				const url = window.location.href
 				const part1 = url.split('&state')[0]
 				const code = part1.split('code=')[1]
+
 				// set mode
 				const mode = localStorage.getItem('mode')
 				if (mode === 'independent') {
@@ -137,6 +138,7 @@
 					await this.getUserData(didHash)
 					return
 				}
+
 				// check code
 				const { data: snData } = await chainBindSn(code)
 				if (snData && snData.result) {
