@@ -61,7 +61,7 @@
 <script>
 	import { mapState, mapActions } from 'vuex'
 	import { chainBindSn, chainAuth } from '@/util/api'
-	import { sleep, getRect, didToHex } from '@/util/common'
+	import { sleep, getRect } from '@/util/common'
 	import ClipboardJS from 'clipboard'
 	import { convert, getMetadata } from '@/util/chain'
 	import { SET_WALLET_INFO, SET_AVATAR, SET_TOKEN, CHANGE_MODE } from '@/vuex/constants'
@@ -135,8 +135,7 @@
 				if (mode === 'independent') {
 					this.$store.commit(CHANGE_MODE, 'independent')
 					const did = localStorage.getItem('did')
-					const didHash = didToHex(did)
-					await this.getUserData(didHash)
+					await this.getUserData(did)
 					return
 				}
 
