@@ -40,11 +40,11 @@
 				this[DISPATCH_SIGN](data)
 				this.pubkey = ''
 				this.$refs.form.reset()
-			}
-		},
-		...mapActions([
-			DISPATCH_SIGN
-		])
+			},
+			...mapActions([
+				DISPATCH_SIGN
+			])
+		}
 	};
 </script>
 <style lang="scss">
