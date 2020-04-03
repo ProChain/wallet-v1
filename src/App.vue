@@ -14,7 +14,7 @@
 	export default {
 		name: 'App',
 		data() {
-			const { options: { routes }} = this.$router
+			const { options: { routes } } = this.$router
 			let excludedComponents = [];
 
 			routes.forEach(v => v.meta && !v.meta.keepAlive && excludedComponents.push(v.name))

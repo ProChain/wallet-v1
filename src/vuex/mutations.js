@@ -1,17 +1,20 @@
-import * as Mutations from './constants'
+import * as Handles from './constants'
 
 export const mutations = {
-	[Mutations.SET_TOKEN]: (state, token) => {
+	[Handles.SET_TOKEN]: (state, token) => {
 		state.token = token
 	},
-	[Mutations.SET_WALLET_INFO]: (state, walletInfo) => {
+	[Handles.SET_WALLET_INFO]: (state, walletInfo) => {
 		state.walletInfo = walletInfo
 	},
-	[Mutations.SET_TEAM_INFO]: (state, teamInfo) => {
+	[Handles.SET_TEAM_INFO]: (state, teamInfo) => {
 		state.teamInfo = teamInfo
 	},
-	[Mutations.SET_AVATAR]: (state, avatar) => {
+	[Handles.SET_AVATAR]: (state, avatar) => {
 		state.avatar = avatar
+	},
+	[Handles.CHANGE_MODE]: (state, mode) => {
+		state.mode = mode
 	},
 	showLoading: (state) => {
 		state.showLoading = true

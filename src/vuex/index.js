@@ -16,6 +16,7 @@ const state = {
 	token: '',
 	isNewbie: false,
 	isInit: true,
+	mode: 'hosted',
 	locale: 'zh'
 };
 

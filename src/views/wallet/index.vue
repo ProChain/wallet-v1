@@ -1,12 +1,12 @@
 <template>
 	<div class="home-page">
 		<div class="wallet">
-			<account :metadata="walletInfo" />
+			<account :metadata="walletInfo" :mode="mode" />
 			<div class="lock-btns" ref="locks">
 				<van-grid :border="false" :column-num="3">
 					<van-grid-item icon="manager-o" text="DID" to="/profile" />
-					<van-grid-item icon="balance-o" text="挖矿" to="/team" />
-					<van-grid-item icon="replay" text="更新" to="/update-pubkey" />
+					<van-grid-item icon="balance-o" text="挖矿" :to="mode === 'hosted' ? '/team' : ''" :class="{'disabled': mode !== 'hosted'}" />
+					<van-grid-item icon="replay" text="更新" :to="mode === 'hosted' ? '/update-pubkey' : ''" :class="{'disabled': mode !== 'hosted'}" />
 				</van-grid>
 			</div>
 			<van-skeleton title avatar :row="2" :loading="!walletInfo.did">
@@ -61,10 +61,9 @@
 <script>
 	import { mapState, mapActions } from 'vuex'
 	import { chainBindSn, chainAuth } from '@/util/api'
-	import { sleep, getRect } from '@/util/common'
+	import { sleep, getRect, didToHex } from '@/util/common'
 	import ClipboardJS from 'clipboard'
-	import { convert, getMetadata } from '@/util/chain'
-	import { SET_WALLET_INFO, SET_AVATAR, SET_TOKEN } from '@/vuex/constants'
+	import { SET_WALLET_INFO, SET_AVATAR, SET_TOKEN, CHANGE_MODE } from '@/vuex/constants'
 	import Account from '@/components/wallet/account'
 	import Transaction from '@/components/wallet/transaction'
 	export default {
@@ -81,7 +80,8 @@
 			...mapState([
 				'walletInfo',
 				'isNewbie',
-				'isInit'
+				'isInit',
+				'mode'
 			])
 		},
 		watch: {
@@ -128,7 +128,15 @@
 				const url = window.location.href
 				const part1 = url.split('&state')[0]
 				const code = part1.split('code=')[1]
-
+				// set mode
+				const mode = localStorage.getItem('mode')
+				if (mode === 'independent') {
+					this.$store.commit(CHANGE_MODE, 'independent')
+					const did = localStorage.getItem('did')
+					const didHash = didToHex(did)
+					await this.getUserData(didHash)
+					return
+				}
 				// check code
 				const { data: snData } = await chainBindSn(code)
 				if (snData && snData.result) {
@@ -349,6 +357,11 @@
 				position: absolute;
 				right: $largeGutter;
 				bottom: $largeGutter;
+			}
+		}
+		.van-grid-item {
+			&.disabled {
+				color: $grey;
 			}
 		}
 		.init {

@@ -94,7 +94,7 @@
 					const data = new FormData()
 					data.append('file', res.file)
 					const rs = await uploadImg(data)
-					const { data: { result }} = await decodeAvatar(`https://static.chain.pro/${rs.data}`)
+					const { data: { result } } = await decodeAvatar(`https://static.chain.pro/${rs.data}`)
 					if (!result) {
 						this.$toast('无法解析您选择的区块链头像')
 					} else {

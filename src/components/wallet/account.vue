@@ -3,11 +3,11 @@
 		<div class="reward-con">
 			<h2>
 				我的余额
-				<van-button size="small" type="default" class="colocation" to="/help">托管模式</van-button>
+				<van-button size="small" type="default" class="colocation" to="/help">{{ mode === 'hosted' ? '托管模式' : '自主模式'}}</van-button>
 				<div>{{ metadata.free_balance | money }}</div>
 			</h2>
 			<div class="handle-btns">
-				<van-button icon="exchange" square type="default" class="btn-text" to="/transfer">转账</van-button>
+				<van-button icon="exchange" square type="default" class="btn-text" :to="mode === 'hosted' ? '/transfer' : ''" :class="{'disabled': mode !== 'hosted'}" >转账</van-button>
 				<van-button icon="down" square type="default" class="copy btn-text" :data-clipboard-text="metadata.did">收款</van-button>
 			</div>
 		</div>
@@ -28,7 +28,7 @@
 <script>
 	export default {
 		name: 'account',
-		props: ['metadata'],
+		props: ['metadata', 'mode'],
 		data() {
 			return {
 				menuName: '托管模式',
@@ -80,7 +80,9 @@
 			.handle-btns {
 				margin-top: 20px;
 				text-align: center;
-
+				.disabled {
+					color: #eee;
+				}
 				button {
 					width: 50%;
 					color: #fff;

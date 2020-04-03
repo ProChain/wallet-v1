@@ -1,31 +1,31 @@
 import { hexToString, hexAddPrefix } from '@polkadot/util'
-import * as Actions from './constants'
+import * as Handles from './constants'
 import { formatHexNumber, hexToDid } from '../util/common'
 import vm from '../main'
 
 export const actions = {
-	[Actions.SET_TOKEN]: async({ commit }, token) => {
-		commit(Actions.SET_TOKEN, token)
+	[Handles.SET_TOKEN]: async({ commit }, token) => {
+		commit(Handles.SET_TOKEN, token)
 	},
-	[Actions.SET_WALLET_INFO]: async({ commit }, walletInfo) => {
+	[Handles.SET_WALLET_INFO]: async({ commit }, walletInfo) => {
 		// set client name
 		vm.$socket.emit('setName', {
 			name: walletInfo.did,
 			address: walletInfo.address
 		})
-		commit(Actions.SET_WALLET_INFO, walletInfo)
+		commit(Handles.SET_WALLET_INFO, walletInfo)
 	},
-	[Actions.SET_TEAM_INFO]: async({ commit }, teamInfo) => {
-		commit(Actions.SET_TEAM_INFO, teamInfo)
+	[Handles.SET_TEAM_INFO]: async({ commit }, teamInfo) => {
+		commit(Handles.SET_TEAM_INFO, teamInfo)
 	},
-	[Actions.SET_AVATAR]: async({ commit }, avatar) => {
-		commit(Actions.SET_AVATAR, avatar)
+	[Handles.SET_AVATAR]: async({ commit }, avatar) => {
+		commit(Handles.SET_AVATAR, avatar)
 	},
 	/**
 	 * @@@
 	 * all socket relevant state
 	 */
-	[Actions.SOCKET_CONNECT]: ({ state: { walletInfo } }) => {
+	[Handles.SOCKET_CONNECT]: ({ state: { walletInfo } }) => {
 		console.log('connect------')
 		if (walletInfo.did) {
 			vm.$socket.emit('setName', {
@@ -34,31 +34,31 @@ export const actions = {
 			})
 		}
 	},
-	[Actions.SOCKET_DISCONNECT]: () => {
+	[Handles.SOCKET_DISCONNECT]: () => {
 		console.log('disconnect------')
 	},
-	[Actions.SOCKET_RECONNECT]: () => {
+	[Handles.SOCKET_RECONNECT]: () => {
 		console.log('reconnect------')
 	},
-	[Actions.SOCKET_BALANCE_CHANGE]: ({ commit, state }, payload) => {
+	[Handles.SOCKET_BALANCE_CHANGE]: ({ commit, state }, payload) => {
 		const walletInfo = {
 			...state.walletInfo,
 			free_balance: payload.balance
 		}
-		commit(Actions.SET_WALLET_INFO, walletInfo)
+		commit(Handles.SET_WALLET_INFO, walletInfo)
 	},
-	[Actions.SOCKET_FAILED]: ({ commit }, payload) => {
+	[Handles.SOCKET_FAILED]: ({ commit }, payload) => {
 		vm.$toast(payload.msg)
 		commit('hideLoading')
 	},
-	[Actions.SOCKET_TRANSFERED]: ({ commit }) => {
+	[Handles.SOCKET_TRANSFERED]: ({ commit }) => {
 		commit('hideLoading')
 		vm.$toast('已转账')
 		setTimeout(() => {
 			vm.$router.go(-1)
 		}, 500)
 	},
-	[Actions.SOCKET_LOCKED]: ({ state, commit }, payload) => {
+	[Handles.SOCKET_LOCKED]: ({ state, commit }, payload) => {
 		const [, lockedFunds, lockedTime, lockedPeriod, rewardsRatio, maxQuota] = JSON.parse(payload.msg)
 		const lockedRecords = {
 			locked_funds: formatHexNumber(lockedFunds),
@@ -71,11 +71,11 @@ export const actions = {
 			...state.walletInfo,
 			locked_records: lockedRecords
 		}
-		commit(Actions.SET_WALLET_INFO, walletInfo)
+		commit(Handles.SET_WALLET_INFO, walletInfo)
 		commit('hideLoading')
 		vm.$toast('已抵押')
 	},
-	[Actions.SOCKET_UNLOCKED]: ({ state: { walletInfo }, commit }, payload) => {
+	[Handles.SOCKET_UNLOCKED]: ({ state: { walletInfo }, commit }, payload) => {
 		const [, amount, unlockedTime] = JSON.parse(payload.msg)
 		const unlockedRecords = walletInfo.unlocked_records
 		const unlockedFunds = formatHexNumber(amount)
@@ -105,11 +105,11 @@ export const actions = {
 				unlocked_time: unlockedTime
 			}
 		}
-		commit(Actions.SET_WALLET_INFO, newWalletInfo)
+		commit(Handles.SET_WALLET_INFO, newWalletInfo)
 		commit('hideLoading')
 		vm.$toast('已赎回')
 	},
-	[Actions.SOCKET_ADDRESS_ADDED]: ({ state: { walletInfo }, commit }, payload) => {
+	[Handles.SOCKET_ADDRESS_ADDED]: ({ state: { walletInfo }, commit }, payload) => {
 		let [, addressType, address] = JSON.parse(payload.msg)
 		const externalAddress = walletInfo.external_address
 
@@ -123,41 +123,44 @@ export const actions = {
 				[addressType]: address
 			}
 		}
-		commit(Actions.SET_WALLET_INFO, newWalletInfo)
+		commit(Handles.SET_WALLET_INFO, newWalletInfo)
 		commit('hideLoading')
 		vm.$router.push('/')
 	},
-	[Actions.SOCKET_GROUPNAME_SET]: ({ commit }) => {
+	[Handles.SOCKET_GROUPNAME_SET]: ({ commit }) => {
 		commit('hideLoading')
 	},
-	[Actions.SOCKET_UPDATED]: ({ commit }) => {
+	[Handles.SOCKET_UPDATED]: ({ state, commit }) => {
 		commit('hideLoading')
+		commit(Handles.CHANGE_MODE, 'independent')
+		localStorage.setItem('mode', 'independent')
+		localStorage.setItem('did', state.walletInfo.did)
 		vm.$toast('已更新公钥')
 	},
-	[Actions.SOCKET_SUB_CREATED]: ({ state, commit }) => {
+	[Handles.SOCKET_SUB_CREATED]: ({ state, commit }) => {
 		const subordinateCount = state.walletInfo.subordinate_count + 1
 		const walletInfo = {
 			...state.walletInfo,
 			subordinate_count: subordinateCount
 		}
-		commit(Actions.SET_WALLET_INFO, walletInfo)
+		commit(Handles.SET_WALLET_INFO, walletInfo)
 		commit('hideLoading')
 	},
-	[Actions.SOCKET_CREATED]: ({ state, commit }, { msg }) => {
+	[Handles.SOCKET_CREATED]: ({ state, commit }, { msg }) => {
 		if (msg) {
 			let [did] = JSON.parse(msg)
 			const walletInfo = {
 				...state.walletInfo,
 				did: hexToDid(did)
 			}
-			commit(Actions.SET_WALLET_INFO, walletInfo)
+			commit(Handles.SET_WALLET_INFO, walletInfo)
 			commit('hideLoading')
 			setTimeout(() => {
 				commit('initDid', true)
 			}, 300)
 		}
 	},
-	[Actions.DISPATCH_SIGN]: ({ state, commit }, data) => {
+	[Handles.DISPATCH_SIGN]: ({ state, commit }, data) => {
 		const params = Object.assign({}, data, {
 			token: state.token
 		})
