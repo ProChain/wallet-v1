@@ -63,6 +63,7 @@
 	import { chainBindSn, chainAuth } from '@/util/api'
 	import { sleep, getRect, didToHex } from '@/util/common'
 	import ClipboardJS from 'clipboard'
+	import { convert, getMetadata } from '@/util/chain'
 	import { SET_WALLET_INFO, SET_AVATAR, SET_TOKEN, CHANGE_MODE } from '@/vuex/constants'
 	import Account from '@/components/wallet/account'
 	import Transaction from '@/components/wallet/transaction'
