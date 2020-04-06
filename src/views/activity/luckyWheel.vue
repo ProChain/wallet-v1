@@ -12,6 +12,9 @@
 		data() {
 			return {
 			}
+		},
+		async mounted() {
+			this.$store.commit('hideLoading')
 		}
 	}
 </script>
