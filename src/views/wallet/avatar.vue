@@ -74,6 +74,7 @@
 	import { mapState } from 'vuex'
 	import { getAvatarStyle, encodeAvatar, getTeamLogo, getTeamInfo, uploadImg } from '@/util/api'
 	import { sleep, blobToFile } from '@/util/common'
+	import { convert } from '@/util/chain'
 	import { VueCropper }  from 'vue-cropper'
 	export default {
 		name: 'walletAvatar',
@@ -153,7 +154,8 @@
 			const { data } = await getTeamInfo(this.walletInfo.did)
 			this.teamInfo = data
 
-			const { data: { list } } = await getTeamLogo(this.walletInfo.did)
+			const { result } = await convert(this.walletInfo.superior, 'hash')
+			const { data: { list } } = await getTeamLogo(result)
 			this.logos = list
 		},
 		methods: {
