@@ -49,7 +49,7 @@
 						</span>
 						<span>{{ item.nick_name }}</span>
 						<span>{{ item.did }}</span>
-						<span>{{ item.amount }} PRA</span>
+						<span>{{ item.amount }} PRM</span>
 					</li>
 				</ul>
 			</div>
@@ -93,37 +93,37 @@
 				prizeList: [{
 						icon: require('../../assets/images/activity/bean_500.png'), // 奖品图片
 						count: 50, // 奖品数量
-						name: 'PRA', // 奖品名称
+						name: 'PRM', // 奖品名称
 						isPrize: 1 // 该奖项是否为奖品
 					},
 					{
 						icon: require('../../assets/images/activity/bean_one.png'),
 						count: 15,
-						name: 'PRA',
+						name: 'PRM',
 						isPrize: 1
 					},
 					{
 						icon: require('../../assets/images/activity/bean_five.png'),
 						count: 20,
-						name: 'PRA',
+						name: 'PRM',
 						isPrize: 1
 					},
 					{
 						icon: require('../../assets/images/activity/point_five.png'),
 						count: 5,
-						name: 'PRA',
+						name: 'PRM',
 						isPrize: 1
 					},
 					{
 						icon: require('../../assets/images/activity/point_ten.png'),
 						count: 10,
-						name: 'PRA',
+						name: 'PRM',
 						isPrize: 1
 					},
 					{
 						icon: require('../../assets/images/activity/bean_500.png'),
 						count: 30,
-						name: 'PRA',
+						name: 'PRM',
 						isPrize: 1
 					},
 					{
@@ -135,7 +135,7 @@
 					{
 						icon: require('../../assets/images/activity/bean_500.png'),
 						count: 40,
-						name: 'PRA',
+						name: 'PRM',
 						isPrize: 1
 					}
 				], // 奖品列表
@@ -202,7 +202,7 @@
 				const { data: { list } } = await getGift();
 				this.prizeList = this.prizeList.map((v, i) => {
 					let { id, name, reward } = list[i]
-					name = name.replace('PRA', '').replace('未中奖', '')
+					name = name.replace('PRM', '').replace('未中奖', '')
 					v.id = id
 					v.count = name
 					v.reward = reward

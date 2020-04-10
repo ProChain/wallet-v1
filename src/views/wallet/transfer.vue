@@ -58,7 +58,7 @@
 			async handleSubmit() {
 				this.$dialog.confirm({
 					title: '请确认您的转账信息',
-					message: `收款账号：${this.transferForm.receiver}\n金额：${(this.transferForm.amount)} PRA`,
+					message: `收款账号：${this.transferForm.receiver}\n金额：${(this.transferForm.amount)} PRM`,
 					messageAlign: 'left'
 				}).then(() => {
 					const receiver = didToHex(this.transferForm.receiver)
