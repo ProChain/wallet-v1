@@ -12,7 +12,6 @@ const apiUploadImg = '/api/v1/mainnet/upload_avatar'
 const apiGifts = '/api/v1/lottery/gifts'
 const apiDraw = '/api/v1/lottery/draw'
 const apiLotteryRecord = '/api/v1/lottery/records'
-
 const apiBuildTeam = '/api/v1/mainnet/build_team'
 const apiGroupLogo = '/api/v1/mainnet/get_team_logo'
 const apiTeamInfo = '/api/v1/mainnet/team_info'
@@ -22,6 +21,7 @@ const apiTeamTags = '/api/v1/mainnet/get_team_tags'
 const apiSymbolPic = '/api/v1/mainnet/get_team_logo_by_symbol'
 const apiBalance = '/api/v1/lottery/balance'
 const apiInviteRank = '/api/v1/mainnet/invite_report'
+const apiRemoveBind = 'api/v1/mainnet/remove_bind'
 
 export async function chainAuth(wxcode) {
 	if (process.env.VUE_APP_TEST_WX) {
@@ -182,4 +182,12 @@ export async function getLotteryBalance() {
 
 export async function getInviteRank() {
 	return axios.get(apiInviteRank)
+}
+
+export async function removeBind(token) {
+	return axios.get(apiRemoveBind, {
+		params: {
+			token
+		}
+	})
 }

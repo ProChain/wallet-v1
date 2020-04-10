@@ -60,7 +60,7 @@
 </template>
 <script>
 	import { mapState, mapActions } from 'vuex'
-	import { chainBindSn, chainAuth } from '@/util/api'
+	import { chainBindSn, chainAuth, removeBind } from '@/util/api'
 	import { sleep, getRect } from '@/util/common'
 	import ClipboardJS from 'clipboard'
 	import { convert, getMetadata } from '@/util/chain'
@@ -164,6 +164,18 @@
 						}
 
 						this.$socket.emit('create_by_sns', params)
+						this.sockets.subscribe('tx_failed', payload => {
+							console.log(payload, 'create failed')
+							this.$dialog.confirm({
+								title: '温馨提示',
+								message: '创建DID失败，是否重新绑定？',
+								messageAlign: 'left'
+							}).then(() => {
+								removeBind(data.token).then(() => {
+									window.location.reload()
+								})
+							}).catch(console.log)
+						})
 					}
 				}
 
