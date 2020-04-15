@@ -54,7 +54,7 @@
 					·如果您是区块链项目方，可使用般若DID协议绑定自身主链地址，从而获取到用户的数字身份档案。
 				</p>
 				<p class="tips">
-					注：成为共识合伙人需要50PRA<br>
+					注：成为共识合伙人需要50PRM<br>
 					我的当前余额 <b>{{ walletInfo.free_balance | money }}</b>
 				</p>
 			</van-panel>

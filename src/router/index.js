@@ -225,9 +225,12 @@ router.beforeEach(async(to, from, next) => {
 				name: 'home'
 			})
 		}
+	} else if (to.name === 'walletHome' && window.location.href.indexOf('code') === -1) {
+		const redirectUri = encodeURIComponent('http://wallet.prabox.net')
+		window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx48f51627bef8bcdf&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect`
 	} else {
 		next()
 	}
-});
+})
 
 export default router

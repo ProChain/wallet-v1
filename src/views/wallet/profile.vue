@@ -3,10 +3,10 @@
 		<div class="account">
 			<van-cell-group title="我的DID" :border="false">
 				<van-cell v-if="walletInfo.did" :title="walletInfo.did | clip(18, -10)" label="创建区块身份头像" is-link :center="true" :to="{path: '/avatar', query: {avatar}}">
-					<i class="icon pra" slot="icon"></i>
+					<i class="icon prm" slot="icon"></i>
 				</van-cell>
 				<van-cell v-else title="未绑定" :center="true">
-					<i class="icon pra grey" slot="icon"></i>
+					<i class="icon prm grey" slot="icon"></i>
 				</van-cell>
 			</van-cell-group>
 			<van-cell-group title="社交账号" :border="false">
@@ -29,10 +29,10 @@
 		<van-overlay :show="isNewbie">
 			<div class="wrapper">
 				<van-cell v-if="walletInfo.did" :title="walletInfo.did | clip(18, -10)" label="创建区块身份头像" is-link :center="true" :to="{path: '/avatar', query: {avatar}}">
-					<i class="icon pra" slot="icon"></i>
+					<i class="icon prm" slot="icon"></i>
 				</van-cell>
 				<van-cell v-else title="未绑定" :center="true">
-					<i class="icon pra grey" slot="icon"></i>
+					<i class="icon prm grey" slot="icon"></i>
 				</van-cell>
 				<van-icon name="share" />
 				<div class="tip">

@@ -2,7 +2,7 @@
 	<div class="lock-component">
 		<div class="lock-card">
 			<ValidationObserver v-slot="{ invalid }" ref="form">
-				<van-cell-group title="抵押PRA" :border="false">
+				<van-cell-group title="抵押PRM" :border="false">
 					<ValidationProvider v-slot="{ errors }" rules="required|min_value:10" name="amount">
 						<van-field type="number" v-model="lockForm.amount" :error-message="errors[0]" placeholder="请输入抵押数量" />
 						<van-cell title="钱包余额" :value="walletInfo.free_balance | money" />
@@ -19,7 +19,7 @@
 				</p>
 				<h2>为什么要抵押？</h2>
 				<p>
-					当前，每抵押0.1个PRA，即可扩大1人团队规模。<br>
+					当前，每抵押0.1个PRM，即可扩大1人团队规模。<br>
 					团队成员与团队负责人的关系将永久绑定并记录上链，团队成员的每笔广告收益，团队负责人会获得10%分成。减少抵押则降低分成比例。<br>
 					当团队成员开创新团队时，其团队负责人将获得其首次抵押费用的50%
 				</p>

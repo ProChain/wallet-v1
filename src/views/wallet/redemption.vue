@@ -2,7 +2,7 @@
 	<div class="unlock-component">
 		<div class="unlock-card">
 			<ValidationObserver v-slot="{ invalid }" ref="form">
-				<van-cell-group title="赎回PRA" :border="false">
+				<van-cell-group title="赎回PRM" :border="false">
 					<ValidationProvider v-slot="{ errors }" rules="required" name="amount">
 						<van-field type="number" v-model="amount" :error-message="errors[0]" placeholder="请输入赎回数量" />
 						<van-cell title="钱包余额" :value="walletInfo.free_balance | money" />
@@ -19,11 +19,11 @@
 				</p>
 				<h2>为什么要赎回？</h2>
 				<p>
-					如果您的团队成员不活跃，可以考虑减少抵押的PRA
+					如果您的团队成员不活跃，可以考虑减少抵押的PRM
 				</p>
 				<h2>赎回规则</h2>
 				<p>
-					1.每次赎回冻结时间为7天，7天后赎回的PRA会进入钱包<br>
+					1.每次赎回冻结时间为7天，7天后赎回的PRM会进入钱包<br>
 					2.如果继续追加抵押，冻结时间按照最新一次抵押计算
 				</p>
 			</div>

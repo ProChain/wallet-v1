@@ -161,6 +161,9 @@ export const actions = {
 		}
 	},
 	[Handles.DISPATCH_SIGN]: ({ state, commit }, data) => {
+		if (state.walletInfo.free_balance <= 0) {
+			return vm.$toast('请确保您持有的PRM大于0')
+		}
 		const params = Object.assign({}, data, {
 			token: state.token
 		})

@@ -177,15 +177,15 @@
 							}).catch(console.log)
 						})
 					}
-				}
 
-				// user guide
-				const isNew = localStorage.getItem('isNew')
-				console.log(typeof isNew, isNew)
-				if (isNew !== 'false') {
-					this.$store.commit('setNewbie', true)
-				} else {
-					this.$store.commit('setNewbie', false)
+					// user guide
+					const isNew = localStorage.getItem('isNew')
+					console.log(typeof isNew, isNew)
+					if (isNew !== 'false') {
+						this.$store.commit('setNewbie', true)
+					} else {
+						this.$store.commit('setNewbie', false)
+					}
 				}
 			},
 			async getUserData(didHash) {
@@ -236,7 +236,7 @@
 					background-image: url(../../assets/images/twitter.svg);
 				}
 
-				&.pra {
+				&.prm {
 					background-image: url(../../assets/images/logo.jpg);
 				}
 

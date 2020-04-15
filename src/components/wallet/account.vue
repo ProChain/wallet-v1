@@ -2,7 +2,7 @@
 	<div class="user-account">
 		<div class="reward-con">
 			<h2>
-				我的余额
+				我的资产
 				<van-button size="small" type="default" class="colocation" to="/help">{{ mode === 'hosted' ? '托管模式' : '自主模式'}}</van-button>
 				<div>{{ metadata.free_balance | money }}</div>
 			</h2>

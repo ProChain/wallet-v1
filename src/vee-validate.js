@@ -16,7 +16,7 @@ extend('min_value', {
 	validate(value, args) {
 		return value >= args.number
 	},
-	message: '最少{number}个PRA',
+	message: '最少{number}个PRM',
 	params: ['number']
 });
 

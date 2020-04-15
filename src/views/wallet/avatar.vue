@@ -2,7 +2,7 @@
 	<div class="avatar-component">
 		<div class="avatar-card">
 			<p class="tips">
-				区块链头像中包含了您的DID信息，通过PRA:DID协议的服务，您可获得广告营销激励。此外通过DID，可以查找到对应绑定的btc、eth等地址，实现一个地址，收所有币。
+				区块链头像中包含了您的DID信息，通过PRM:DID协议的服务，您可获得广告营销激励。此外通过DID，可以查找到对应绑定的btc、eth等地址，实现一个地址，收所有币。
 			</p>
 			<van-steps :active="current" active-icon="success" active-color="#38f">
 				<van-step>选择头像</van-step>
