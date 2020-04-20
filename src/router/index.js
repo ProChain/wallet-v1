@@ -20,7 +20,7 @@ const lazyLoadView = AsyncView => {
 
 const router = new VueRouter({
 	routes: [
-	/* wallet */
+		/* wallet */
 		{
 			path: '/',
 			name: 'walletHome',
@@ -121,18 +121,6 @@ const router = new VueRouter({
 				requireAuth: false
 			}
 		},
-		/* acticity */
-		{
-			path: '/activity/lucky-wheel',
-			name: 'luckyWheel',
-			component: () => lazyLoadView(import('@/views/activity/luckyWheel')),
-			meta: {
-				index: 6,
-				title: 'meta.luckyWheel',
-				keepAlive: false,
-				requireAuth: false
-			}
-		},
 		/* team */
 		{
 			path: '/team',
@@ -189,6 +177,17 @@ const router = new VueRouter({
 				requireAuth: false
 			}
 		},
+		{
+			path: '/team/qrcode',
+			name: 'qrcode',
+			component: () => lazyLoadView(import('@/views/team/qrcode')),
+			meta: {
+				index: 4,
+				title: 'meta.qrcode',
+				keepAlive: false,
+				requireAuth: false
+			}
+		},
 		/* common */
 		{
 			path: '/register',
@@ -211,6 +210,29 @@ const router = new VueRouter({
 				keepAlive: true,
 				requireAuth: false
 			}
+		},
+		/* acticity */
+		{
+			path: '/activity/lucky-wheel',
+			name: 'luckyWheel',
+			component: () => lazyLoadView(import('@/views/activity/luckyWheel')),
+			meta: {
+				index: 6,
+				title: 'meta.luckyWheel',
+				keepAlive: false,
+				requireAuth: false
+			}
+		},
+		{
+			path: '/activity/promotion',
+			name: 'promotion',
+			component: () => lazyLoadView(import('@/views/activity/promotion')),
+			meta: {
+				index: 6,
+				title: 'meta.promotion',
+				keepAlive: false,
+				requireAuth: false
+			}
 		}
 	]
 });
@@ -226,7 +248,7 @@ router.beforeEach(async(to, from, next) => {
 			})
 		}
 	} else if (to.name === 'walletHome' && window.location.href.indexOf('code') === -1) {
-		const redirectUri = encodeURIComponent(process.env.VUE_APP_DOMAIN)
+		const redirectUri = encodeURIComponent(window.location.href)
 		window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx48f51627bef8bcdf&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect`
 	} else {
 		next()

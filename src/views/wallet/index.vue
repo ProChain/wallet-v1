@@ -2,6 +2,7 @@
 	<div class="home-page">
 		<div class="wallet">
 			<account :metadata="walletInfo" :mode="mode" />
+			<van-notice-bar text="快快加入你的推荐人社群，获取更多收益信息!" left-icon="volume-o" @click="$router.push('/team/qrcode')" />
 			<div class="lock-btns" ref="locks">
 				<van-grid :border="false" :column-num="3">
 					<van-grid-item icon="manager-o" text="DID" to="/profile" />
@@ -37,6 +38,20 @@
 				</div>
 			</div>
 		</van-overlay>
+		<van-overlay :show="showInvitation" class="van-invitation">
+			<div class="wrapper">
+				<div class="content">
+					<h5><van-icon name="warning-o" />请输入邀请码完成DID创建</h5>
+					<van-field v-model="shortIndex" placeholder="请输入你的邀请码" />
+					<van-button v-if="shortIndex" type="primary" size="large" square class="create-did" @click="createDid(shortIndex)">
+						生成我的DID</b>
+					</van-button>
+					<van-button v-else type="primary" size="large" square disabled class="create-did">
+						生成我的DID</b>
+					</van-button>
+				</div>
+			</div>
+		</van-overlay>
 		<van-overlay :show="isNewbie && isInit && !showBindingTutorial" class="van-newbie">
 			<div v-if="pos.top" class="wrapper" :style="{marginTop: pos.top + 'px'}">
 				<van-grid :border="false" :column-num="1">
@@ -60,7 +75,7 @@
 </template>
 <script>
 	import { mapState, mapActions } from 'vuex'
-	import { chainBindSn, chainAuth, removeBind } from '@/util/api'
+	import { getWechatUser, removeBind } from '@/util/api'
 	import { sleep, getRect } from '@/util/common'
 	import ClipboardJS from 'clipboard'
 	import { convert, getMetadata } from '@/util/chain'
@@ -73,7 +88,10 @@
 			return {
 				code: '',
 				showBindingTutorial: false,
+				showInvitation: false,
 				bindSn: '',
+				shortIndex: '',
+				unionid: '',
 				pos: {}
 			}
 		},
@@ -89,6 +107,7 @@
 			isInit(val) {
 				if (val) {
 					console.log(val, 'is init')
+					this.showInvitation = false
 					this.getUserData(this.walletInfo.did)
 				}
 			}
@@ -121,7 +140,7 @@
 				await sleep()
 				await this.init()
 			} catch (e) {
-				console.log(e)
+				alert(e)
 			}
 		},
 		methods: {
@@ -140,57 +159,69 @@
 				}
 
 				// check code
-				const { data: snData } = await chainBindSn(code)
-				if (snData && snData.result) {
-					this.showBindingTutorial = true
-					this.bindSn = snData.result
-					return
-				}
+				// const { data: snData } = await chainBindSn(code)
+				// if (snData && snData.result) {
+				// 	this.showBindingTutorial = true
+				// 	this.bindSn = snData.result
+				// 	return
+				// }
 
-				// get wx data
-				const { data } = await chainAuth(code)
-				if (data) {
-					this[SET_AVATAR](data.avatar)
-					const { result: didHash } = await convert(data.wxid, 'wxid')
-					if (didHash) {
-						this[SET_TOKEN](data.token)
-						await this.getUserData(didHash)
-					} else { // create did
-						this.$store.commit('initDid', false)
-						const params = {
-							type: '1',
-							sid: data.wxid,
-							socialSuperior: data.p_wxid
-						}
-
-						this.$socket.emit('create_by_sns', params)
-						this.sockets.subscribe('tx_failed', payload => {
-							console.log(payload, 'create failed')
-							this.$dialog.confirm({
-								title: '温馨提示',
-								message: '创建DID失败，是否重新绑定？',
-								messageAlign: 'left'
-							}).then(() => {
-								removeBind(data.token).then(() => {
-									window.location.reload()
-								})
-							}).catch(console.log)
-						})
-					}
-
-					// user guide
-					const isNew = localStorage.getItem('isNew')
-					console.log(typeof isNew, isNew)
-					if (isNew !== 'false') {
-						this.$store.commit('setNewbie', true)
+				// check user info
+				const { data } = await getWechatUser(code)
+				if (!data) return
+				this[SET_AVATAR](data.avatar)
+				if (data.wxid) {
+					this[SET_TOKEN](data.token)
+					const { result: didHash } = await convert(data.wxid, 'unionid')
+					await this.getUserData(didHash)
+				} else if (data.unionid) {
+					const { result: unionHash } = await convert(data.unionid, 'unionid')
+					this.unionid = data.unionid
+					if (unionHash) {
+						await this.getUserData(unionHash)
 					} else {
-						this.$store.commit('setNewbie', false)
+						const { short_index: shortIndex } = this.$route.query
+						if (shortIndex) {
+							this.createDid(shortIndex)
+						} else {
+							this.showInvitation = true
+						}
 					}
 				}
 			},
 			async getUserData(didHash) {
 				const { data: metadata } = await getMetadata(didHash)
 				this[SET_WALLET_INFO](metadata)
+
+				// user guide
+				const isNew = localStorage.getItem('isNew')
+				if (isNew !== 'false') {
+					this.$store.commit('setNewbie', true)
+				} else {
+					this.$store.commit('setNewbie', false)
+				}
+			},
+			createDid(shortIndex) {
+				this.$store.commit('initDid', false)
+				const params = {
+					type: '1',
+					unionid: this.unionid,
+					shortIndex
+				}
+
+				this.$socket.emit('create_by_sns', params)
+				this.sockets.subscribe('tx_failed', payload => {
+					console.log(payload, 'create failed')
+					this.$dialog.confirm({
+						title: '温馨提示',
+						message: '创建DID失败，是否重新绑定？',
+						messageAlign: 'left'
+					}).then(() => {
+						removeBind(data.token).then(() => {
+							window.location.reload()
+						})
+					}).catch(console.error)
+				})
 			},
 			handleDelay() {
 				this.$store.commit('setNewbie', false)
@@ -371,6 +402,26 @@
 				position: absolute;
 				right: $largeGutter;
 				bottom: $largeGutter;
+			}
+		}
+		.van-invitation {
+			.content {
+				width: 80%;
+				background: #fff;
+				font-size: $mediumFontSize;
+				h5 {
+					font-weight: normal;
+					padding: $mediumGutter;
+					border-bottom: 1px solid #eee;
+					.van-icon {
+						font-size: $largeFontSize;
+						vertical-align: middle;
+						margin-right: $smallGutter;
+					}
+				}
+				.create-did {
+					margin-top: $largeGutter;
+				}
 			}
 		}
 		.van-grid-item {

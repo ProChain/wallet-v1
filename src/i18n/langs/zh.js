@@ -19,6 +19,8 @@ module.exports = {
 		tags: '团队标签',
 		profile: '我的DID',
 		register: '注册Prochain DID',
-		help: '帮助'
+		help: '帮助',
+		promotion: '邀请好友',
+		qrcode: '进群二维码'
 	}
 };

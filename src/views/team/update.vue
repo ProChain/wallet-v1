@@ -18,6 +18,16 @@
 						<van-loading type="spinner" size="20" />
 					</template>
 				</van-image>
+				<van-cell-group title="管理员微信" :border="false">
+					<ValidationProvider v-slot="{ errors }" rules="required" name="admin_qrcode">
+						<van-field v-model="didForm.admin_qrcode" :error-message="errors[0]" placeholder="请输入管理员微信" />
+					</ValidationProvider>
+				</van-cell-group>
+				<van-cell-group title="进群二维码" :border="false">
+					<ValidationProvider v-slot="{ errors }" rules="required" name="group_qrcode_list">
+						<van-field v-model="didForm.group_qrcode_list" :error-message="errors[0]" placeholder="请输入进群二维码(多个以逗号分割)" />
+					</ValidationProvider>
+				</van-cell-group>
 				<van-cell-group title="描述信息" :border="false">
 					<ValidationProvider v-slot="{ errors }" name="description">
 						<van-field v-model="didForm.description" :error-message="errors[0]" placeholder="请输入描述" />
@@ -52,6 +62,8 @@
 	const intialFormData = {
 		name: '',
 		symbol: '',
+		admin_qrcode: '',
+		group_qrcode_list: '',
 		url: '',
 		website: '',
 		description: '',
@@ -109,7 +121,6 @@
 				} else {
 					this.didForm.name = this.teamInfo.name
 				}
-
 				const rs = await buildTeam({
 					...this.didForm,
 					did: this.walletInfo.did,

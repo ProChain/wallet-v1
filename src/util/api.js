@@ -3,6 +3,7 @@ import axios from './axios'
 const apiChainAuth = '/api/v1/mainnet/auth'
 const apiChainBind = '/api/v1/mainnet/bind'
 const apiChainSn = '/api/v1/mainnet/bind_sn'
+const apiWxSignature = '/api/v1/read_task/wx_signature'
 const apiAccessToken = '/api/v1/mainnet/wechat_user_info'
 const apiAvatarStyle = '/api/v1/mainnet/avatar_style'
 const apiEncodeAvatar = '/api/v1/mainnet/encode_avatar'
@@ -22,6 +23,21 @@ const apiSymbolPic = '/api/v1/mainnet/get_team_logo_by_symbol'
 const apiBalance = '/api/v1/lottery/balance'
 const apiInviteRank = '/api/v1/mainnet/invite_report'
 const apiRemoveBind = 'api/v1/mainnet/remove_bind'
+
+const mockData = {
+	'country': '中国',
+	'unionid': 'oJG9ntjq-vDyMlDZPGC2ESNbwkTFg',
+	'province': '北京',
+	'city': '朝阳',
+	'openid': 'ohHyijtT_tpX1Nv7xbNUswDu9Me8',
+	'sex': 1,
+	'nickname': '青',
+	'headimgurl': 'http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epcKdUcX0VeDqlKLRCDDLzylKEJ0PdKiblfdCdkkK6U9jFv8qmTGsm3AhsOsT4tZ0nOibRlrf9aF72A/132',
+	'language': 'zh_CN',
+	'privilege': [],
+	'wxid': 'wxid_7h9gf2umzeja22',
+	'token': 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3eGlkX2dycmlkb2VrZXM4ZTIyIiwiYXV0aCI6Ik1BSU5ORVRfVVNFUiIsImV4cCI6MTU4NjkxNjMwMn0.RJhvO3HXHWyzNRaPoxZaBE--W8_m2sAizjTLeUzt-dDN3z5OBPkgybvxYs8KosNxumfF0r-8PZnJLQ2jyw00-g'
+}
 
 export async function chainAuth(wxcode) {
 	if (process.env.VUE_APP_TEST_WX) {
@@ -47,6 +63,14 @@ export async function chainBindSn(wxcode) {
 	})
 }
 
+export async function getWxSignature(url) {
+	return axios.get(apiWxSignature, {
+		params: {
+			url
+		}
+	})
+}
+
 export async function chainBind(sn, wxid) {
 	return axios.post(apiChainBind, {
 		sn,
@@ -55,6 +79,11 @@ export async function chainBind(sn, wxid) {
 }
 
 export async function getWechatUser(wxcode) {
+	if (process.env.VUE_APP_TEST_WX) {
+		return {
+			data: mockData
+		}
+	}
 	return axios.get(apiAccessToken, {
 		params: {
 			wxcode
@@ -102,10 +131,9 @@ export async function updateAvatar(wxid, avatar) {
 }
 
 export async function uploadImg(data) {
-	return axios.post(apiUploadImg, data,
-		{
-			headers: { 'Content-Type': 'multipart/form-data' }
-		})
+	return axios.post(apiUploadImg, data, {
+		headers: { 'Content-Type': 'multipart/form-data' }
+	})
 }
 
 export async function drawLottery(token) {
@@ -128,11 +156,15 @@ export async function getLotteryRecord(did) {
 	})
 }
 
-export async function buildTeam({ did, name, symbol, description, url, website, tags }) {
+export async function buildTeam({ did, name, symbol, admin_qrcode, group_qrcode_list, description, url, website, tags }) {
+	let qrcodeList = group_qrcode_list
+	if (!Array.isArray(group_qrcode_list)) qrcodeList = group_qrcode_list.replace(/\s+/g, '').split(',')
 	return axios.post(apiBuildTeam, {
 		did,
 		name,
 		symbol,
+		admin_qrcode,
+		group_qrcode_list: qrcodeList,
 		description,
 		url,
 		website,

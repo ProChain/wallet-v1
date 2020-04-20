@@ -1,5 +1,6 @@
 module.exports = {
 	productionSourceMap: process.env.NODE_ENV === 'development',
+	outputDir: process.env.outputDir,
     lintOnSave: true,
     devServer: {
 		disableHostCheck: true,

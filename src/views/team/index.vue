@@ -14,12 +14,14 @@
 				</p>
 			</van-col>
 		</van-row>
+		<van-notice-bar text="邀请更多朋友加入团队" left-icon="volume-o" mode="closeable" @click="invite" @close.stop />
 		<van-panel v-if="teamInfo.tags && teamInfo.tags.length > 0">
 			<div class="van-cell-group__title mp-0" slot="header">团队标签</div>
 			<van-tag v-for="(tag, idx) in teamInfo.tags" round type="success" size="large" :key="idx">{{ tag }}</van-tag>
 		</van-panel>
 		<van-cell-group title="我的推荐人" :border="false">
 			<van-cell :title="superior | clip(18, -10) || '您没有推荐人'" :center="true" />
+			<van-cell title="团队管理信息" :center="true" is-link to="/team/qrcode" />
 		</van-cell-group>
 		<div class="team">
 			<div class="myteam">
@@ -96,8 +98,7 @@
 				this.num = meta.total
 
 				const rs = await getTeamInfo(this.walletInfo.did)
-				if (rs.hasErrors) return this.$toast.error(rs.message)
-				this[SET_TEAM_INFO](rs.data)
+				this[SET_TEAM_INFO](rs.data || {})
 			} catch (error) {
 				console.log(error);
 			}
@@ -131,6 +132,13 @@
 					console.log(data, 'lock data')
 					self[DISPATCH_SIGN](data)
 				}).catch(console.log)
+			},
+			invite() {
+				const path = '/activity/promotion'
+				const query = {
+					short_index: this.walletInfo.short_index
+				}
+				this.$router.push({ path, query })
 			},
 			...mapActions([
 				SET_TEAM_INFO,
