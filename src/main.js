@@ -14,9 +14,9 @@ import './vee-validate'
 Vue.config.productionTip = false
 
 Vue.use(new VueSocketIO({
-	debug: process.env.NODE_ENV === 'development',
+	debug: process.env.VUE_APP_MODE === 'development',
 	connection: process.env.VUE_APP_SIGN_HOST_WSS,
-	options: process.env.NODE_ENV === 'development' ? {} : { path: '/sign/socket.io/' },
+	options: process.env.VUE_APP_MODE === 'development' ? {} : { path: process.env.VUE_APP_SIGN_HOST_PATH },
 	vuex: {
 		store,
 		actionPrefix: 'SOCKET_',
