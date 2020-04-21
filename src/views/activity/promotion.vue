@@ -50,7 +50,7 @@
 				const { data } = await getWxSignature(link)
 				const imgUrl = 'https://static.chain.pro/chain/praad.gif'
 				wx.config({
-					debug: process.env.NODE_ENV === 'development',
+					debug: false,
 					appId: data.appId,
 					timestamp: data.timestamp,
 					nonceStr: data.nonceStr,
