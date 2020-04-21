@@ -46,6 +46,19 @@
 		},
 		async created() {
 			try {
+				const { short_index: short } = this.$route.query
+				this.shortIndex = short
+				
+				const { result } = await convert(short, 'index')
+				const didHash = didToHex(result)
+				const { meta } = await getMembers(didHash)
+				this.members = meta.total
+				const { data: metadata } = await getMetadata(result)
+				const maxQuota = metadata.locked_records ? metadata.locked_records.max_quota : 0
+				this.members = maxQuota - meta.total > 0 ? maxQuota - meta.total : 0
+				const teamInfo = await getTeamInfo(result)
+				this.teamInfo = teamInfo.data || {}
+				
 				const link = window.location.href
 				const { data } = await getWxSignature(link)
 				const imgUrl = 'https://static.chain.pro/chain/praad.gif'
@@ -72,24 +85,6 @@
 				wx.error((e) => {
 					alert(e)
 				})
-			} catch (e) {
-				alert(e)
-			}
-		},
-		async mounted() {
-			try {
-				const { short_index: short } = this.$route.query
-				this.shortIndex = short
-
-				const { result } = await convert(short, 'index')
-				const didHash = didToHex(result)
-				const { meta } = await getMembers(didHash)
-				this.members = meta.total
-				const { data: metadata } = await getMetadata(result)
-				const maxQuota = metadata.locked_records ? metadata.locked_records.max_quota : 0
-				this.members = maxQuota - meta.total > 0 ? maxQuota - meta.total : 0
-				const teamInfo = await getTeamInfo(result)
-				this.teamInfo = teamInfo.data || {}
 			} catch (e) {
 				alert(e)
 			}
