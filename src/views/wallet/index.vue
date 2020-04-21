@@ -41,9 +41,10 @@
 		<van-overlay :show="showInvitation" class="van-invitation">
 			<div class="wrapper">
 				<div class="content">
-					<h5><van-icon name="warning-o" />请输入邀请码完成DID创建</h5>
+					<h5>
+						<van-icon name="warning-o" />请输入邀请码完成DID创建</h5>
 					<van-field v-model="shortIndex" placeholder="请输入你的邀请码" />
-					<van-button v-if="shortIndex" type="primary" size="large" square class="create-did" @click="createDid(shortIndex)">
+					<van-button v-if="shortIndex && /\w{6}/.test(shortIndex)" type="primary" size="large" square class="create-did" @click="createDid(shortIndex)">
 						生成我的DID</b>
 					</van-button>
 					<van-button v-else type="primary" size="large" square disabled class="create-did">
@@ -75,7 +76,7 @@
 </template>
 <script>
 	import { mapState, mapActions } from 'vuex'
-	import { getWechatUser, removeBind } from '@/util/api'
+	import { getWechatUser } from '@/util/api'
 	import { sleep, getRect } from '@/util/common'
 	import ClipboardJS from 'clipboard'
 	import { convert, getMetadata } from '@/util/chain'
@@ -105,7 +106,7 @@
 		},
 		watch: {
 			isInit(val) {
-				if (val) {
+				if (val && val !== 'reset') {
 					console.log(val, 'is init')
 					this.showInvitation = false
 					this.getUserData(this.walletInfo.did)
@@ -177,7 +178,7 @@
 						await this.getUserData(didHash)
 						return
 					}
-				} 
+				}
 				if (data.unionid) {
 					const { result: unionHash } = await convert(data.unionid, 'unionid')
 					this.unionid = data.unionid
@@ -216,15 +217,16 @@
 				this.$socket.emit('create_by_sns', params)
 				this.sockets.subscribe('tx_failed', payload => {
 					console.log(payload, 'create failed')
-					this.$dialog.confirm({
-						title: '温馨提示',
-						message: '创建DID失败，是否重新绑定？',
-						messageAlign: 'left'
-					}).then(() => {
-						removeBind(data.token).then(() => {
-							window.location.reload()
-						})
-					}).catch(console.error)
+					this.$store.commit('initDid', 'reset')
+					// this.$dialog.confirm({
+					// 	title: '温馨提示',
+					// 	message: '创建DID失败，是否重新绑定？',
+					// 	messageAlign: 'left'
+					// }).then(() => {
+					// 	removeBind(data.token).then(() => {
+					// 		window.location.reload()
+					// 	})
+					// }).catch(console.error)
 				})
 			},
 			handleDelay() {
@@ -307,18 +309,22 @@
 			}
 		}
 	}
+
 	.van-tutorial {
 		z-index: 999;
 	}
+
 	.binding-tutorial {
 		background: #fff;
 		width: 80%;
 		padding: $largeGutter;
 		font-size: $mediumFontSize;
 		border-radius: $smallGutter;
+
 		.text b {
 			color: $red;
 		}
+
 		.code-con {
 			position: relative;
 
@@ -340,6 +346,7 @@
 			}
 		}
 	}
+
 	.content-box {
 		display: flex;
 		justify-content: flex-end;
@@ -348,6 +355,7 @@
 		padding: 10px;
 		margin: $mediumGutter 0 0;
 		overflow: hidden;
+
 		.dialog {
 			height: 35px;
 			line-height: 35px;
@@ -356,32 +364,38 @@
 			position: relative;
 			margin-right: 15px;
 			border-radius: 5px;
+
 			&::after {
 				content: '';
 				position: absolute;
 				right: -6px;
 				top: 12px;
-				width:0;
-				height:0;
+				width: 0;
+				height: 0;
 				border-top: 4px solid transparent;
 				border-bottom: 4px solid transparent;
 				border-left: 6px solid #9fe971;
 			}
 		}
+
 		img {
 			width: 40px;
 			height: 40px;
 		}
 	}
+
 	.home-page {
 		.van-newbie {
 			.wrapper {
 				align-items: flex-start;
 				justify-content: flex-start;
+
 				.van-grid {
 					flex: 0 0 33.3333%;
+
 					.van-grid-item {
 						height: 82PX;
+
 						.van-grid-item__content--center {
 							width: 70PX;
 							height: 70PX;
@@ -390,11 +404,13 @@
 						}
 					}
 				}
+
 				.van-icon-share {
 					color: #fff;
 					transform: rotateY(180deg);
 					margin-top: $largeGutter;
 				}
+
 				.tip {
 					color: #fff;
 					font-size: $mediumFontSize;
@@ -402,37 +418,44 @@
 					margin-top: $mediumGutter;
 				}
 			}
+
 			.van-button--normal {
 				position: absolute;
 				right: $largeGutter;
 				bottom: $largeGutter;
 			}
 		}
+
 		.van-invitation {
 			.content {
 				width: 80%;
 				background: #fff;
 				font-size: $mediumFontSize;
+
 				h5 {
 					font-weight: normal;
 					padding: $mediumGutter;
 					border-bottom: 1px solid #eee;
+
 					.van-icon {
 						font-size: $largeFontSize;
 						vertical-align: middle;
 						margin-right: $smallGutter;
 					}
 				}
+
 				.create-did {
 					margin-top: $largeGutter;
 				}
 			}
 		}
+
 		.van-grid-item {
 			&.disabled {
 				color: $grey;
 			}
 		}
+
 		.init {
 			.van-loading__text {
 				color: #fff;

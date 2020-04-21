@@ -26,7 +26,7 @@ const apiRemoveBind = 'api/v1/mainnet/remove_bind'
 
 const mockData = {
 	'country': '中国',
-	'unionid': 'oJG9ntjq-vDyMlDZPGC2ESNbwkTFg',
+	'unionid': 'oJG9ntjq-vDyMlDZPGC2ESNbwTFghwj',
 	'province': '北京',
 	'city': '朝阳',
 	'openid': 'ohHyijtT_tpX1Nv7xbNUswDu9Me8',
@@ -35,7 +35,7 @@ const mockData = {
 	'headimgurl': 'http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epcKdUcX0VeDqlKLRCDDLzylKEJ0PdKiblfdCdkkK6U9jFv8qmTGsm3AhsOsT4tZ0nOibRlrf9aF72A/132',
 	'language': 'zh_CN',
 	'privilege': [],
-	'wxid': 'wxid_7h9gf2umzeja22',
+	'wxid': 'wxid_7h9gf2umzeja2',
 	'token': 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3eGlkX2dycmlkb2VrZXM4ZTIyIiwiYXV0aCI6Ik1BSU5ORVRfVVNFUiIsImV4cCI6MTU4NjkxNjMwMn0.RJhvO3HXHWyzNRaPoxZaBE--W8_m2sAizjTLeUzt-dDN3z5OBPkgybvxYs8KosNxumfF0r-8PZnJLQ2jyw00-g'
 }
 
