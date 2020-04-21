@@ -1,7 +1,7 @@
 <template>
 	<div class="qrcode">
 		<van-cell-group title="推荐人" :border="false">
-			<van-cell :title="walletInfo.did | clip(18, -10) || '您没有推荐人'" :center="true">
+			<van-cell :title="superior | clip(18, -10) || '您没有推荐人'" :center="true">
 			</van-cell>
 		</van-cell-group>
 		<van-cell-group title="推荐人联系方式" :border="false">
@@ -33,6 +33,7 @@
 <script>
 	import { mapState } from 'vuex'
 	import { getTeamInfo } from '@/util/api'
+	import { convert } from '@/util/chain'
 	import QRCode from 'qrcodejs2'
 	export default {
 		name: 'qrcode',
@@ -41,7 +42,8 @@
 				info: {
 					group_qrcode_list: []
 				},
-				qrList: []
+				qrList: [],
+				superior: ''
 			}
 		},
 		computed: {
@@ -50,7 +52,10 @@
 			])
 		},
 		async mounted() {
-			const info = await getTeamInfo(this.walletInfo.did)
+			// 上级did
+			const { result } = await convert(this.walletInfo.superior, 'hash')
+			this.superior = result
+			const info = await getTeamInfo(result)
 			if (info.data) {
 				this.info = info.data
 				this.qrList = this.info.group_qrcode_list.map(v => {

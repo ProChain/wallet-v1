@@ -61,7 +61,7 @@
 					console.log('wx ready')
 					wx.updateAppMessageShareData({
 						title: `${this.teamInfo.name||''}赠送你一个DID名额`,
-						desc: `他只剩下${this.members}个名额了`,
+						desc: '用DID，轻松领奖励，越领奖励越丰厚',
 						link,
 						imgUrl,
 						success() {
