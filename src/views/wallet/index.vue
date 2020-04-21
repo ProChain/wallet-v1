@@ -173,8 +173,12 @@
 				if (data.wxid) {
 					this[SET_TOKEN](data.token)
 					const { result: didHash } = await convert(data.wxid, 'unionid')
-					await this.getUserData(didHash)
-				} else if (data.unionid) {
+					if (didHash) {
+						await this.getUserData(didHash)
+						return
+					}
+				} 
+				if (data.unionid) {
 					const { result: unionHash } = await convert(data.unionid, 'unionid')
 					this.unionid = data.unionid
 					if (unionHash) {
