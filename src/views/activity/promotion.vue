@@ -6,7 +6,7 @@
 		<div class="content">
 			<div class="profile">
 				<div class="user">
-					<van-image round width="2rem" height="2rem" :src="teamInfo.url" />
+					<van-image round width="1.5rem" height="1.5rem" :src="teamInfo.url" />
 					<div>
 						<p>
 							{{ teamInfo.name }} 共识合伙人
