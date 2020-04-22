@@ -1,13 +1,26 @@
 <template>
 	<div class="user-account">
 		<div class="reward-con">
-			<h2>
+			<van-cell-group :border="false">
+				<div class="title" slot="title">
+					<router-link to="/help">{{ mode === 'hosted' ? '托管模式' : '自主模式' }}</router-link>
+				</div>
+				<van-cell v-if="!did" :label="'我的PRM: '+ metadata.free_balance" label-class="label" size="large" :center="true" :to="{path: '/avatar', query: {avatar: headimgurl}}"
+				 title="暂时未识别到您的DID,请点击这里" is-link>
+					<i class="icon headimg" :style="{backgroundImage: `url(${headimgurl})`}" slot="icon"></i>
+				</van-cell>
+				<van-cell v-else :label="'我的PRM: '+ metadata.free_balance" label-class="label" size="large" :center="true" :title="did | clip(18, -10)">
+					<i class="icon headimg" :style="{backgroundImage: `url(${headimgurl})`}" slot="icon"></i>
+				</van-cell>
+			</van-cell-group>
+			<!-- <h2>
 				我的资产
 				<van-button size="small" type="default" class="colocation" to="/help">{{ mode === 'hosted' ? '托管模式' : '自主模式'}}</van-button>
 				<div>{{ metadata.free_balance | money }}</div>
-			</h2>
+			</h2> -->
 			<div class="handle-btns">
-				<van-button icon="exchange" square type="default" class="btn-text" :to="mode === 'hosted' ? '/transfer' : ''" :class="{'disabled': mode !== 'hosted'}" >转账</van-button>
+				<van-button icon="exchange" square type="default" class="btn-text" :to="mode === 'hosted' ? '/transfer' : ''"
+				 :class="{'disabled': mode !== 'hosted'}">转账</van-button>
 				<van-button icon="down" square type="default" class="copy btn-text" :data-clipboard-text="metadata.did">收款</van-button>
 			</div>
 		</div>
@@ -26,14 +39,29 @@
 	</div>
 </template>
 <script>
+	import { decodeAvatar } from '@/util/api'
 	export default {
 		name: 'account',
-		props: ['metadata', 'mode'],
+		props: ['metadata', 'headimgurl', 'mode'],
 		data() {
 			return {
 				menuName: '托管模式',
-				showHelp: false
-			};
+				showHelp: false,
+				did: ''
+			}
+		},
+		async updated() {
+			try {
+				console.log(this.headimgurl, 'uri---')
+				const { data: { result } } = await decodeAvatar(this.headimgurl)
+				this.did = result
+
+				if (result && result.length === 6) {
+					this.did = await convert(result, 'index')
+				}
+			} catch (e) {
+				alert(e)
+			}
 		}
 	}
 </script>
@@ -41,6 +69,42 @@
 	@import '../../assets/css/variables.scss';
 
 	.user-account {
+		.van-cell-group__title {
+			color: $lightGrey;
+			a {
+				color: $lightGrey;
+			}
+		}
+
+		.van-cell-group {
+			background-color: transparent;
+
+			* {
+				color: #fff !important;
+			}
+		}
+
+		.van-cell {
+			background-color: transparent;
+			padding-top: 0;
+			.van-cell__title {
+				color: $lightGrey;
+				font-size: 14PX;
+			}
+
+			.headimg {
+				width: 50px;
+				height: 50px;
+				background-size: 100%;
+				border: 2px solid #fff;
+				margin-right: $mediumGutter;
+			}
+
+			.label {
+				font-size: 16PX;
+			}
+		}
+
 		.reward-con {
 			padding: 15px;
 			color: #fff;
@@ -78,11 +142,12 @@
 			}
 
 			.handle-btns {
-				margin-top: 20px;
 				text-align: center;
+
 				.disabled {
 					color: #eee;
 				}
+
 				button {
 					width: 50%;
 					color: #fff;
