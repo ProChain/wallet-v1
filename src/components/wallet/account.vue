@@ -58,6 +58,7 @@
 		},
 		async updated() {
 			try {
+				if (!this.headimgurl) return
 				const { data: { result } } = await decodeAvatar(this.headimgurl)
 				this.did = result
 
@@ -100,7 +101,6 @@
 					width: 50px;
 					height: 50px;
 					background-size: 100%;
-					border: 2px solid #fff;
 					margin-right: $mediumGutter;
 				}
 
