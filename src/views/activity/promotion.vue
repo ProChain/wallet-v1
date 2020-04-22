@@ -39,8 +39,7 @@
 
 <script>
 	import { convert, getMetadata } from '@/util/chain'
-	import { didToHex } from '@/util/common'
-	import { getMembers, getTeamInfo, getWxSignature } from '@/util/api'
+	import { getTeamInfo, getWxSignature } from '@/util/api'
 	import wx from 'weixin-js-sdk'
 	export default {
 		name: 'promotion',
@@ -59,12 +58,9 @@
 				this.nickName = nickName
 
 				const { result } = await convert(short, 'index')
-				const didHash = didToHex(result)
-				const { meta } = await getMembers(didHash)
-				this.members = meta.total
 				const { data: metadata } = await getMetadata(result)
 				const maxQuota = metadata.locked_records ? metadata.locked_records.max_quota : 0
-				this.members = maxQuota - meta.total > 0 ? maxQuota - meta.total : 0
+				this.members = maxQuota === 0 ? 0 : maxQuota - metadata.subordinate_count
 				const teamInfo = await getTeamInfo(result)
 				this.teamInfo = teamInfo.data || {}
 
@@ -83,7 +79,7 @@
 					console.log('wx ready')
 					wx.updateAppMessageShareData({
 						title: `"${this.nickName}"赠送你一个DID名额`,
-						desc: '用DID，轻松领奖励，越领奖励越丰厚',
+						desc: '拥有DID，轻松领奖励，奖励秒到账，越领越丰厚',
 						link,
 						imgUrl,
 						success() {
