@@ -201,13 +201,13 @@
 			},
 			beforeUpload(file) {
 				const maxFileSize = 1024 * 1024 * 10;
-				if (!/\.(gif|jpg|jpeg|png|GIF|JPG|JPEG|PNG)$/.test(file.name)) {
-					this.$toast('图片类型必须是gif,jpeg,jpg,png中的一种')
-					return false
-				}
+				// if (!/\.(gif|jpg|jpeg|png|GIF|JPG|JPEG|PNG)$/.test(file.name)) {
+				// 	this.$toast('图片类型必须是gif,jpeg,jpg,png中的一种')
+				// 	return false
+				// }
 				if (file.size > maxFileSize) {
 					this.$toast('图片尺寸超过10M了')
-					return false;
+					return false
 				}
 				this.show = true
 				return true
