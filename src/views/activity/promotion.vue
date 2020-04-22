@@ -81,9 +81,8 @@
 				})
 				wx.ready(() => {
 					console.log('wx ready')
-					const title = `${this.teamInfo.name||''}共识合伙人${this.nickName}赠送你一个DID名额`
 					wx.updateAppMessageShareData({
-						title,
+						title: `${this.nickName}赠送你一个DID名额`,
 						desc: '用DID，轻松领奖励，越领奖励越丰厚',
 						link,
 						imgUrl,
