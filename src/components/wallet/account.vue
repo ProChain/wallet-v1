@@ -5,12 +5,18 @@
 				<div class="title" slot="title">
 					<router-link to="/help">{{ mode === 'hosted' ? '托管模式' : '自主模式' }}</router-link>
 				</div>
-				<van-cell v-if="!did" :label="'我的PRM: '+ metadata.free_balance" label-class="label" size="large" :center="true" :to="{path: '/avatar', query: {avatar: headimgurl}}"
-				 title="暂时未识别到您的DID,请点击这里" is-link>
+				<van-cell v-if="!did" size="large" :center="true" :to="{path: '/avatar', query: {avatar: headimgurl}}" title="暂时未识别到您的DID,请点击这里"
+				 is-link>
 					<i class="icon headimg" :style="{backgroundImage: `url(${headimgurl})`}" slot="icon"></i>
+					<div class="label" slot="label">
+						我的PRM: {{ metadata.free_balance | money(false) }}
+					</div>
 				</van-cell>
-				<van-cell v-else :label="'我的PRM: '+ metadata.free_balance" label-class="label" size="large" :center="true" :title="did | clip(18, -10)">
+				<van-cell v-else size="large" :center="true" :title="did | clip(18, -10)">
 					<i class="icon headimg" :style="{backgroundImage: `url(${headimgurl})`}" slot="icon"></i>
+					<div class="label" slot="label">
+						我的PRM: {{ metadata.free_balance | money(false) }}
+					</div>
 				</van-cell>
 			</van-cell-group>
 			<!-- <h2>
@@ -52,7 +58,6 @@
 		},
 		async updated() {
 			try {
-				console.log(this.headimgurl, 'uri---')
 				const { data: { result } } = await decodeAvatar(this.headimgurl)
 				this.did = result
 
@@ -70,7 +75,6 @@
 
 	.user-account {
 		.van-cell-group__title {
-			color: $lightGrey;
 			a {
 				color: $lightGrey;
 			}
@@ -82,26 +86,27 @@
 			* {
 				color: #fff !important;
 			}
-		}
 
-		.van-cell {
-			background-color: transparent;
-			padding-top: 0;
-			.van-cell__title {
-				color: $lightGrey;
-				font-size: 14PX;
-			}
+			.van-cell {
+				background-color: transparent;
+				padding-top: 0;
 
-			.headimg {
-				width: 50px;
-				height: 50px;
-				background-size: 100%;
-				border: 2px solid #fff;
-				margin-right: $mediumGutter;
-			}
+				.van-cell__title {
+					color: $lightGrey !important;
+					font-size: 14PX;
+				}
 
-			.label {
-				font-size: 16PX;
+				.headimg {
+					width: 50px;
+					height: 50px;
+					background-size: 100%;
+					border: 2px solid #fff;
+					margin-right: $mediumGutter;
+				}
+
+				.label {
+					font-size: 16PX;
+				}
 			}
 		}
 

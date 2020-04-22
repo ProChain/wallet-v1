@@ -1,12 +1,13 @@
 import moment from 'moment'
 
-export function money(amount) {
+export function money(amount, show = true) {
+	let result = 0
 	if (amount) {
 		const newAmount = amount > 10 ** 8 ? Number(amount / 10 ** 15) : Number(amount)
-		return newAmount.toFixed(2) + ' PRM'
-	} else {
-		return '0 PRM'
+		result = newAmount.toFixed(2)
 	}
+	if (show) result += ' PRM'
+	return result
 }
 
 export function person(num) {
