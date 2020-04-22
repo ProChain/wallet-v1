@@ -158,7 +158,7 @@ export async function getLotteryRecord(did) {
 
 export async function buildTeam({ did, name, symbol, admin_qrcode, group_qrcode_list, description, url, website, tags }) {
 	let qrcodeList = group_qrcode_list
-	if (!Array.isArray(group_qrcode_list)) qrcodeList = group_qrcode_list.replace(/\s+/g, '').split(',')
+	if (!Array.isArray(group_qrcode_list) && group_qrcode_list) qrcodeList = group_qrcode_list.replace(/\s+/g, '').split(',')
 	return axios.post(apiBuildTeam, {
 		did,
 		name,

@@ -140,7 +140,7 @@ const router = new VueRouter({
 			meta: {
 				index: 3,
 				title: 'meta.teamLogo',
-				keepAlive: true,
+				keepAlive: false,
 				requireAuth: false
 			}
 		},
