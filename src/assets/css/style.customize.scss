@@ -22,6 +22,11 @@
   filter: grayscale(100%);
   filter: gray;
 }
+.tips {
+	color: $grey;
+	margin: $smallGutter $mediumGutter;
+	font-size: $smallFontSize;
+}
 .van-button {
 	&.btn-text {
 		border: none;

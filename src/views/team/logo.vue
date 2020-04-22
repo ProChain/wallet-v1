@@ -18,6 +18,9 @@
 				</div>
 			</div>
 		</van-panel>
+		<p class="tips">
+			注：只有logo的上传者才能修改或者替换此logo
+		</p>
 		<van-button square size="large" type="primary" :disabled="walletInfo.did !== owner" @click="handleSubmit">确认修改</van-button>
 		<van-popup
 		v-model="show"
