@@ -29,7 +29,7 @@
 			</div>
 			<div class="desc">
 				<p>
-					“DID（分散式身份）是Web3.0的重要基础设施，让您真正掌握自己的注意力价值与数据主权。”
+					“DID（分散式身份）是Web3.0的重要基础设施，让您真正掌握自己的注意力价值与数据主权，随时随地获得Web3.0的广告收益”
 				</p>
 				<van-button type="warning" round size="large" @click="create">立即创建</van-button>
 			</div>

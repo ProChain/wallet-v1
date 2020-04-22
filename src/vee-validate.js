@@ -1,5 +1,5 @@
 import { localize } from 'vee-validate'
-import { required, min_value } from 'vee-validate/dist/rules'
+import { required, min_value, max } from 'vee-validate/dist/rules'
 import { extend } from 'vee-validate'
 import zh_CN from 'vee-validate/dist/locale/zh_CN.json'
 
@@ -10,6 +10,11 @@ localize({
 localize('zh_CN')
 
 extend('required', required)
+
+extend('max', {
+	...max,
+	message: '{_field_}不能超过5位',
+})
 
 extend('min_value', {
 	...min_value,

@@ -2,15 +2,15 @@
 	<div class="team-update-component">
 		<div class="team-update">
 			<ValidationObserver v-slot="{ invalid }" ref="form">
-				<van-cell-group title="团队名称" :border="false">
+				<van-cell-group title="团队全称" :border="false">
 					<ValidationProvider v-slot="{ errors }" rules="required" name="name">
 						<van-field v-if="pageType !== 'create'" v-model="teamInfo.name" disabled />
 						<van-field v-else v-model="didForm.name" :error-message="errors[0]" placeholder="请输入团队名称" />
 					</ValidationProvider>
 				</van-cell-group>
-				<van-cell-group title="团队标识" :border="false">
-					<ValidationProvider v-slot="{ errors }" rules="required" name="symbol">
-						<van-field v-model="didForm.symbol" :error-message="errors[0]" placeholder="请设置您的团队标识" @input="debouncedSearch" />
+				<van-cell-group title="团队简称" :border="false">
+					<ValidationProvider v-slot="{ errors }" rules="required|max:5" name="symbol">
+						<van-field v-model="didForm.symbol" :error-message="errors[0]" placeholder="如BTC、PRM或者“般若”、“波卡”" @input="debouncedSearch" />
 					</ValidationProvider>
 				</van-cell-group>
 				<van-image v-if="symbolPic" :src="symbolPic" width="1rem" height="1rem" round>
@@ -18,22 +18,25 @@
 						<van-loading type="spinner" size="20" />
 					</template>
 				</van-image>
-				<van-cell-group title="管理员微信" :border="false">
-					<ValidationProvider v-slot="{ errors }" rules="required" name="admin_qrcode">
-						<van-field v-model="didForm.admin_qrcode" :error-message="errors[0]" placeholder="请输入管理员微信" />
-					</ValidationProvider>
+				<van-cell-group title="团队管理联系方式(方便推荐人直接联系进入社群)" :border="false">
+					<!-- <ValidationProvider v-slot="{ errors }" rules="required" name="admin_qrcode">
+						<van-field v-model="didForm.admin_qrcode" :error-message="errors[0]" placeholder="团队管理员微信二维码，方便推荐人直接联系进入社群" />
+					</ValidationProvider> -->
 				</van-cell-group>
-				<van-cell-group title="进群二维码" :border="false">
-					<ValidationProvider v-slot="{ errors }" rules="required" name="group_qrcode_list">
+				<van-uploader class="upload" v-model="adminQrcode" :before-read="beforeUpload" :after-read="adminUploaded" @delete="deleteAdmin" :max-count="1" />
+				<van-cell-group title="团队社群二维码(方便推荐人直接扫码进群)" :border="false">
+					<!-- <ValidationProvider v-slot="{ errors }" rules="required" name="group_qrcode_list">
 						<van-field v-model="didForm.group_qrcode_list" :error-message="errors[0]" placeholder="请输入进群二维码(多个以逗号分割)" />
-					</ValidationProvider>
+					</ValidationProvider> -->
 				</van-cell-group>
-				<van-cell-group title="描述信息" :border="false">
+				<van-uploader class="upload" v-model="fileList" :before-read="beforeUpload" :after-read="uploaded" :max-count="3"
+				 @delete="handleDelete" multiple />
+				<van-cell-group v-if="pageType !== 'create'" title="描述信息" :border="false">
 					<ValidationProvider v-slot="{ errors }" name="description">
 						<van-field v-model="didForm.description" :error-message="errors[0]" placeholder="请输入描述" />
 					</ValidationProvider>
 				</van-cell-group>
-				<van-cell-group title="团队网址" :border="false">
+				<van-cell-group v-if="pageType !== 'create'" title="团队网址" :border="false">
 					<ValidationProvider v-slot="{ errors }" name="website">
 						<van-field v-model="didForm.website" :error-message="errors[0]" placeholder="请输入团队网址" />
 					</ValidationProvider>
@@ -57,17 +60,17 @@
 	import { mapState, mapActions } from 'vuex'
 	import { ValidationObserver, ValidationProvider } from 'vee-validate'
 	import { SET_TEAM_INFO, DISPATCH_SIGN } from '@/vuex/constants'
-	import { getPicBySymbol, buildTeam } from '@/util/api'
+	import { getPicBySymbol, buildTeam, uploadImg } from '@/util/api'
 	import { debounce } from '@/util/common'
 	const intialFormData = {
 		name: '',
 		symbol: '',
 		admin_qrcode: '',
-		group_qrcode_list: '',
+		group_qrcode_list: [],
 		url: '',
 		website: '',
 		description: '',
-		tags: []
+		tags: [],
 	}
 	export default {
 		name: 'teamUpdate',
@@ -76,7 +79,9 @@
 				pageType: '',
 				didForm: Object.assign({}, intialFormData),
 				btnText: '更新团队',
-				symbolPic: ''
+				symbolPic: '',
+				fileList: [],
+				adminQrcode: []
 			}
 		},
 		computed: {
@@ -101,6 +106,23 @@
 				}
 			}
 			this.pageType = type
+			if (this.didForm.group_qrcode_list) {
+				this.fileList = this.didForm.group_qrcode_list.map(v => {
+					return {
+						url: v
+					}
+				})
+			} else {
+				this.didForm.group_qrcode_list = []
+			}
+
+			if (this.didForm.admin_qrcode) {
+				this.adminQrcode = [
+					{
+						url: this.didForm.admin_qrcode
+					}
+				]
+			}
 		},
 		activated() {
 			const tags = sessionStorage.getItem('tags')
@@ -144,6 +166,47 @@
 				const { data } = await getPicBySymbol(symbol)
 				this.symbolPic = data && data.url
 			},
+			beforeUpload(file) {
+				const maxFileSize = 1024 * 1024 * 10;
+				if (!/\.(gif|jpg|jpeg|png|GIF|JPG|JPEG|PNG)$/.test(file.name)) {
+					this.$toast('图片类型必须是gif,jpeg,jpg,png中的一种')
+					return false
+				}
+				if (file.size > maxFileSize) {
+					this.$toast('图片尺寸超过10M了')
+					return false;
+				}
+				return true
+			},
+			async uploaded(res) {
+				try {
+					const data = new FormData()
+					data.append('file', res.file)
+					const rs = await uploadImg(data)
+					const pic = `https://static.chain.pro/${rs.data}`
+					this.didForm.group_qrcode_list.push(pic)
+				} catch (e) {
+					alert(e)
+				}
+			},
+			handleDelete(_res, { index }) {
+				console.log(_res, 'res')
+				this.didForm.group_qrcode_list.splice(index, 1)
+			},
+			deleteAdmin() {
+				this.didForm.admin_qrcode = ''
+			},
+			async adminUploaded(res) {
+				try {
+					const data = new FormData()
+					data.append('file', res.file)
+					const rs = await uploadImg(data)
+					const pic = `https://static.chain.pro/${rs.data}`
+					this.didForm.admin_qrcode = pic
+				} catch (e) {
+					alert(e)
+				}
+			},
 			...mapActions([
 				SET_TEAM_INFO,
 				DISPATCH_SIGN
@@ -162,8 +225,21 @@
 		.van-image {
 			background-color: #c1bdbd;
 			margin: $mediumGutter 0 0 $mediumGutter;
+
 			img {
 				transform: scale(0.8);
+			}
+		}
+
+		.upload {
+			padding: $smallGutter 16PX 0;
+
+			img {
+				transform: scale(1);
+			}
+
+			.van-image {
+				margin: 0;
 			}
 		}
 	}

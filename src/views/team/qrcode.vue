@@ -4,9 +4,13 @@
 			<van-cell :title="superior | clip(18, -10) || '您没有推荐人'" :center="true">
 			</van-cell>
 		</van-cell-group>
-		<van-cell-group title="推荐人联系方式" :border="false">
-			<van-cell :title="info.admin_qrcode || '未登记'" :center="true">
-			</van-cell>
+		<van-cell-group title="推荐人联系方式" :border="false" class="contact">
+			<van-cell v-if="!info.admin_qrcode" title="未登记" :center="true"></van-cell>
+			<van-image v-else :src="info.admin_qrcode">
+				<template v-slot:loading>
+					<van-loading type="spinner" size="20" />
+				</template>
+			</van-image>
 		</van-cell-group>
 		<van-panel title="推荐人社群" class="mt-medium">
 			<div class="qrcode-list" v-if="info.group_qrcode_list.length">
@@ -16,13 +20,16 @@
 						 alt="">
 						{{ info.name }}
 					</dt> -->
-					<dd v-for="(item, index) in qrList">
+					<dd v-for="(item, index) in info.group_qrcode_list">
 						<div class="qrcode" :id="`qrcode${index}`">
-							<img v-if="!item.dest" class="placeholder" src="@/assets/images/placeholder.svg" />
+							<van-image :src="item">
+								<template v-slot:loading>
+									<van-loading type="spinner" size="20" />
+								</template>
+							</van-image>
 						</div>
 					</dd>
 				</dl>
-				<p>该二维码7天内有效，重新进入将更新</p>
 			</div>
 			<div v-else class="no-content">
 				管理员还没有提交二维码
@@ -58,15 +65,15 @@
 			const info = await getTeamInfo(result)
 			if (info.data) {
 				this.info = info.data
-				this.qrList = this.info.group_qrcode_list.map(v => {
-					return {
-						origin: v,
-						dest: ''
-					}
-				})
+				// this.qrList = this.info.group_qrcode_list.map(v => {
+				// 	return {
+				// 		origin: v,
+				// 		dest: ''
+				// 	}
+				// })
 			}
 			setTimeout(() => {
-				this.generateQrcode()
+				// this.generateQrcode()
 			}, 500)
 		},
 		methods: {
@@ -91,7 +98,19 @@
 
 	.qrcode {
 		font-size: $mediumFontSize;
-
+		.contact {
+			text-align: center;
+			.van-cell__title {
+				text-align: left;
+			}
+			.van-image {
+				width: 260px;
+				height: 260px;
+				text-align: center;
+				padding: $largeGutter 0;
+				overflow: hidden;
+			}
+		}
 		.van-panel__content {
 			padding: 0 0 $largeGutter;
 
@@ -113,8 +132,7 @@
 					height: 100%;
 				}
 				.qrcode {
-					width: 260px;
-					height: 260px;
+					width: 90%;
 					margin: 0 auto;
 					overflow: hidden;
 					img {
