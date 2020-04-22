@@ -18,8 +18,8 @@ export const actions = {
 	[Handles.SET_TEAM_INFO]: async({ commit }, teamInfo) => {
 		commit(Handles.SET_TEAM_INFO, teamInfo)
 	},
-	[Handles.SET_AVATAR]: async({ commit }, avatar) => {
-		commit(Handles.SET_AVATAR, avatar)
+	[Handles.SET_USER_INFO]: async({ commit }, userInfo) => {
+		commit(Handles.SET_USER_INFO, userInfo)
 	},
 	/**
 	 * @@@

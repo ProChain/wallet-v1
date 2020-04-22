@@ -10,8 +10,8 @@ export const mutations = {
 	[Handles.SET_TEAM_INFO]: (state, teamInfo) => {
 		state.teamInfo = teamInfo
 	},
-	[Handles.SET_AVATAR]: (state, avatar) => {
-		state.avatar = avatar
+	[Handles.SET_USER_INFO]: (state, userInfo) => {
+		state.userInfo = userInfo
 	},
 	[Handles.CHANGE_MODE]: (state, mode) => {
 		state.mode = mode

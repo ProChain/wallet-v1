@@ -8,10 +8,10 @@ const state = {
 		locked_records: {},
 		unlocked_records: {}
 	},
-	avatar: '',
 	teamInfo: {
 		tags: []
 	},
+	userInfo: {},
 	showLoading: true,
 	token: '',
 	isNewbie: false,

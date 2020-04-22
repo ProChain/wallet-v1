@@ -80,7 +80,7 @@
 	import { sleep, getRect } from '@/util/common'
 	import ClipboardJS from 'clipboard'
 	import { convert, getMetadata } from '@/util/chain'
-	import { SET_WALLET_INFO, SET_AVATAR, SET_TOKEN, CHANGE_MODE } from '@/vuex/constants'
+	import { SET_WALLET_INFO, SET_USER_INFO, SET_TOKEN, CHANGE_MODE } from '@/vuex/constants'
 	import Account from '@/components/wallet/account'
 	import Transaction from '@/components/wallet/transaction'
 	export default {
@@ -172,7 +172,7 @@
 				const { data } = await getWechatUser(code)
 				if (!data) return
 				this.headimgurl = data.headimgurl.replace(/\d+$/, 0)
-				this[SET_AVATAR](data.avatar)
+				this[SET_USER_INFO](data)
 				if (data.wxid) {
 					this[SET_TOKEN](data.token)
 					const { result: didHash } = await convert(data.wxid, 'unionid')
@@ -236,7 +236,7 @@
 			},
 			...mapActions([
 				SET_WALLET_INFO,
-				SET_AVATAR,
+				SET_USER_INFO,
 				SET_TOKEN
 			])
 		}

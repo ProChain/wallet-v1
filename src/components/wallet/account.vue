@@ -5,7 +5,7 @@
 				<div class="title" slot="title">
 					<router-link to="/help">{{ mode === 'hosted' ? '托管模式' : '自主模式' }}</router-link>
 				</div>
-				<van-cell v-if="!did" size="large" :center="true" :to="{path: '/avatar', query: {avatar: headimgurl}}" title="暂时未识别到您的DID,请点击这里"
+				<van-cell v-if="!did" size="large" :center="true" to="/avatar" title="暂时未识别到您的DID,请点击这里"
 				 is-link>
 					<i class="icon headimg" :style="{backgroundImage: `url(${headimgurl})`}" slot="icon"></i>
 					<div class="label" slot="label">

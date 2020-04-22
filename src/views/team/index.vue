@@ -112,7 +112,8 @@
 			},
 			...mapState([
 				'walletInfo',
-				'teamInfo'
+				'teamInfo',
+				'userInfo'
 			])
 		},
 		methods: {
@@ -136,7 +137,8 @@
 			invite() {
 				const path = '/activity/promotion'
 				const query = {
-					short_index: this.walletInfo.short_index
+					short_index: this.walletInfo.short_index,
+					nick_name: this.userInfo.nickname
 				}
 				this.$router.push({ path, query })
 			},

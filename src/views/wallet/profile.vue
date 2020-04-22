@@ -2,7 +2,7 @@
 	<div class="profile">
 		<div class="account">
 			<van-cell-group title="我的DID" :border="false">
-				<van-cell v-if="walletInfo.did" :title="walletInfo.did | clip(18, -10)" label="创建区块身份头像" is-link :center="true" :to="{path: '/avatar', query: {avatar}}">
+				<van-cell v-if="walletInfo.did" :title="walletInfo.did | clip(18, -10)" label="创建区块身份头像" is-link :center="true" to="/avatar">
 					<i class="icon prm" slot="icon"></i>
 				</van-cell>
 				<van-cell v-else title="未绑定" :center="true">
@@ -52,7 +52,6 @@
 			},
 			...mapState([
 				'walletInfo',
-				'avatar',
 				'isNewbie'
 			])
 		}

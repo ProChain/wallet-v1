@@ -88,8 +88,7 @@
 		computed: {
 			...mapState([
 				'walletInfo',
-				'teamInfo',
-				'avatar'
+				'teamInfo'
 			])
 		},
 		components: {

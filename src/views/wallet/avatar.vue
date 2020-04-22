@@ -117,7 +117,8 @@
 		},
 		computed: {
 			...mapState([
-				'walletInfo'
+				'walletInfo',
+				'userInfo'
 			])
 		},
 		components: {
@@ -143,11 +144,8 @@
 			localStorage.setItem('isNew', false)
 			this.$store.commit('setNewbie', false)
 			await sleep()
-			this.avatar = this.$route.query.avatar
-			const { avatar, teamname } = this.$route.query
-			if (avatar) {
-				this.avatar = avatar
-			}
+			this.avatar = this.userInfo.headimgurl
+			const { teamname } = this.$route.query
 			if (teamname) {
 				this.teamname = teamname
 			}

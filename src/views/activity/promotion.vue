@@ -5,10 +5,17 @@
 		<div class="bg-color"></div>
 		<div class="content">
 			<div class="profile">
-				<van-image round width="2rem" height="2rem" :src="teamInfo.url" />
-				<p>
-					{{ teamInfo.name }}
-				</p>
+				<div class="user">
+					<van-image round width="2rem" height="2rem" :src="teamInfo.url" />
+					<div>
+						<p>
+							{{ teamInfo.name }} 共识合伙人
+						</p>
+						<p>
+							{{ nickName }}
+						</p>
+					</div>
+				</div>
 				<h2>
 					赠送你一个DID名额
 				</h2>
@@ -40,15 +47,17 @@
 		data() {
 			return {
 				shortIndex: '',
+				nickName: '',
 				members: 0,
 				teamInfo: {}
 			}
 		},
 		async created() {
 			try {
-				const { short_index: short } = this.$route.query
+				const { short_index: short, nick_name: nickName } = this.$route.query
 				this.shortIndex = short
-				
+				this.nickName = nickName
+
 				const { result } = await convert(short, 'index')
 				const didHash = didToHex(result)
 				const { meta } = await getMembers(didHash)
@@ -58,7 +67,7 @@
 				this.members = maxQuota - meta.total > 0 ? maxQuota - meta.total : 0
 				const teamInfo = await getTeamInfo(result)
 				this.teamInfo = teamInfo.data || {}
-				
+
 				const link = window.location.href
 				const { data } = await getWxSignature(link)
 				const imgUrl = 'https://static.chain.pro/chain/praad.gif'
@@ -72,8 +81,9 @@
 				})
 				wx.ready(() => {
 					console.log('wx ready')
+					const title = `${this.teamInfo.name||''}共识合伙人${this.nickName}赠送你一个DID名额`
 					wx.updateAppMessageShareData({
-						title: `${this.teamInfo.name||''}赠送你一个DID名额`,
+						title,
 						desc: '用DID，轻松领奖励，越领奖励越丰厚',
 						link,
 						imgUrl,
@@ -146,6 +156,15 @@
 			}
 
 			.profile {
+				.user {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					p {
+						text-align: left;
+						padding-left: $mediumGutter;
+					}
+				}
 				h2 {
 					margin-top: $largeGutter*2;
 				}
