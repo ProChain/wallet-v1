@@ -202,6 +202,7 @@
 					data.append('file', res.file)
 					const rs = await uploadImg(data)
 					const pic = `https://static.chain.pro/${rs.data}`
+					console.log(pic, 'admin pic----')
 					this.didForm.admin_qrcode = pic
 				} catch (e) {
 					alert(e)
