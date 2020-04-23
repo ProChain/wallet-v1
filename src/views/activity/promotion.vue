@@ -87,7 +87,9 @@
 							console.log('share success')
 						}
 					})
-					// wx.showAllNonBaseMenuItem()
+					setTimeout(() => {
+						wx.showAllNonBaseMenuItem()
+					}, 200)
 				})
 				wx.error((e) => {
 					console.log(e)
