@@ -70,8 +70,7 @@
 				this.members = maxQuota === 0 ? 0 : maxQuota - metadata.subordinate_count
 				const teamInfo = await getTeamInfo(result)
 				this.teamInfo = teamInfo.data || {}
-
-				const link = window.location.href
+				const link = window.location.href.split('#')[0]
 				const { data } = await getWxSignature(link)
 				const imgUrl = 'https://static.chain.pro/chain/praad.gif'
 				wx.config({
