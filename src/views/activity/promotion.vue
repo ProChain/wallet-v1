@@ -87,7 +87,7 @@
 					wx.updateAppMessageShareData({
 						title,
 						desc: '拥有DID，轻松领奖励，奖励秒到账，越领越丰厚',
-						link,
+						link: window.location.href,
 						imgUrl,
 						success() {
 							console.log('share success')
