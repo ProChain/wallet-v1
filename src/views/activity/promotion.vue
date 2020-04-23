@@ -73,11 +73,11 @@
 					timestamp: data.timestamp,
 					nonceStr: data.nonceStr,
 					signature: data.signature,
-					jsApiList: ['hideAllNonBaseMenuItem', 'updateAppMessageShareData']
+					jsApiList: ['hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem', 'updateAppMessageShareData']
 				})
+				wx.hideAllNonBaseMenuItem()
 				wx.ready(() => {
 					console.log('wx ready')
-					wx.hideAllNonBaseMenuItem()
 					wx.updateAppMessageShareData({
 						title: `"${this.nickName}"赠送你一个DID名额`,
 						desc: '拥有DID，轻松领奖励，奖励秒到账，越领越丰厚',
@@ -87,6 +87,7 @@
 							console.log('share success')
 						}
 					})
+					wx.showAllNonBaseMenuItem()
 				})
 				wx.error((e) => {
 					console.log(e)
@@ -100,15 +101,6 @@
 		methods: {
 			create() {
 				window.location.href = `${process.env.VUE_APP_DOMAIN}/#/?short_index=${this.shortIndex}`
-			},
-			async getOpenId() {
-				const url = window.location.href
-				const part1 = url.split('&state')[0]
-				const code = part1.split('code=')[1]
-				const { apply_id: applyId } = this.$route.query
-				const { data: { result, wxidmd5 } } = await applySn(applyId, code)
-				this.code = result
-				if (wxidmd5) this.rewardUrl = `/wallet?queryid=${wxidmd5}`
 			}
 		}
 	}
