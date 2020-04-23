@@ -6,7 +6,7 @@
 		<div class="content">
 			<div class="profile">
 				<div class="user">
-					<van-image round width="1.3rem" height="1.3rem" :src="teamInfo.url" />
+					<van-image round width="1.1rem" height="1.1rem" :src="teamInfo.url" />
 					<div>
 						<p>
 							{{ teamInfo.name }} 共识合伙人
@@ -20,7 +20,7 @@
 					赠送你一个DID名额
 				</h2>
 				<h3>
-					他只剩下 {{ members }} 个名额了
+					他的剩余名额 {{ members }}
 				</h3>
 			</div>
 			<div class="code">
@@ -122,6 +122,7 @@
 		color: #fff;
 		background: url(../../assets/images/activity/bg.jpg) no-repeat;
 		background-size: cover;
+
 		.van-notice-bar {
 			width: 100%;
 			position: absolute;
@@ -156,6 +157,7 @@
 
 			h3 {
 				margin: $smallGutter;
+				color: $lightGrey;
 			}
 
 			.profile {
@@ -167,6 +169,13 @@
 					p {
 						text-align: left;
 						padding-left: $mediumGutter;
+						font-size: $smallFontSize;
+						color: $lightGrey;
+
+						&:last-of-type {
+							font-size: $mediumFontSize;
+							font-weight: bold;
+						}
 					}
 				}
 
@@ -193,6 +202,7 @@
 
 				.van-button {
 					margin-top: $largeGutter;
+					animation: scaleDrew 2.5s ease-in-out infinite;
 				}
 			}
 
@@ -217,6 +227,24 @@
 
 		100% {
 			font-size: $mediumFontSize;
+		}
+	}
+
+	@keyframes scaleDrew {
+		0% {
+			transform: scale(1);
+		}
+
+		25% {
+			transform: scale(1.05);
+		}
+
+		50% {
+			transform: scale(1);
+		}
+
+		75% {
+			transform: scale(1.05);
 		}
 	}
 </style>
