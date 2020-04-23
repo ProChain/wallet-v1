@@ -68,15 +68,16 @@
 				const { data } = await getWxSignature(link)
 				const imgUrl = 'https://static.chain.pro/chain/praad.gif'
 				wx.config({
-					debug: false,
+					debug: process.env.VUE_APP_MODE === 'development',
 					appId: data.appId,
 					timestamp: data.timestamp,
 					nonceStr: data.nonceStr,
 					signature: data.signature,
-					jsApiList: ['updateAppMessageShareData']
+					jsApiList: ['hideAllNonBaseMenuItem', 'updateAppMessageShareData']
 				})
 				wx.ready(() => {
 					console.log('wx ready')
+					wx.hideAllNonBaseMenuItem()
 					wx.updateAppMessageShareData({
 						title: `"${this.nickName}"赠送你一个DID名额`,
 						desc: '拥有DID，轻松领奖励，奖励秒到账，越领越丰厚',
