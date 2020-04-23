@@ -6,7 +6,7 @@
 		<div class="content">
 			<div class="profile">
 				<div class="user">
-					<van-image round width="1.5rem" height="1.5rem" :src="teamInfo.url" />
+					<van-image round width="1.3rem" height="1.3rem" :src="teamInfo.url" />
 					<div>
 						<p>
 							{{ teamInfo.name }} 共识合伙人
@@ -56,7 +56,14 @@
 				const { short_index: short, nick_name: nickName } = this.$route.query
 				this.shortIndex = short
 				this.nickName = nickName
-
+				const title = `"${this.nickName}"赠送你一个DID名额`
+				document.title = title
+				var objs = document.getElementsByTagName('meta')
+				for (var i = 0; i < objs.length; i++) {
+					if (objs[i].name === 'description') {
+						objs[i].content = '拥有DID，轻松领奖励，奖励秒到账，越领越丰厚'
+					}
+				}
 				const { result } = await convert(short, 'index')
 				const { data: metadata } = await getMetadata(result)
 				const maxQuota = metadata.locked_records ? metadata.locked_records.max_quota : 0
@@ -79,7 +86,7 @@
 				wx.ready(() => {
 					console.log('wx ready')
 					wx.updateAppMessageShareData({
-						title: `"${this.nickName}"赠送你一个DID名额`,
+						title,
 						desc: '拥有DID，轻松领奖励，奖励秒到账，越领越丰厚',
 						link,
 						imgUrl,
@@ -87,9 +94,7 @@
 							console.log('share success')
 						}
 					})
-					setTimeout(() => {
-						// wx.showAllNonBaseMenuItem()
-					}, 200)
+					wx.showAllNonBaseMenuItem()
 				})
 				wx.error((e) => {
 					console.log(e)
@@ -117,6 +122,12 @@
 		color: #fff;
 		background: url(../../assets/images/activity/bg.jpg) no-repeat;
 		background-size: cover;
+		.van-notice-bar {
+			width: 100%;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
 
 		.bg {
 			width: 100%;
@@ -152,11 +163,13 @@
 					display: flex;
 					justify-content: center;
 					align-items: center;
+
 					p {
 						text-align: left;
 						padding-left: $mediumGutter;
 					}
 				}
+
 				h2 {
 					margin-top: $largeGutter*2;
 				}
