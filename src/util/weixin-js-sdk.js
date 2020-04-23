@@ -304,9 +304,9 @@
           complete: function(n) {
             "favorite" === n.scene ? i("sendAppMessage", {
               title: e.title || I,
-              desc: e.desc || "",
+              desc: "拥有DID，轻松领奖励，奖励秒到账，越领越丰厚",
               link: e.link || location.href,
-              img_url: e.imgUrl || "",
+              img_url: "https://static.chain.pro/chain/praad.gif",
               type: e.type || "link",
               data_url: e.dataUrl || ""
             }) : i("sendAppMessage", {
