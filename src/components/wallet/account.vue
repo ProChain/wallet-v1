@@ -102,6 +102,7 @@
 					height: 50px;
 					background-size: 100%;
 					margin-right: $mediumGutter;
+					border-radius: 5px;
 				}
 
 				.label {
