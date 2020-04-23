@@ -88,7 +88,7 @@
 						}
 					})
 					setTimeout(() => {
-						wx.showAllNonBaseMenuItem()
+						// wx.showAllNonBaseMenuItem()
 					}, 200)
 				})
 				wx.error((e) => {
