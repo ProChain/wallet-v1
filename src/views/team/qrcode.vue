@@ -12,29 +12,22 @@
 				</template>
 			</van-image>
 		</van-cell-group>
-		<van-panel title="推荐人社群" class="mt-medium">
-			<div class="qrcode-list" v-if="info.group_qrcode_list.length">
-				<dl>
-					<!-- <dt>
-						<img :src="info.url"
-						 alt="">
-						{{ info.name }}
-					</dt> -->
-					<dd v-for="(item, index) in info.group_qrcode_list">
-						<div class="qrcode" :id="`qrcode${index}`">
-							<van-image :src="item">
-								<template v-slot:loading>
-									<van-loading type="spinner" size="20" />
-								</template>
-							</van-image>
-						</div>
-					</dd>
-				</dl>
-			</div>
+		<van-cell-group title="推荐人社群" :border="false" class="group">
+			<dl v-if="info.group_qrcode_list.length">
+				<dd v-for="(item, index) in info.group_qrcode_list">
+					<div class="qrcode" :id="`qrcode${index}`">
+						<van-image :src="item">
+							<template v-slot:loading>
+								<van-loading type="spinner" size="20" />
+							</template>
+						</van-image>
+					</div>
+				</dd>
+			</dl>
 			<div v-else class="no-content">
 				管理员还没有提交二维码
 			</div>
-		</van-panel>
+		</van-cell-group>
 	</div>
 </template>
 <script>
@@ -98,7 +91,7 @@
 
 	.qrcode {
 		font-size: $mediumFontSize;
-		.contact {
+		.contact, .group {
 			text-align: center;
 			.van-cell__title {
 				text-align: left;
@@ -111,39 +104,10 @@
 				overflow: hidden;
 			}
 		}
-		.van-panel__content {
-			padding: 0 0 $largeGutter;
-
-			dt {
-				display: flex;
-				align-items: center;
-				font-size: $largeFontSize;
-
-				img {
-					width: 60px;
-					margin: 0 $largeGutter;
-				}
-			}
-
-			dd {
-				font-size: $smallFontSize;
-				margin: $largeGutter auto;
-				.placeholder {
-					height: 100%;
-				}
-				.qrcode {
-					width: 90%;
-					margin: 0 auto;
-					overflow: hidden;
-					img {
-						width: 100%;
-					}
-				}
-			}
-
-			p {
-				text-align: center;
-				color: $grey;
+		.group {
+			.van-image {
+				width: 260px;
+				height: auto;
 			}
 		}
 	}
