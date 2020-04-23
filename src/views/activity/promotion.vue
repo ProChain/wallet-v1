@@ -1,6 +1,6 @@
 <template>
 	<div class="promotion">
-		<van-notice-bar v-if="!teamInfo.name " text="请先创建团队再分享此页面!" left-icon="volume-o" />
+		<van-notice-bar v-if="showNotice" text="请先创建团队再分享此页面!" left-icon="volume-o" />
 		<div class="bg"></div>
 		<div class="bg-color"></div>
 		<div class="content">
@@ -49,7 +49,8 @@
 				nickName: '',
 				members: 0,
 				quota: 0,
-				teamInfo: {}
+				teamInfo: {},
+				showNotice: false
 			}
 		},
 		async created() {
@@ -71,6 +72,7 @@
 				this.members = this.quota === 0 ? 0 : this.quota - metadata.subordinate_count
 				const teamInfo = await getTeamInfo(result)
 				this.teamInfo = teamInfo.data || {}
+				this.showNotice = !this.teamInfo.name
 				const link = window.location.href.split('#')[0]
 				const { data } = await getWxSignature(link)
 				const imgUrl = 'https://static.chain.pro/chain/praad.gif'
@@ -169,6 +171,7 @@
 						text-align: left;
 						font-size: $smallFontSize;
 						color: #ffb7ab;
+						margin-left: $smallGutter;
 
 						&:last-of-type {
 							font-size: $largeFontSize;
