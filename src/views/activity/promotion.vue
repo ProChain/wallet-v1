@@ -6,7 +6,7 @@
 		<div class="content">
 			<div class="profile">
 				<div class="user">
-					<van-image round width="1.1rem" height="1.1rem" :src="teamInfo.url" />
+					<van-image width="1.2rem" height="1.2rem" :src="teamInfo.url" />
 					<div>
 						<p>
 							{{ teamInfo.name }} 共识合伙人
@@ -20,7 +20,7 @@
 					赠送你一个DID名额
 				</h2>
 				<h3>
-					他的剩余名额 {{ members }}
+					他的剩余名额 {{ members }} / {{ quota }}
 				</h3>
 			</div>
 			<div class="code">
@@ -31,8 +31,8 @@
 				<p>
 					“DID（分散式身份）是Web3.0的重要基础设施，让您真正掌握自己的注意力价值与数据主权，随时随地获得Web3.0的广告收益”
 				</p>
-				<van-button type="warning" round size="large" @click="create">立即创建</van-button>
 			</div>
+			<van-button color="#fed01d" round size="large" @click="create">立即创建</van-button>
 		</div>
 	</div>
 </template>
@@ -48,6 +48,7 @@
 				shortIndex: '',
 				nickName: '',
 				members: 0,
+				quota: 0,
 				teamInfo: {}
 			}
 		},
@@ -66,8 +67,8 @@
 				}
 				const { result } = await convert(short, 'index')
 				const { data: metadata } = await getMetadata(result)
-				const maxQuota = metadata.locked_records ? metadata.locked_records.max_quota : 0
-				this.members = maxQuota === 0 ? 0 : maxQuota - metadata.subordinate_count
+				this.quota = metadata.locked_records ? metadata.locked_records.max_quota : 0
+				this.members = this.quota === 0 ? 0 : this.quota - metadata.subordinate_count
 				const teamInfo = await getTeamInfo(result)
 				this.teamInfo = teamInfo.data || {}
 				const link = window.location.href.split('#')[0]
@@ -145,18 +146,17 @@
 			position: relative;
 			z-index: 3;
 
-			h2,
 			h3 {
 				font-weight: normal;
 			}
 
 			h2 {
-				font-size: $largeFontSize*1.35;
+				font-size: $largeFontSize*1.7;
 			}
 
 			h3 {
 				margin: $smallGutter;
-				color: $lightGrey;
+				color: #ffb7ab;
 			}
 
 			.profile {
@@ -167,13 +167,13 @@
 
 					p {
 						text-align: left;
-						padding-left: $mediumGutter;
 						font-size: $smallFontSize;
-						color: $lightGrey;
+						color: #ffb7ab;
 
 						&:last-of-type {
-							font-size: $mediumFontSize;
+							font-size: $largeFontSize;
 							font-weight: bold;
+							color: #fff;
 						}
 					}
 				}
@@ -184,30 +184,30 @@
 			}
 
 			.code {
-				border: 2px solid #d4220e;
-				width: 80%;
-				margin: $largeGutter auto;
-				padding: $largeGutter 0;
-				border-radius: $smallGutter;
-
-				h3 {
-					margin-top: 0;
+				margin: $largeGutter*2 auto;
+				h2 {
+					font-weight: normal;
 				}
 			}
 
 			.desc {
-				width: 70%;
+				width: 220px;
 				margin: 0 auto;
+				background: rgba(255, 255, 255, 0.3);
+				padding: 20px;
+				line-height: $largeGutter*1.2;
+				text-align: left;
+				border-radius: 5px;
 
-				.van-button {
-					margin-top: $largeGutter;
-					animation: scaleDrew 2.5s ease-in-out infinite;
-				}
+			}
+			.van-button {
+				width: 260px;
+				margin-top: $largeGutter;
+				color: #f13a26!important;
+				font-size: $largeFontSize*1.2;
+				animation: scaleDrew 2.5s ease-in-out infinite;
 			}
 
-			.van-image--round {
-				border: 3px solid #fff;
-			}
 		}
 
 		.van-notice-bar {

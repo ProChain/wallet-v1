@@ -18,19 +18,33 @@
 			</div>
 			<div v-if="result.avatar" class="choose-color">
 				<h2>选择背景色</h2>
-				<ul class="bgcolor">
-					<li v-for="(color, i) in bgcolor" :key="i" :class="{ 'active': colorActive == i}" @click="handleColorChange(color, i)">
+				<ul class="bgcolors">
+					<li v-for="(color, i) in colorArr" :key="i" :class="{ 'active': colorActive == i}" @click="handleColorChange(color, i)">
 						<span :style="{background: color.replace('0x', '#')}"></span>
 					</li>
 				</ul>
 			</div>
 			<div v-if="result.color && !teamname" class="choose-logo">
 				<h2>选择LOGO</h2>
-				<ul class="logo">
-					<li v-for="(logo, i) in logos" :key="i" :class="{ 'active': logoActive == i}" @click="handleLogoChange(logo, i)">
-						<span>{{ logo.symbol }}</span>
+				<ul class="logos first">
+					<li v-for="(item, i) in logoArr.slice(0, 1)" :key="i" :class="{ 'active': logoActive == i}" @click="handleLogoChange(item, i)">
+						<span>{{ item.symbol }}</span>
 					</li>
 				</ul>
+				<van-collapse v-model="activeItem" :border="false">
+					<van-collapse-item :is-link="false" name="1">
+						<div class="more" slot="title">
+							选择更多
+							<van-icon v-if="activeItem.length === 0" name="arrow-down" />
+							<van-icon v-else name="arrow-up" />
+						</div>
+						<ul class="logos">
+							<li v-for="(item, i) in logoArr.slice(1)" :key="i+1" :class="{ 'active': logoActive == i + 1 }" @click="handleLogoChange(item, i + 1)">
+								<span>{{ item.symbol }}</span>
+							</li>
+						</ul>
+					</van-collapse-item>
+				</van-collapse>
 			</div>
 			<div class="new-avatar" v-if="newAvatar">
 				<img :src="newAvatar" />
@@ -39,31 +53,14 @@
 				</p>
 			</div>
 		</div>
-		<van-popup
-		v-model="show"
-		position="top">
+		<van-popup v-model="show" position="top">
 			<div class="cropper-content">
 				<div class="cropper" style="text-align:center">
 					<van-loading v-if="!option.img" type="spinner" />
-					<vueCropper
-					v-else
-					ref="cropper"
-					:img="option.img"
-					:outputSize="option.size"
-					:outputType="option.outputType"
-					:info="false"
-					:full="option.full"
-					:canMove="option.canMove"
-					:canMoveBox="option.canMoveBox"
-					:original="option.original"
-					:autoCrop="option.autoCrop"
-					:fixed="option.fixed"
-					:fixedNumber="option.fixedNumber"
-					:centerBox="option.centerBox"
-					:infoTrue="option.infoTrue"
-					:fixedBox="option.fixedBox"
-					@realTime="realTime"
-					></vueCropper>
+					<vueCropper v-else ref="cropper" :img="option.img" :outputSize="option.size" :outputType="option.outputType" :info="false"
+					 :full="option.full" :canMove="option.canMove" :canMoveBox="option.canMoveBox" :original="option.original"
+					 :autoCrop="option.autoCrop" :fixed="option.fixed" :fixedNumber="option.fixedNumber" :centerBox="option.centerBox"
+					 :infoTrue="option.infoTrue" :fixedBox="option.fixedBox" @realTime="realTime"></vueCropper>
 				</div>
 				<van-button type="primary" size="large" @click="finish">裁剪</van-button>
 			</div>
@@ -75,16 +72,16 @@
 	import { getAvatarStyle, encodeAvatar, getTeamLogo, getTeamInfo, uploadImg } from '@/util/api'
 	import { sleep, blobToFile } from '@/util/common'
 	import { convert } from '@/util/chain'
-	import { VueCropper }  from 'vue-cropper'
+	import { VueCropper } from 'vue-cropper'
 	export default {
 		name: 'walletAvatar',
 		data() {
 			return {
 				avatar: '',
-				bgcolor: [],
+				colorArr: [],
 				imgArr: [],
 				teamname: '',
-				logos: [],
+				logoArr: [],
 				teamInfo: {},
 				newAvatar: '',
 				result: {},
@@ -95,6 +92,7 @@
 				previews: '',
 				filename: '',
 				show: false,
+				activeItem: [],
 				option: {
 					img: '', // 裁剪图片的地址
 					info: true, // 裁剪框的大小信息
@@ -154,7 +152,7 @@
 
 			const { result } = await convert(this.walletInfo.superior, 'hash')
 			const { data: { list } } = await getTeamLogo(result)
-			this.logos = list
+			this.logoArr = list
 		},
 		methods: {
 			realTime(data) {
@@ -181,9 +179,9 @@
 			},
 			async handleAvatarChange(avatar) {
 				const { data: list } = await getAvatarStyle(avatar)
-				this.bgcolor = list.list
+				this.colorArr = list.list
 				this.$set(this.result, 'avatar', avatar)
-				console.log(this.bgcolor)
+				console.log(this.colorArr)
 				this.current = 0
 			},
 			handleColorChange(color, i) {
@@ -300,7 +298,7 @@
 		.choose-color {
 			padding: 0 $mediumGutter;
 
-			.bgcolor {
+			.bgcolors {
 				overflow: hidden;
 
 				li {
@@ -327,9 +325,11 @@
 		}
 
 		.choose-logo {
-			padding: 0 $mediumGutter;
+			position: relative;
+			margin: 0 $mediumGutter;
+			font-size: $smallFontSize;
 
-			.logo {
+			.logos {
 				overflow: hidden;
 
 				li {
@@ -353,6 +353,37 @@
 							border-color: #c00;
 						}
 					}
+				}
+			}
+
+			.first {
+				width: 20%;
+				position: absolute;
+				left: 0;
+				top: 22px;
+				z-index: 99;
+
+				li {
+					width: 100%;
+				}
+			}
+			.van-collapse {
+				.van-collapse-item__content {
+					color: $dark;
+					padding: 0;
+				}
+				.van-collapse-item__title {
+					padding: 0;
+				}
+				.van-collapse-item__wrapper {
+					margin-top: $smallGutter;
+				}
+				.more {
+					margin-left: 20%;
+					text-align: center;
+					width: 80px;
+					height: 35px;
+					line-height: 35px;
 				}
 			}
 		}
@@ -396,10 +427,12 @@
 			}
 		}
 	}
+
 	.van-loading {
 		top: 50%;
 		transform: translateY(-50%);
 	}
+
 	.cropper-content {
 		.cropper {
 			width: auto;
