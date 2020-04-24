@@ -142,7 +142,7 @@
 					message: '确认成为共识合伙人，将扣除您10个币！',
 				}).then(() => {
 					const period = 30 * 60 * 60 * 24
-					const amount = formatNumber(50)
+					const amount = formatNumber(10)
 					const data = {
 						address: self.walletInfo.address,
 						method: 'lock',
