@@ -14,7 +14,7 @@
 				</p>
 			</van-col>
 		</van-row>
-		<van-notice-bar text="邀请更多朋友加入团队" left-icon="volume-o" mode="closeable" @click="invite" @close.stop />
+		<van-notice-bar text="邀请更多朋友加入团队" left-icon="volume-o" mode="closeable" @click="show = true" @close.stop />
 		<van-panel v-if="teamInfo.tags && teamInfo.tags.length > 0">
 			<div class="van-cell-group__title mp-0" slot="header">团队标签</div>
 			<van-tag v-for="(tag, idx) in teamInfo.tags" round type="success" size="large" :key="idx">{{ tag }}</van-tag>
@@ -69,21 +69,37 @@
 				<van-button square color="#ccc" size="large" to="/redemption">赎回</van-button>
 			</van-col>
 		</van-row>
+		<van-overlay :show="show">
+			<div class="tips">
+				<div class="con">
+					<i class="png">
+						<i class="png_shadow shadow_color-1"></i>
+					</i>
+				</div>
+				<div class="desc">
+					1、点击右上角<br>
+					2、点击 “发送给朋友按钮” 按钮发送到群里
+				</div>
+				<van-button plain type="default" @click="show = false">我知道了</van-button>
+			</div>
+		</van-overlay>
 	</div>
 </template>
 <script>
 	import { mapState, mapActions } from 'vuex'
-	import { getTeamInfo, getMembers } from '@/util/api'
+	import { getTeamInfo, getMembers, getWxSignature } from '@/util/api'
 	import { convert } from '@/util/chain'
 	import { didToHex, formatNumber, sleep } from '@/util/common'
 	import { SET_TEAM_INFO, SET_WALLET_INFO, DISPATCH_SIGN } from '@/vuex/constants'
+	import wx from 'weixin-js-sdk'
 	export default {
 		name: 'teamIndex',
 		data() {
 			return {
 				superior: '',
 				num: 0,
-				active: 0
+				active: 0,
+				show: false
 			}
 		},
 		async mounted() {
@@ -99,6 +115,8 @@
 
 				const rs = await getTeamInfo(this.walletInfo.did)
 				this[SET_TEAM_INFO](rs.data || {})
+
+				this.share()
 			} catch (error) {
 				console.log(error);
 			}
@@ -141,6 +159,39 @@
 					nick_name: this.userInfo.nickname
 				}
 				this.$router.push({ path, query })
+			},
+			async share() {
+				const shortIndex = this.walletInfo.short_index
+				const nickName = this.userInfo.nickname
+				const title = `"${nickName}"赠送你一个DID名额`
+				const link = window.location.href.split('#')[0]
+				const url = `${link}#/activity/promotion?short_index=${shortIndex}&nick_name=${nickName}`
+				const { data } = await getWxSignature(link)
+				const imgUrl = 'https://static.chain.pro/chain/praad.gif'
+				wx.config({
+					debug: process.env.VUE_APP_MODE === 'development',
+					appId: data.appId,
+					timestamp: data.timestamp,
+					nonceStr: data.nonceStr,
+					signature: data.signature,
+					jsApiList: ['updateAppMessageShareData']
+				})
+				wx.ready(() => {
+					console.log('wx ready')
+					wx.updateAppMessageShareData({
+						title,
+						desc: '拥有DID，轻松领奖励，奖励秒到账，越领越丰厚',
+						link: url,
+						imgUrl,
+						success() {
+							console.log('share success')
+						}
+					})
+				})
+				wx.error((e) => {
+					console.log(e)
+					alert(e)
+				})
 			},
 			...mapActions([
 				SET_TEAM_INFO,
@@ -222,6 +273,54 @@
 			position: fixed;
 			left: 0;
 			bottom: 0;
+		}
+
+		.van-overlay {
+			.tips {
+				color: #fff;
+				text-align: center;
+
+				.con {
+					display: inline-block;
+					width: 150px;
+
+					.png {
+						display: block;
+						position: absolute;
+						right: -10px;
+						height: 150px;
+						width: 150px;
+						margin-top: -160px; //使用 margin-top 偏移，将原图片隐藏到窗口之外
+					}
+
+					.png_shadow {
+						display: inline-block;
+						width: 100%;
+						height: 100%;
+						background: url(../../assets/images/arrow.png) no-repeat;
+						background-size: 150px 150px;
+					}
+
+					.shadow_color-1 {
+						filter: drop-shadow(0 130px #fff);
+					}
+				}
+
+				.desc {
+					margin-top: 80px;
+					padding: 0 20px;
+					font-size: 18px;
+					text-align: left;
+				}
+
+				.van-button {
+					width: 35%;
+					background-color: transparent;
+					font-size: 16px;
+					color: #fff;
+					margin-top: 30px;
+				}
+			}
 		}
 	}
 </style>
