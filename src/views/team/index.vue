@@ -78,7 +78,7 @@
 				</div>
 				<div class="desc">
 					1、点击右上角<br>
-					2、点击 “发送给朋友按钮” 按钮发送到群里
+					2、点击 “发送给朋友” 按钮发送到群里
 				</div>
 				<van-button plain type="default" @click="show = false">我知道了</van-button>
 			</div>
