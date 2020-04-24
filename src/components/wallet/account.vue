@@ -2,7 +2,7 @@
 	<div class="user-account">
 		<div class="reward-con">
 			<van-cell-group :border="false">
-				<div class="title" slot="title">
+				<div class="colocation" slot="title">
 					<router-link to="/help">{{ mode === 'hosted' ? '托管模式' : '自主模式' }}</router-link>
 				</div>
 				<van-cell v-if="!did" size="large" :center="true" to="/avatar" title="暂时未识别到您的DID,请点击这里"
@@ -93,8 +93,10 @@
 				padding-top: 0;
 
 				.van-cell__title {
-					color: $lightGrey !important;
-					font-size: 14PX;
+					span {
+						color: rgba(255, 255, 255, 0.9) !important;
+						font-size: 14PX;
+					}
 				}
 
 				.headimg {
@@ -106,7 +108,8 @@
 				}
 
 				.label {
-					font-size: 16PX;
+					font-size: 17PX;
+					font-weight: bold;
 				}
 			}
 		}
@@ -131,19 +134,13 @@
 			}
 
 			.colocation {
-				float: right;
-				color: #fff;
-				font-size: $mediumFontSize;
-				background: rgba(27, 0, 0, 0.3);
-				border-radius: 2px;
-				height: 22px;
-				border: none;
-
-				span {
-					display: flex;
-					justify-content: center;
-					align-items: center;
-					line-height: normal;
+				display: flex;
+				align-items: center;
+				line-height: normal;
+				a {
+					background: rgba(27, 0, 0, 0.3);
+					padding: 2px 5px;
+					border-radius: 2px;
 				}
 			}
 
