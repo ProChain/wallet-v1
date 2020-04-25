@@ -61,7 +61,7 @@
 				</p>
 			</van-panel>
 		</div>
-		<van-row class="footer">
+		<van-row class="footer" v-if="walletInfo.is_partner">
 			<van-col span="12">
 				<van-button square type="primary" size="large" to="/lock">抵押</van-button>
 			</van-col>
