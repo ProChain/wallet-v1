@@ -188,7 +188,7 @@
 							console.log('share success')
 						}
 					})
-					wx.showAllNonBaseMenuItem()
+					// wx.showAllNonBaseMenuItem()
 				})
 				wx.error((e) => {
 					console.log(e)
