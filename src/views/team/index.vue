@@ -91,7 +91,6 @@
 	import { convert } from '@/util/chain'
 	import { didToHex, formatNumber, sleep } from '@/util/common'
 	import { SET_TEAM_INFO, SET_WALLET_INFO, DISPATCH_SIGN } from '@/vuex/constants'
-	// import wx from 'weixin-js-sdk'
 	export default {
 		name: 'teamIndex',
 		data() {

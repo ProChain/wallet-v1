@@ -40,7 +40,6 @@
 <script>
 	import { convert, getMetadata } from '@/util/chain'
 	import { getTeamInfo, getWxSignature } from '@/util/api'
-	// import wx from 'weixin-js-sdk'
 	export default {
 		name: 'promotion',
 		data() {
