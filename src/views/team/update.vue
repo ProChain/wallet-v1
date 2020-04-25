@@ -19,15 +19,15 @@
 					</template>
 				</van-image>
 				<van-cell-group title="团队管理联系方式(方便推荐人直接联系进入社群)" :border="false">
-					<!-- <ValidationProvider v-slot="{ errors }" rules="required" name="admin_qrcode">
+					<ValidationProvider v-slot="{ errors }" rules="required" name="admin_qrcode" class="hidden">
 						<van-field v-model="didForm.admin_qrcode" :error-message="errors[0]" placeholder="团队管理员微信二维码，方便推荐人直接联系进入社群" />
-					</ValidationProvider> -->
+					</ValidationProvider>
 				</van-cell-group>
 				<van-uploader class="upload" v-model="adminQrcode" :before-read="beforeUpload" :after-read="adminUploaded" @delete="deleteAdmin" :max-count="1" />
 				<van-cell-group title="团队社群二维码(方便推荐人直接扫码进群)" :border="false">
-					<!-- <ValidationProvider v-slot="{ errors }" rules="required" name="group_qrcode_list">
+					<ValidationProvider v-slot="{ errors }" rules="qrcode" name="group_qrcode_list" class="hidden">
 						<van-field v-model="didForm.group_qrcode_list" :error-message="errors[0]" placeholder="请输入进群二维码(多个以逗号分割)" />
-					</ValidationProvider> -->
+					</ValidationProvider>
 				</van-cell-group>
 				<van-uploader class="upload" v-model="fileList" :before-read="beforeUpload" :after-read="uploaded" :max-count="3"
 				 @delete="handleDelete" multiple />

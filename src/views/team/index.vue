@@ -32,7 +32,7 @@
 						<i i class="icon" :style="{ backgroundImage: `url(${teamInfo.url})`}" slot="icon"></i>
 					</van-cell>
 				</van-cell-group>
-				<van-panel v-else-if="lockedRecords.locked_funds >= 25 && !teamInfo.name">
+				<van-panel v-else-if="lockedRecords.locked_funds >= 5 && !teamInfo.name">
 					<div class="van-cell-group__title van-hairline--bottom page-bg" slot="header">我的团队</div>
 					<p>您尚未创建团队</p>
 					<van-button size="large" type="primary" :to="{ path: '/team/update?type=create' }">

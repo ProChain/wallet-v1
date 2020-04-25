@@ -25,9 +25,11 @@ extend('min_value', {
 	params: ['number']
 });
 
-// extend('positive', value => {
-//     if (value >= 0) {
-//         return true
-//     }
-//     return 'This {_field_} field must be a positive number'
-// })
+extend('qrcode', value => {
+	console.log(value.length, 'value-----')
+	if (value.length > 0) {
+		return true
+	}
+	return '{_field_}是必须的'
+})
+
