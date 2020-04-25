@@ -81,9 +81,8 @@
 					timestamp: data.timestamp,
 					nonceStr: data.nonceStr,
 					signature: data.signature,
-					jsApiList: ['hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem', 'updateAppMessageShareData']
+					jsApiList: ['updateAppMessageShareData']
 				})
-				wx.hideAllNonBaseMenuItem()
 				wx.ready(() => {
 					console.log('wx ready')
 					wx.updateAppMessageShareData({
@@ -95,7 +94,6 @@
 							console.log('share success')
 						}
 					})
-					wx.showAllNonBaseMenuItem()
 				})
 				wx.error((e) => {
 					console.log(e)
