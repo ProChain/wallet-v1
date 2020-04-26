@@ -173,7 +173,7 @@
 					timestamp: data.timestamp,
 					nonceStr: data.nonceStr,
 					signature: data.signature,
-					jsApiList: ['updateAppMessageShareData']
+					jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
 				})
 				wx.ready(() => {
 					console.log('wx ready')
@@ -184,6 +184,15 @@
 						imgUrl,
 						success() {
 							console.log('share success')
+						}
+					})
+
+					wx.updateTimelineShareData({
+						title,
+						link: url,
+						imgUrl,
+						success() {
+							console.log('share to timeline success')
 						}
 					})
 				})

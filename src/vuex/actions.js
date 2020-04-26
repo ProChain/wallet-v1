@@ -156,9 +156,15 @@ export const actions = {
 			}
 			commit(Handles.SET_WALLET_INFO, walletInfo)
 			commit('hideLoading')
-			setTimeout(() => {
+			// setTimeout(() => {
+			// 	commit('initDid', true)
+			// }, 300)
+			vm.$dialog.alert({
+				message: '恭喜您，DID账号创建成功！',
+				confirmButtonText: '我知道了'
+			}).then(() => {
 				commit('initDid', true)
-			}, 300)
+			})
 		}
 	},
 	[Handles.DISPATCH_SIGN]: ({ state, commit }, data) => {

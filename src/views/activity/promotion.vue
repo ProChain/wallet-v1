@@ -6,7 +6,8 @@
 		<div class="content">
 			<div class="profile">
 				<div class="user">
-					<van-image round width="1.2rem" height="1.2rem" :src="teamInfo.url" />
+					<van-icon v-if="!teamInfo.url" name="friends-o" size="1.3rem"/>
+					<van-image v-else round width="1.2rem" height="1.2rem" :src="teamInfo.url" />
 					<div>
 						<p>
 							{{ teamInfo.name }} 共识合伙人
@@ -81,7 +82,7 @@
 					timestamp: data.timestamp,
 					nonceStr: data.nonceStr,
 					signature: data.signature,
-					jsApiList: ['updateAppMessageShareData']
+					jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
 				})
 				wx.ready(() => {
 					console.log('wx ready')
@@ -92,6 +93,15 @@
 						imgUrl,
 						success() {
 							console.log('share success')
+						}
+					})
+
+					wx.updateTimelineShareData({
+						title,
+						link: window.location.href,
+						imgUrl,
+						success() {
+							console.log('share to timeline success')
 						}
 					})
 				})

@@ -44,7 +44,8 @@
 					<h5>
 						<van-icon name="warning-o" />请输入邀请码完成DID创建</h5>
 					<van-field v-model="shortIndex" placeholder="请输入你的邀请码" />
-					<van-button v-if="shortIndex && /\w{6}/.test(shortIndex)" type="primary" size="large" square class="create-did" @click="createDid(shortIndex)">
+					<van-button v-if="shortIndex && /\w{6}/.test(shortIndex)" type="primary" size="large" square class="create-did"
+					 @click="createDid(shortIndex)">
 						生成我的DID</b>
 					</van-button>
 					<van-button v-else type="primary" size="large" square disabled class="create-did">
