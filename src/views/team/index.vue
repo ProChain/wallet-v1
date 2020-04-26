@@ -164,7 +164,7 @@
 				const nickName = this.userInfo.nickname
 				const title = `"${nickName}"赠送你一个DID名额`
 				const link = window.location.href.split('#')[0]
-				const url = `${link}#/activity/promotion?short_index=${shortIndex}&nick_name=${nickName}`
+				const url = `${link}#/activity/promotion?short_index=${shortIndex}&nick_name=${encodeURIComponent(nickName)}`
 				const { data } = await getWxSignature(link)
 				const imgUrl = 'https://static.chain.pro/chain/praad.gif'
 				wx.config({
