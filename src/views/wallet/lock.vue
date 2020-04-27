@@ -65,7 +65,7 @@
 		},
 		methods: {
 			async handleSubmit() {
-				const period = this.lockForm.period * 60 * 60 * 24
+				const period = this.lockForm.period * 60 * 60 * 24 * 1000
 				const amount = formatNumber(this.lockForm.amount)
 				const data = {
 					address: this.walletInfo.address,
