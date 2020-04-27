@@ -19,7 +19,7 @@ extend('max', {
 extend('min_value', {
 	...min_value,
 	validate(value, args) {
-		return value >= args.number
+		return value >= Number(args.number)
 	},
 	message: '最少{number}个PRM',
 	params: ['number']
@@ -32,4 +32,3 @@ extend('qrcode', value => {
 	}
 	return '{_field_}是必须的'
 })
-

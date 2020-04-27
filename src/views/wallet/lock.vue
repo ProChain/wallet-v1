@@ -3,7 +3,7 @@
 		<div class="lock-card">
 			<ValidationObserver v-slot="{ invalid }" ref="form">
 				<van-cell-group title="抵押PRM" :border="false">
-					<ValidationProvider v-slot="{ errors }" rules="required|min_value:10" name="amount">
+					<ValidationProvider v-slot="{ errors }" rules="required|min_value:2" name="amount">
 						<van-field type="number" v-model="lockForm.amount" :error-message="errors[0]" placeholder="请输入抵押数量" />
 						<van-cell title="钱包余额" :value="walletInfo.free_balance | money" />
 					</ValidationProvider>
