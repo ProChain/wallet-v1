@@ -9,7 +9,10 @@ localize({
 
 localize('zh_CN')
 
-extend('required', required)
+extend('required', {
+	...required,
+	message: '请输入{_field_}'
+})
 
 extend('max', {
 	...max,

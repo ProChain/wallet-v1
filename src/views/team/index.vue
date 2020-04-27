@@ -1,6 +1,6 @@
 <template>
 	<div class="team-component">
-		<van-row type="flex" class="sumary">
+		<van-row type="flex" class="sumary" v-if="walletInfo.donate >= 5">
 			<van-col span="12">
 				已抵押
 				<p>
@@ -14,7 +14,8 @@
 				</p>
 			</van-col>
 		</van-row>
-		<van-notice-bar text="邀请更多朋友加入团队" left-icon="volume-o" mode="closeable" @click="show = true" @close.stop />
+		<van-notice-bar v-if="walletInfo.donate >= 5" text="邀请更多朋友加入团队" left-icon="volume-o" mode="closeable" @click="show = true"
+		 @close.stop />
 		<van-panel v-if="teamInfo.tags && teamInfo.tags.length > 0">
 			<div class="van-cell-group__title mp-0" slot="header">团队标签</div>
 			<van-tag v-for="(tag, idx) in teamInfo.tags" round type="success" size="large" :key="idx">{{ tag }}</van-tag>
@@ -29,10 +30,10 @@
 					<van-cell title="团队名称" :label="teamInfo.name" :center="true" is-link to="/team/update" />
 					<van-cell title="团队规模" :center="true" :label="lockedRecords.max_quota | person" is-link to="/team/member" />
 					<van-cell title="团队logo" :center="true" is-link to="/team/logo">
-						<i i class="icon" :style="{ backgroundImage: `url(${teamInfo.url})`}" slot="icon"></i>
+						<i i class="icon team-logo" :style="{ backgroundImage: `url(${teamInfo.url})`}" slot="icon"></i>
 					</van-cell>
 				</van-cell-group>
-				<van-panel v-else-if="lockedRecords.locked_funds >= 5 && !teamInfo.name">
+				<van-panel v-else-if="lockedRecords.locked_funds >= 5 && !teamInfo.name" :border="false">
 					<div class="van-cell-group__title van-hairline--bottom page-bg" slot="header">我的团队</div>
 					<p>您尚未创建团队</p>
 					<van-button size="large" type="primary" :to="{ path: '/team/update?type=create' }">
@@ -42,9 +43,7 @@
 				<van-panel v-else>
 					<div class="van-cell-group__title van-hairline--bottom page-bg" slot="header">我的团队</div>
 					<p>您尚未抵押足够的币</p>
-					<van-button size="large" type="primary" @click="becomePartner">
-						立刻成为共识合伙人
-					</van-button>
+
 				</van-panel>
 			</div>
 			<van-panel v-if="walletInfo.donate < 5" class="desc">
@@ -56,7 +55,7 @@
 					·如果您是区块链项目方，可使用般若DID协议绑定自身主链地址，从而获取到用户的数字身份档案。
 				</p>
 				<p class="tips">
-					注：成为共识合伙人需要50PRM<br>
+					注：成为共识合伙人需要 10PRM<br>
 					我的当前余额 <b>{{ walletInfo.free_balance | money }}</b>
 				</p>
 			</van-panel>
@@ -69,6 +68,9 @@
 				<van-button square color="#ccc" size="large" to="/redemption">赎回</van-button>
 			</van-col>
 		</van-row>
+		<van-button v-else size="large" type="primary" @click="becomePartner" class="become-partner">
+			立刻成为共识合伙人
+		</van-button>
 		<van-overlay :show="show">
 			<div class="tips">
 				<div class="con">
@@ -257,6 +259,10 @@
 					background-color: $grey;
 				}
 
+				.team-logo {
+					border-radius: 3px;
+				}
+
 				.van-button {
 					margin-top: $mediumGutter;
 				}
@@ -276,7 +282,8 @@
 			}
 		}
 
-		.footer {
+		.footer,
+		.become-partner {
 			width: 100%;
 			position: fixed;
 			left: 0;

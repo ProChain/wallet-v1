@@ -157,7 +157,7 @@
 					...this.teamInfo,
 					...this.didForm
 				}
-				if (this.symbolPic) teamInfo.url = this.symbolPic
+				teamInfo.url = this.symbolPic
 				this[SET_TEAM_INFO](teamInfo)
 
 				this.$router.go(-1)

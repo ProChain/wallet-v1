@@ -241,7 +241,7 @@ const router = new VueRouter({
 			meta: {
 				index: 6,
 				title: 'meta.faucet',
-				keepAlive: true,
+				keepAlive: false,
 				requireAuth: false
 			}
 		}

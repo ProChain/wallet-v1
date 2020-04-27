@@ -144,6 +144,7 @@
 			async handleSubmit() {
 				if (!this.logo) return this.$toast('请选择logo')
 				const rs = await buildTeam({
+					...this.teamInfo,
 					did: this.walletInfo.did,
 					url: this.logo
 				})

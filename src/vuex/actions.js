@@ -160,6 +160,7 @@ export const actions = {
 			// 	commit('initDid', true)
 			// }, 300)
 			vm.$dialog.alert({
+				title: '温馨提示',
 				message: '恭喜您，DID账号创建成功！',
 				confirmButtonText: '我知道了'
 			}).then(() => {
