@@ -53,17 +53,21 @@
 			return {
 				menuName: '托管模式',
 				showHelp: false,
-				did: ''
+				did: '',
+				updated: false
 			}
 		},
 		async updated() {
 			try {
-				if (!this.headimgurl) return
-				const { data: { result } } = await decodeAvatar(this.headimgurl)
-				this.did = result
+				if (!this.updated) {
+					if (!this.headimgurl) return
+					const { data: { result } } = await decodeAvatar(this.headimgurl)
+					this.did = result
 
-				if (result && result.length === 6) {
-					this.did = await convert(result, 'index')
+					if (result && result.length === 6) {
+						this.did = await convert(result, 'index')
+					}
+					this.updated = true
 				}
 			} catch (e) {
 				alert(e)

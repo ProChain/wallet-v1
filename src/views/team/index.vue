@@ -25,7 +25,7 @@
 		</van-cell-group>
 		<div class="team">
 			<div class="myteam">
-				<van-cell-group v-if="walletInfo.is_partner && teamInfo.name" title="我的团队" :border="false" class="team-info">
+				<van-cell-group v-if="walletInfo.donate >= 5 && teamInfo.name" title="我的团队" :border="false" class="team-info">
 					<van-cell title="团队名称" :label="teamInfo.name" :center="true" is-link to="/team/update" />
 					<van-cell title="团队规模" :center="true" :label="lockedRecords.max_quota | person" is-link to="/team/member" />
 					<van-cell title="团队logo" :center="true" is-link to="/team/logo">
@@ -47,7 +47,7 @@
 					</van-button>
 				</van-panel>
 			</div>
-			<van-panel v-if="!walletInfo.is_partner" class="desc">
+			<van-panel v-if="walletInfo.donate < 5" class="desc">
 				<div class="van-cell-group__title page-bg" slot="header">成为共识合伙人，您将拥有以下特权</div>
 				<p>
 					·定制社群名称和logo，并在区块链上登记。<br>
@@ -61,7 +61,7 @@
 				</p>
 			</van-panel>
 		</div>
-		<van-row class="footer" v-if="walletInfo.is_partner">
+		<van-row class="footer" v-if="walletInfo.donate >= 5">
 			<van-col span="12">
 				<van-button square type="primary" size="large" to="/lock">抵押</van-button>
 			</van-col>

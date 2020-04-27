@@ -70,7 +70,7 @@ export const actions = {
 		const walletInfo = {
 			...state.walletInfo,
 			locked_records: lockedRecords,
-			is_partner: true
+			donate: formatHexNumber(lockedFunds)
 		}
 		commit(Handles.SET_WALLET_INFO, walletInfo)
 		commit('hideLoading')

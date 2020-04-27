@@ -233,6 +233,17 @@ const router = new VueRouter({
 				keepAlive: false,
 				requireAuth: false
 			}
+		},
+		{
+			path: '/activity/faucet',
+			name: 'faucet',
+			component: () => lazyLoadView(import('@/views/activity/faucet')),
+			meta: {
+				index: 6,
+				title: 'meta.faucet',
+				keepAlive: true,
+				requireAuth: false
+			}
 		}
 	]
 });
