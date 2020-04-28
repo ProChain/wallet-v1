@@ -98,7 +98,7 @@
 			}
 			.van-image {
 				width: 260px;
-				height: 260px;
+				height: auto;
 				text-align: center;
 				padding: $largeGutter 0;
 				overflow: hidden;
