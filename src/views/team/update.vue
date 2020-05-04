@@ -198,6 +198,7 @@
 			},
 			async adminUploaded(res) {
 				try {
+					console.log(res, 'file---')
 					const data = new FormData()
 					data.append('file', res.file)
 					const rs = await uploadImg(data)
