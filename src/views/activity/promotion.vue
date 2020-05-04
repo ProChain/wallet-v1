@@ -68,8 +68,10 @@
 				}
 				const { result } = await convert(short, 'index')
 				const { data: metadata } = await getMetadata(result)
-				this.quota = metadata.locked_records ? metadata.locked_records.max_quota : 0
-				this.members = this.quota === 0 ? 0 : this.quota - metadata.subordinate_count
+				const quota = metadata.locked_records ? metadata.locked_records.max_quota : 0
+				const members = quota === 0 ? 0 : quota - metadata.subordinate_count
+				this.quota = parseInt(quota)
+				this.members = parseInt(members)
 				const teamInfo = await getTeamInfo(result)
 				this.teamInfo = teamInfo.data || {}
 				this.showNotice = !this.teamInfo.name
