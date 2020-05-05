@@ -185,6 +185,8 @@
 					const rs = await uploadImg(data)
 					const pic = `https://static.chain.pro/${rs.data}`
 					this.didForm.group_qrcode_list.push(pic)
+					const len = this.fileList.length
+					this.$set(this.fileList, len-1, { url: pic })
 				} catch (e) {
 					alert(e)
 				}
@@ -205,6 +207,11 @@
 					const pic = `https://static.chain.pro/${rs.data}`
 					console.log(pic, 'admin pic----')
 					this.didForm.admin_qrcode = pic
+					this.adminQrcode = [
+						{
+							url: pic
+						}
+					]
 				} catch (e) {
 					alert(e)
 				}
