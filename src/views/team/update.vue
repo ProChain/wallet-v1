@@ -104,6 +104,7 @@
 					...intialFormData,
 					...this.teamInfo
 				}
+				this.handleInputChange(this.didForm.symbol)
 			}
 			this.pageType = type
 			if (this.didForm.group_qrcode_list) {
