@@ -49,7 +49,7 @@
 				this.userInfo = userInfo
 				this.did = await decodeAvatarLocal(userInfo.headimgurl)
 
-				if (this.did === 6) {
+				if (this.did.length === 6) {
 					this.did = await convert(this.did, 'index')
 				}
 			} catch (e) {
