@@ -1,7 +1,7 @@
 import { BarcodeFormat, DecodeHintType, BrowserMultiFormatReader, BinaryBitmap, RGBLuminanceSource, HybridBinarizer } from '@zxing/library'
 import Jimp from 'jimp'
 
-export default function(url) {
+export default async function(url) {
 	return new Promise((resolve, reject) => {
 		// 配置图片url
 		const webImgUrl = url
