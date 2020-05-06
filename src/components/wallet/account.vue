@@ -25,7 +25,7 @@
 				<div>{{ metadata.free_balance | money }}</div>
 			</h2> -->
 			<div class="handle-btns">
-				<van-button icon="exchange" square type="default" class="btn-text" :to="mode === 'hosted' ? '/transfer' : ''"
+				<van-button icon="exchange" square type="default" class="btn-text" :to="mode === 'hosted' ? '/transfer' : '/transfer'"
 				 :class="{'disabled': mode !== 'hosted'}">转账</van-button>
 				<van-button icon="down" square type="default" class="copy btn-text" :data-clipboard-text="metadata.did">收款</van-button>
 			</div>
