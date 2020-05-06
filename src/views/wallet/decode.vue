@@ -39,8 +39,6 @@
 			const code = part1.split('code=')[1]
 
 			const { data: userInfo } = await getWechatUser(code)
-			userInfo.headimgurl =
-				'https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKiaU2ujhqaUevBuWpaD0Tia3vXxHQFUiaeEXxPSTIZQdAlzGV6gTVvG2CYLwMJv9qSjTaCOs0VTUl5g/132'
 			userInfo.headimgurl = userInfo.headimgurl.replace(/\d+$/, 0)
 			this.userInfo = userInfo
 		},
