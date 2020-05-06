@@ -29,8 +29,8 @@
 	import { mapState, mapActions } from 'vuex'
 	import { DISPATCH_SIGN } from '@/vuex/constants'
 	import { didToHex, formatNumber } from '@/util/common'
-	import { uploadImg, decodeAvatar } from '@/util/api'
 	import { ValidationObserver, ValidationProvider } from 'vee-validate'
+	import decodeAvatarLocal from '@/util/decode'
 	const intialFormData = {
 		receiver: '',
 		amount: '',
@@ -91,17 +91,18 @@
 			},
 			async handleSuccess(res) {
 				try {
-					const data = new FormData()
-					data.append('file', res.file)
-					const rs = await uploadImg(data)
-					const { data: { result } } = await decodeAvatar(`https://static.chain.pro/${rs.data}`)
-					if (!result) {
-						this.$toast('无法解析您选择的区块链头像')
-					} else {
-						this.transferForm.receiver = result
-					}
+					this.transferForm.receiver = await decodeAvatarLocal(res.content)
+					// const data = new FormData()
+					// data.append('file', res.file)
+					// const rs = await uploadImg(data)
+					// const { data: { result } } = await decodeAvatar(`https://static.chain.pro/${rs.data}`)
+					// if (!result) {
+					// 	this.$toast('无法解析您选择的区块链头像')
+					// } else {
+					// 	this.transferForm.receiver = result
+					// }
 				} catch (e) {
-					console.log(e, 'decode error')
+					alert(e)
 				}
 			},
 			...mapActions([

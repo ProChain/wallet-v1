@@ -8,7 +8,7 @@
 					{{ did }}
 				</p>
 			</div>
-			<div v-else class="no-content">
+			<div class="tip" v-else>
 				没有找到DID，如果您刚更换头像，可能需要等4小时才能检测到
 			</div>
 		</div>
@@ -16,9 +16,10 @@
 </template>
 <script>
 	import { mapState } from 'vuex'
-	import { getWechatUser, decodeAvatar } from '@/util/api'
+	import { getWechatUser } from '@/util/api'
 	import { convert } from '@/util/chain'
 	import { sleep } from '@/util/common'
+	import decodeAvatarLocal from '@/util/decode'
 	export default {
 		name: 'walletDecode',
 		data() {
@@ -33,8 +34,8 @@
 				'walletInfo'
 			])
 		},
-		mounted() {
-			this.$nextTick(async() => {
+		async mounted() {
+			try {
 				const url = window.location.href
 				const part1 = url.split('&state')[0]
 				const code = part1.split('code=')[1]
@@ -45,17 +46,14 @@
 				userInfo.headimgurl = userInfo.headimgurl.replace(/\d+$/, 0)
 				this.userInfo = userInfo
 
-				const {
-					data: {
-						result
-					}
-				} = await decodeAvatar(userInfo.headimgurl)
-				this.did = result
+				this.did = await decodeAvatarLocal(userInfo.headimgurl)
 
-				if (result.length === 6) {
-					this.did = await convert(result, 'index')
+				if (this.did === 6) {
+					this.did = await convert(this.did, 'index')
 				}
-			})
+			} catch (e) {
+				console.log(e)
+			}
 		}
 	}
 </script>
@@ -67,9 +65,13 @@
 		padding: $mediumGutter;
 
 		.decode {
-			width: 30%;
+			width: 50%;
+			margin: $largeGutter auto;
 		}
-
+		.tip {
+			color: $grey;
+			padding: 0 $largeGutter;
+		}
 		.my-did {
 			margin: $mediumGutter 0;
 		}

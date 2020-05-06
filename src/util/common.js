@@ -59,9 +59,7 @@ export async function sleep(timeout = 200) {
 export function checkDeviceType() {
 	const ua = navigator.userAgent
 	let isMobile = false
-	if ((ua.match(
-		/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
-	))) {
+	if ((ua.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
 		isMobile = true
 	} else {
 		isMobile = false
@@ -230,7 +228,7 @@ export function throttle(fn, interval) {
 }
 
 export function blobToFile(blob, fileName) {
-	blob.lastModifiedDate =new Date()
+	blob.lastModifiedDate = new Date()
 	blob.name = fileName
 	return blob
 }
