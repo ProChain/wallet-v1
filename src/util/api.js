@@ -32,7 +32,7 @@ const mockData = {
 	'openid': 'ohHyijtT_tpX1Nv7xbNUswDu9Me8',
 	'sex': 1,
 	'nickname': '青',
-	'headimgurl': 'http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epcKdUcX0VeDqlKLRCDDLzylKEJ0PdKiblfdCdkkK6U9jFv8qmTGsm3AhsOsT4tZ0nOibRlrf9aF72A/132',
+	'headimgurl': 'http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKiaU2ujhqaUevBuWpaD0Tia3vXxHQFUiaeEXxPSTIZQdAlzGV6gTVvG2CYLwMJv9qSjTaCOs0VTUl5g/132',
 	'language': 'zh_CN',
 	'privilege': [],
 	'wxid': 'wxid_7h9gf2umzeja22',
