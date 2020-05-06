@@ -52,6 +52,7 @@ export default async function(url) {
 				} else {
 					reject('解析失败')
 				}
+				console.log('here here----')
 				resolve(did)
 			}).catch(e => {
 				console.log(e)

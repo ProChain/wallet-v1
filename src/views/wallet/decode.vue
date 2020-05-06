@@ -40,14 +40,16 @@
 				const code = part1.split('code=')[1]
 
 				const { data: userInfo } = await getWechatUser(code)
+				console.log('3')
 				userInfo.headimgurl =
 					'https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKiaU2ujhqaUevBuWpaD0Tia3vXxHQFUiaeEXxPSTIZQdAlzGV6gTVvG2CYLwMJv9qSjTaCOs0VTUl5g/132'
 				userInfo.headimgurl = userInfo.headimgurl.replace(/\d+$/, 0)
 				console.log(userInfo.headimgurl)
 				this.userInfo = userInfo
 				this.$store.commit('showLoading')
+				console.log('4')
 				this.did = await decodeAvatarLocal(userInfo.headimgurl)
-				// this.$store.commit('hideLoading')
+				console.log('5')
 				if (this.did.length === 6) {
 					this.did = await convert(this.did, 'index')
 				}
