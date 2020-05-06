@@ -52,7 +52,8 @@
 						this.did = await convert(this.did, 'index')
 					}
 				} catch (e) {
-					console.log(e)
+					alert(e)
+					this.$store.commit('hideLoading')
 				}
 			}
 		}
