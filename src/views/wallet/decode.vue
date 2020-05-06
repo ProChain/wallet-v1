@@ -49,7 +49,7 @@
 				console.log(userInfo.headimgurl)
 				this.userInfo = userInfo
 				this.did = await decodeAvatarLocal(userInfo.headimgurl)
-				this.$store.commit('hideLoading')
+				// this.$store.commit('hideLoading')
 				if (this.did.length === 6) {
 					this.did = await convert(this.did, 'index')
 				}
