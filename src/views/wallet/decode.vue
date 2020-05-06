@@ -1,9 +1,8 @@
 <template>
 	<div class="decode-component">
 		<div class="decode-card">
-			<img class="decode" :src="userInfo.headimgurl" />
+			<van-image width="100%" :src="userInfo.headimgurl" />
 			<div class="my-did" v-if="did">
-				<h2>您的DID</h2>
 				<p>
 					{{ did }}
 				</p>
@@ -11,6 +10,7 @@
 			<div class="tip" v-else>
 				没有找到DID，如果您刚更换头像，可能需要等4小时才能检测到
 			</div>
+			<van-button type="primary" size="large" @click="decodePic">点击检测头像</van-button>
 		</div>
 	</div>
 </template>
@@ -34,25 +34,28 @@
 			])
 		},
 		async mounted() {
-			try {
-				const url = window.location.href
-				const part1 = url.split('&state')[0]
-				const code = part1.split('code=')[1]
+			const url = window.location.href
+			const part1 = url.split('&state')[0]
+			const code = part1.split('code=')[1]
 
-				const { data: userInfo } = await getWechatUser(code)
-				console.log('3')
-				userInfo.headimgurl =
-					'https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKiaU2ujhqaUevBuWpaD0Tia3vXxHQFUiaeEXxPSTIZQdAlzGV6gTVvG2CYLwMJv9qSjTaCOs0VTUl5g/132'
-				userInfo.headimgurl = userInfo.headimgurl.replace(/\d+$/, 0)
-				this.userInfo = userInfo
-				console.log('4')
-				this.did = await decodeAvatarLocal(userInfo.headimgurl)
-				console.log('5')
-				if (this.did.length === 6) {
-					this.did = await convert(this.did, 'index')
+			const { data: userInfo } = await getWechatUser(code)
+			userInfo.headimgurl =
+				'https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKiaU2ujhqaUevBuWpaD0Tia3vXxHQFUiaeEXxPSTIZQdAlzGV6gTVvG2CYLwMJv9qSjTaCOs0VTUl5g/132'
+			userInfo.headimgurl = userInfo.headimgurl.replace(/\d+$/, 0)
+			this.userInfo = userInfo
+		},
+		methods: {
+			async decodePic() {
+				try {
+					this.$store.commit('showLoading')
+					this.did = await decodeAvatarLocal(this.userInfo.headimgurl)
+					this.$store.commit('hideLoading')
+					if (this.did.length === 6) {
+						this.did = await convert(this.did, 'index')
+					}
+				} catch (e) {
+					console.log(e)
 				}
-			} catch (e) {
-				console.log(e)
 			}
 		}
 	}
@@ -62,16 +65,12 @@
 
 	.decode-card {
 		font-size: $baseFontSize;
-		padding: $mediumGutter;
-
-		.decode {
-			width: 50%;
-			margin: $largeGutter auto;
-		}
+		padding: $largeGutter*2;
+		text-align: center;
 
 		.tip {
 			color: $grey;
-			padding: 0 $largeGutter;
+			padding: $largeGutter;
 		}
 
 		.my-did {
@@ -79,6 +78,7 @@
 
 			p {
 				color: $grey;
+				word-break: break-all;
 			}
 		}
 	}

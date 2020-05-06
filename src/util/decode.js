@@ -1,6 +1,5 @@
 import { BarcodeFormat, DecodeHintType, BrowserMultiFormatReader, BinaryBitmap, RGBLuminanceSource, HybridBinarizer } from '@zxing/library'
 import Jimp from 'jimp'
-import vm from '../main'
 
 export default async function(url) {
 	return new Promise((resolve, reject) => {
@@ -14,8 +13,6 @@ export default async function(url) {
 		hints.set(DecodeHintType.POSSIBLE_FORMATS, formats)
 		hints.set(DecodeHintType.TRY_HARDER, true)
 		const codeReader = new BrowserMultiFormatReader(hints)
-		vm.$store.commit('showLoading')
-		console.log('1 here----')
 		// 开始读取图片
 		Jimp.read(webImgUrl)
 			.then((webImg) => {
@@ -54,8 +51,6 @@ export default async function(url) {
 				} else {
 					reject('解析失败')
 				}
-				console.log('here here----')
-				vm.$store.commit('hideLoading')
 				resolve(did)
 			}).catch(e => {
 				console.log(e)
