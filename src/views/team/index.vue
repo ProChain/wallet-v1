@@ -22,12 +22,12 @@
 		</van-panel>
 		<van-cell-group title="我的推荐人" :border="false">
 			<van-cell :title="superior | clip(18, -10) || '您没有推荐人'" :center="true" />
-			<van-cell title="团队管理信息" :center="true" is-link to="/team/qrcode" />
+			<van-cell title="TA的团队" :center="true" is-link to="/team/qrcode" />
 		</van-cell-group>
 		<div class="team">
 			<div class="myteam">
 				<van-cell-group v-if="walletInfo.donate >= 5 && teamInfo.name" title="我的团队" :border="false" class="team-info">
-					<van-cell title="团队名称" :label="teamInfo.name" :center="true" is-link to="/team/update" />
+					<van-cell title="团队信息" :label="teamInfo.name" :center="true" is-link to="/team/update" />
 					<van-cell title="团队规模" :center="true" :label="lockedRecords.max_quota | person" is-link to="/team/member" />
 					<van-cell title="团队logo" :center="true" is-link to="/team/logo">
 						<i i class="icon team-logo" :style="{ backgroundImage: `url(${teamInfo.url})`}" slot="icon"></i>
