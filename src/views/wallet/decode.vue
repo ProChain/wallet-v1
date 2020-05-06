@@ -45,7 +45,6 @@
 				const { data: userInfo } = await getWechatUser(code)
 				userInfo.headimgurl = userInfo.headimgurl.replace(/\d+$/, 0)
 				this.userInfo = userInfo
-
 				this.did = await decodeAvatarLocal(userInfo.headimgurl)
 
 				if (this.did === 6) {
@@ -74,6 +73,9 @@
 		}
 		.my-did {
 			margin: $mediumGutter 0;
+			p {
+				color: $grey;
+			}
 		}
 	}
 </style>
