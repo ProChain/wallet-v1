@@ -53,6 +53,7 @@
 				if (this.did.length === 6) {
 					this.did = await convert(this.did, 'index')
 				}
+				this.$store.commit('showLoading')
 			} catch (e) {
 				console.log(e)
 			}
