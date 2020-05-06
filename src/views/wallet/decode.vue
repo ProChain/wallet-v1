@@ -39,8 +39,9 @@
 			const code = part1.split('code=')[1]
 
 			const { data: userInfo } = await getWechatUser(code)
-			userInfo.headimgurl = userInfo.headimgurl.replace(/\d+$/, 0)
+			userInfo.headimgurl = userInfo.headimgurl.replace(/\d+$/, 0).replace('http', 'https')
 			this.userInfo = userInfo
+			console.log(userInfo.headimgurl)
 		},
 		methods: {
 			async decodePic() {
