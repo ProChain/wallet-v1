@@ -41,14 +41,15 @@
 				const code = part1.split('code=')[1]
 
 				await sleep()
-
 				const { data: userInfo } = await getWechatUser(code)
-				userInfo.headimgurl = 'https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKiaU2ujhqaUevBuWpaD0Tia3vXxHQFUiaeEXxPSTIZQdAlzGV6gTVvG2CYLwMJv9qSjTaCOs0VTUl5g/132'
+				this.$store.commit('showLoading')
+				userInfo.headimgurl =
+					'https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKiaU2ujhqaUevBuWpaD0Tia3vXxHQFUiaeEXxPSTIZQdAlzGV6gTVvG2CYLwMJv9qSjTaCOs0VTUl5g/132'
 				userInfo.headimgurl = userInfo.headimgurl.replace(/\d+$/, 0)
 				console.log(userInfo.headimgurl)
 				this.userInfo = userInfo
 				this.did = await decodeAvatarLocal(userInfo.headimgurl)
-
+				this.$store.commit('hideLoading')
 				if (this.did.length === 6) {
 					this.did = await convert(this.did, 'index')
 				}
@@ -69,12 +70,15 @@
 			width: 50%;
 			margin: $largeGutter auto;
 		}
+
 		.tip {
 			color: $grey;
 			padding: 0 $largeGutter;
 		}
+
 		.my-did {
 			margin: $mediumGutter 0;
+
 			p {
 				color: $grey;
 			}

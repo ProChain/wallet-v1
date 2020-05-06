@@ -1,9 +1,7 @@
 import { BarcodeFormat, DecodeHintType, BrowserMultiFormatReader, BinaryBitmap, RGBLuminanceSource, HybridBinarizer } from '@zxing/library'
 import Jimp from 'jimp'
-import vm from '../main'
 
 export default function(url) {
-	vm.$store.commit('showLoading')
 	return new Promise((resolve, reject) => {
 		// 配置图片url
 		const webImgUrl = url
@@ -53,12 +51,9 @@ export default function(url) {
 					did = result.join('')
 				} else {
 					reject('解析失败')
-					vm.$store.commit('hideLoading')
 				}
-				vm.$store.commit('hideLoading')
 				resolve(did)
 			}).catch(e => {
-				vm.$store.commit('hideLoading')
 				console.log(e)
 				reject('解析头像失败')
 			})
