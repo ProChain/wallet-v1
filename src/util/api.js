@@ -172,10 +172,11 @@ export async function buildTeam({ did, name, symbol, admin_qrcode, group_qrcode_
 	})
 }
 
-export async function getTeamLogo(did) {
+export async function getTeamLogo(superior, did) {
 	return axios.get(apiGroupLogo, {
 		params: {
-			superior_did: did
+			superior_did: superior,
+			did
 		}
 	})
 }

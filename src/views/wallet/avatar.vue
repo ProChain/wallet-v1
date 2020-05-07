@@ -151,7 +151,7 @@
 			this.teamInfo = data
 
 			const { result } = await convert(this.walletInfo.superior, 'hash')
-			const { data: { list } } = await getTeamLogo(result)
+			const { data: { list } } = await getTeamLogo(result, this.walletInfo.did)
 			this.logoArr = list
 		},
 		methods: {
