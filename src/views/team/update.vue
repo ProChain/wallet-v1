@@ -2,15 +2,20 @@
 	<div class="team-update-component">
 		<div class="team-update">
 			<ValidationObserver v-slot="{ invalid }" ref="form">
-				<van-cell-group title="团队全称" :border="false">
+				<van-cell-group title="* 团队全称" :border="false">
 					<ValidationProvider v-slot="{ errors }" rules="required" name="name">
 						<van-field v-if="pageType !== 'create'" v-model="teamInfo.name" disabled />
 						<van-field v-else v-model="didForm.name" :error-message="errors[0]" placeholder="请输入团队名称" />
 					</ValidationProvider>
 				</van-cell-group>
-				<van-cell-group title="团队简称" :border="false">
+				<van-cell-group title="* 团队简称" :border="false">
 					<ValidationProvider v-slot="{ errors }" rules="required|max:5" name="symbol">
 						<van-field v-model="didForm.symbol" :error-message="errors[0]" placeholder="如BTC、PRM或者“般若”、“波卡”" @input="debouncedSearch" />
+					</ValidationProvider>
+				</van-cell-group>
+				<van-cell-group title="* 团队LOGO" :border="false">
+					<ValidationProvider v-slot="{ errors }" rules="required" name="url" class="hidden">
+						<van-field v-model="didForm.url" :error-message="errors[0]" placeholder="请选择团队logo" />
 					</ValidationProvider>
 				</van-cell-group>
 				<van-image v-if="symbolPic" :src="symbolPic" width="1rem" height="1rem" round>
@@ -18,13 +23,16 @@
 						<van-loading type="spinner" size="20" />
 					</template>
 				</van-image>
-				<van-cell-group title="团队管理联系方式(方便推荐人直接联系进入社群)" :border="false">
+				<van-uploader v-else class="upload" v-model="teamLogo" :before-read="beforeUpload" :after-read="teamLogoUploaded"
+				 @delete="teamLogoDeleted" :max-count="1" />
+				<van-cell-group title="* 团队管理联系方式(方便推荐人直接联系进入社群)" :border="false">
 					<ValidationProvider v-slot="{ errors }" rules="required" name="admin_qrcode" class="hidden">
 						<van-field v-model="didForm.admin_qrcode" :error-message="errors[0]" placeholder="团队管理员微信二维码，方便推荐人直接联系进入社群" />
 					</ValidationProvider>
 				</van-cell-group>
-				<van-uploader class="upload" v-model="adminQrcode" :before-read="beforeUpload" :after-read="adminUploaded" @delete="deleteAdmin" :max-count="1" />
-				<van-cell-group title="团队社群二维码(方便推荐人直接扫码进群)" :border="false">
+				<van-uploader class="upload" v-model="adminQrcode" :before-read="beforeUpload" :after-read="adminUploaded" @delete="deleteAdmin"
+				 :max-count="1" />
+				<van-cell-group title="* 团队社群二维码(方便推荐人直接扫码进群)" :border="false">
 					<ValidationProvider v-slot="{ errors }" rules="qrcode" name="group_qrcode_list" class="hidden">
 						<van-field v-model="didForm.group_qrcode_list" :error-message="errors[0]" placeholder="请输入进群二维码(多个以逗号分割)" />
 					</ValidationProvider>
@@ -51,7 +59,11 @@
 						<span v-else slot="title">请选择标签</span>
 					</van-cell>
 				</van-cell-group>
-				<van-button type="primary" square class="btn-submit" size="large" :disabled="invalid" @click="handleSubmit">{{ btnText }}</van-button>
+				<p class="tips" v-if="walletInfo.did !== owner">
+					注：所有*标的均为必填选项
+				</p>
+				<van-button type="primary" square class="btn-submit" size="large" :disabled="invalid || fileList.length === 0"
+				 @click="handleSubmit">{{ btnText }}</van-button>
 			</ValidationObserver>
 		</div>
 	</div>
@@ -81,7 +93,8 @@
 				btnText: '更新团队',
 				symbolPic: '',
 				fileList: [],
-				adminQrcode: []
+				adminQrcode: [],
+				teamLogo: []
 			}
 		},
 		computed: {
@@ -118,11 +131,9 @@
 			}
 
 			if (this.didForm.admin_qrcode) {
-				this.adminQrcode = [
-					{
-						url: this.didForm.admin_qrcode
-					}
-				]
+				this.adminQrcode = [{
+					url: this.didForm.admin_qrcode
+				}]
 			}
 		},
 		activated() {
@@ -146,8 +157,7 @@
 				}
 				const rs = await buildTeam({
 					...this.didForm,
-					did: this.walletInfo.did,
-					url: ''
+					did: this.walletInfo.did
 				})
 				if (rs.hasErrors) {
 					return this.$toast.error(rs.message)
@@ -158,7 +168,7 @@
 					...this.teamInfo,
 					...this.didForm
 				}
-				teamInfo.url = this.symbolPic
+
 				this[SET_TEAM_INFO](teamInfo)
 
 				this.$router.go(-1)
@@ -166,6 +176,7 @@
 			async handleInputChange(symbol) {
 				const { data } = await getPicBySymbol(symbol)
 				this.symbolPic = data && data.url
+				this.$set(this.didForm, 'url', this.symbolPic)
 			},
 			beforeUpload(file) {
 				const maxFileSize = 1024 * 1024 * 10;
@@ -187,7 +198,7 @@
 					const pic = `https://static.chain.pro/${rs.data}`
 					this.didForm.group_qrcode_list.push(pic)
 					const len = this.fileList.length
-					this.$set(this.fileList, len-1, { url: pic })
+					this.$set(this.fileList, len - 1, { url: pic })
 				} catch (e) {
 					alert(e)
 				}
@@ -208,11 +219,27 @@
 					const pic = `https://static.chain.pro/${rs.data}`
 					console.log(pic, 'admin pic----')
 					this.didForm.admin_qrcode = pic
-					this.adminQrcode = [
-						{
-							url: pic
-						}
-					]
+					this.adminQrcode = [{
+						url: pic
+					}]
+				} catch (e) {
+					alert(e)
+				}
+			},
+			teamLogoDeleted() {
+				this.didForm.url = ''
+			},
+			async teamLogoUploaded(res) {
+				try {
+					const data = new FormData()
+					data.append('file', res.file)
+					const rs = await uploadImg(data)
+					const pic = `https://static.chain.pro/${rs.data}`
+					console.log(pic, 'admin pic----')
+					this.didForm.url = pic
+					this.teamLogo = [{
+						url: pic
+					}]
 				} catch (e) {
 					alert(e)
 				}
@@ -234,7 +261,7 @@
 
 		.van-image {
 			background-color: #c1bdbd;
-			margin: $mediumGutter 0 0 $mediumGutter;
+			margin: $mediumGutter 0 0 16PX;
 
 			img {
 				transform: scale(0.8);

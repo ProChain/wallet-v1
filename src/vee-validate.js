@@ -29,7 +29,6 @@ extend('min_value', {
 });
 
 extend('qrcode', value => {
-	console.log(value.length, 'value-----')
 	if (value.length > 0) {
 		return true
 	}
