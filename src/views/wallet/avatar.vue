@@ -13,7 +13,7 @@
 			<div class="update-avatar">
 				<img v-if="avatar" class="avatar" :src="avatar" />
 				<van-icon v-else class="avatar-icon" name="user-circle-o" />
-				<van-uploader class="upload" :before-read="beforeUpload" :preview-image="false" :after-read="handleSuccess" />
+				<van-uploader class="upload" :max-size="1024 * 1024 * 10" @oversize="$toast('文件大小不能超过10M')" :preview-image="false" :after-read="handleSuccess" />
 				<p>点击左图手动选择新图生成您的区块链头像</p>
 			</div>
 			<div v-if="result.avatar" class="choose-color">
@@ -197,19 +197,6 @@
 				this.logoActive = i
 				this.current = 2
 			},
-			beforeUpload(file) {
-				const maxFileSize = 1024 * 1024 * 10;
-				// if (!/\.(gif|jpg|jpeg|png|GIF|JPG|JPEG|PNG)$/.test(file.name)) {
-				// 	this.$toast('图片类型必须是gif,jpeg,jpg,png中的一种')
-				// 	return false
-				// }
-				if (file.size > maxFileSize) {
-					this.$toast('图片尺寸超过10M了')
-					return false
-				}
-				this.show = true
-				return true
-			},
 			finish() {
 				this.$refs.cropper.getCropBlob(async blob => {
 					this.show = false
@@ -224,6 +211,7 @@
 			async handleSuccess(res) {
 				const self = this
 				console.log(res.file, 'url')
+				this.show = true
 				this.filename = res.file.name
 				let imgFile = new FileReader()
 				imgFile.readAsDataURL(res.file)

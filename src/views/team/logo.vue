@@ -9,7 +9,8 @@
 					<van-image v-if="logo" round width="2rem" height="2rem" :src="logo" />
 					<van-icon v-else class="logo-icon" name="user-circle-o" />
 					<p>点击修改</p>
-					<input type="file" ref="file" @change="handleUpload" class="upload-btn">
+					<van-uploader class="upload-btn" :preview-image="false" :after-read="handleSuccess" :max-size="1024 * 1024 * 10" @oversize="$toast('文件大小不能超过10M')" />
+					<!-- <input type="file" ref="file" @change="handleUpload" class="upload-btn"> -->
 				</div>
 				<div class="preview">
 					<img class="preview" src="../../assets/images/avatar.jpg" alt="avatar">
@@ -104,31 +105,17 @@
 			this.owner = data && data.owner_did
 		},
 		methods: {
-			async handleUpload() {
-				const file = this.$refs.file.files[0]
-				const maxFileSize = 1024 * 1024 * 10
-				if (!/.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(file.name)) {
-					return this.$toast('图片类型必须是gif,jpeg,jpg,png中的一种')
-				}
-				if (file.size > maxFileSize) {
-					return this.$toast('图片尺寸超过10M了')
-				}
-
-				this.show = true
-				this.filename = file.name
-
+			handleSuccess(res) {
 				const self = this
+				this.show = true
+				this.filename = res.file.name
 				let imgFile = new FileReader()
-				imgFile.readAsDataURL(file)
+				imgFile.readAsDataURL(res.file)
 				imgFile.onload = function() {
 					setTimeout(() => {
 						self.option.img = this.result
 					}, 500)
 				}
-				// const data = new FormData()
-				// data.append('file', file)
-				// const rs = await uploadImg(data)
-				// this.logo = `https://static.chain.pro/${rs.data}`
 			},
 			finish() {
 				this.$refs.cropper.getCropBlob(async blob => {

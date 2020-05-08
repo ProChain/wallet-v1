@@ -172,7 +172,8 @@
 				// check user info
 				const { data } = await getWechatUser(code)
 				if (!data) return
-				this.headimgurl = data.headimgurl.replace(/\d+$/, 0)
+				data.headimgurl = data.headimgurl.replace(/\d+$/, 0)
+				this.headimgurl = data.headimgurl
 				this[SET_USER_INFO](data)
 				if (data.wxid) {
 					this[SET_TOKEN](data.token)
