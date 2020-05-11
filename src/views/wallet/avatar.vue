@@ -85,8 +85,8 @@
 				teamInfo: {},
 				newAvatar: '',
 				result: {},
-				logoActive: null,
-				colorActive: null,
+				logoActive: 0,
+				colorActive: 0,
 				file: null,
 				current: -1,
 				previews: '',
@@ -149,10 +149,6 @@
 			}
 			const { data } = await getTeamInfo(this.walletInfo.did)
 			this.teamInfo = data
-
-			const { result } = await convert(this.walletInfo.superior, 'hash')
-			const { data: { list } } = await getTeamLogo(result, this.walletInfo.did)
-			this.logoArr = list
 		},
 		methods: {
 			realTime(data) {
@@ -178,11 +174,20 @@
 				}
 			},
 			async handleAvatarChange(avatar) {
-				const { data: list } = await getAvatarStyle(avatar)
-				this.colorArr = list.list
-				this.$set(this.result, 'avatar', avatar)
+				const { result } = await convert(this.walletInfo.superior, 'hash')
+				const { data: { list } } = await getTeamLogo(result, this.walletInfo.did)
+				this.logoArr = list
+				const { data: styles } = await getAvatarStyle(avatar)
+				this.colorArr = styles.list
+				// this.$set(this.result, 'avatar', avatar)
+				this.result = {
+					...this.result,
+					avatar,
+					color: this.colorArr[0],
+					logo: this.logoArr[0]
+				}
 				console.log(this.colorArr)
-				this.current = 0
+				this.current = 2
 			},
 			handleColorChange(color, i) {
 				this.$set(this.result, 'color', color)
