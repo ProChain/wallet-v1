@@ -305,7 +305,8 @@
 						width: calc(100% - #{$mediumGutter});
 						height: 100%;
 						margin: 0 auto;
-						border: 1PX solid transparent;
+						border: 2px solid transparent;
+						border-radius: 3px;
 					}
 
 					&.active {
@@ -338,7 +339,8 @@
 						width: calc(100% - #{$mediumGutter});
 						height: 100%;
 						margin: 0 auto;
-						border: 1PX solid #ddd;
+						border: 2px solid #ddd;
+						border-radius: 3px;
 					}
 
 					&.active {
