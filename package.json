@@ -19,6 +19,7 @@
     "css-loader": "^3.4.0",
     "fastclick": "^1.0.6",
     "jimp": "^0.10.3",
+    "jsbarcode": "^3.11.0",
     "moment": "^2.24.0",
     "px2rem-loader": "^0.1.9",
     "qrcodejs2": "^0.0.2",

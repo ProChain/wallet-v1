@@ -118,7 +118,7 @@ module.exports = {
         ],
         'max-params': [
             2,
-            5
+            10
         ],
         'max-statements': [
             1,

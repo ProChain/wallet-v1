@@ -49,7 +49,9 @@
 					this.$store.commit('showLoading')
 					this.did = await decodeAvatarLocal(this.userInfo.headimgurl)
 					this.$store.commit('hideLoading')
-					if (this.did.length === 6) {
+					if (!this.did) {
+						this.$toast('did解析失败')
+					} else if (this.did.length === 6) {
 						this.did = await convert(this.did, 'index')
 					}
 				} catch (e) {

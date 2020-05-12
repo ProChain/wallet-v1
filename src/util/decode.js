@@ -49,12 +49,12 @@ export default async function(url) {
 					console.log(result)
 					did = result.join('')
 				} else {
-					reject('解析失败')
+					resolve('')
 				}
 				resolve(did)
 			}).catch(e => {
-				console.log(e)
-				reject('解析头像失败')
+				console.log(e, reject)
+				resolve('')
 			})
 	})
 }

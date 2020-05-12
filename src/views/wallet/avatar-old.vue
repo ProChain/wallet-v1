@@ -11,45 +11,40 @@
 			</van-steps>
 			<!-- <h2>当前头像</h2> -->
 			<div class="update-avatar">
-				<img v-if="avatar" id="avatar" class="avatar" :src="avatar" />
+				<img v-if="avatar" class="avatar" :src="avatar" />
 				<van-icon v-else class="avatar-icon" name="user-circle-o" />
-				<van-uploader class="upload" :max-size="1024 * 1024 * 10" @oversize="$toast('文件大小不能超过10M')" :preview-image="false"
-				 :after-read="handleSuccess" />
+				<van-uploader class="upload" :max-size="1024 * 1024 * 10" @oversize="$toast('文件大小不能超过10M')" :preview-image="false" :after-read="handleSuccess" />
 				<p>点击左图手动选择新图生成您的区块链头像</p>
 			</div>
-			<div class="choose-color">
+			<div v-if="result.avatar" class="choose-color">
 				<h2>选择背景色</h2>
-				<van-skeleton :row="3" :loading="!colorArr.length">
-					<ul class="bgcolors">
-						<li v-for="(color, i) in colorArr" :key="i" :class="{ 'active': colorActive == i}" @click="handleColorChange(color, i)">
-							<span :style="{background: color.replace('0x', '#')}"></span>
-						</li>
-					</ul>
-				</van-skeleton>
+				<ul class="bgcolors">
+					<li v-for="(color, i) in colorArr" :key="i" :class="{ 'active': colorActive == i}" @click="handleColorChange(color, i)">
+						<span :style="{background: color.replace('0x', '#')}"></span>
+					</li>
+				</ul>
 			</div>
-			<div v-if="!teamname" class="choose-logo">
+			<div v-if="result.color && !teamname" class="choose-logo">
 				<h2>选择LOGO</h2>
-				<van-skeleton :row="3" :loading="!logoArr.length">
-					<ul class="logos first">
-						<li v-for="(item, i) in logoArr.slice(0, 1)" :key="i" :class="{ 'active': logoActive == i}" @click="handleLogoChange(item, i)">
-							<span>{{ item.symbol }}</span>
-						</li>
-					</ul>
-					<van-collapse v-model="activeItem" :border="false">
-						<van-collapse-item :is-link="false" name="1">
-							<div class="more" slot="title">
-								选择更多
-								<van-icon v-if="activeItem.length === 0" name="arrow-down" />
-								<van-icon v-else name="arrow-up" />
-							</div>
-							<ul class="logos">
-								<li v-for="(item, i) in logoArr.slice(1)" :key="i+1" :class="{ 'active': logoActive == i + 1 }" @click="handleLogoChange(item, i + 1)">
-									<span>{{ item.symbol }}</span>
-								</li>
-							</ul>
-						</van-collapse-item>
-					</van-collapse>
-				</van-skeleton>
+				<ul class="logos first">
+					<li v-for="(item, i) in logoArr.slice(0, 1)" :key="i" :class="{ 'active': logoActive == i}" @click="handleLogoChange(item, i)">
+						<span>{{ item.symbol }}</span>
+					</li>
+				</ul>
+				<van-collapse v-model="activeItem" :border="false">
+					<van-collapse-item :is-link="false" name="1">
+						<div class="more" slot="title">
+							选择更多
+							<van-icon v-if="activeItem.length === 0" name="arrow-down" />
+							<van-icon v-else name="arrow-up" />
+						</div>
+						<ul class="logos">
+							<li v-for="(item, i) in logoArr.slice(1)" :key="i+1" :class="{ 'active': logoActive == i + 1 }" @click="handleLogoChange(item, i + 1)">
+								<span>{{ item.symbol }}</span>
+							</li>
+						</ul>
+					</van-collapse-item>
+				</van-collapse>
 			</div>
 			<div class="new-avatar" v-if="newAvatar">
 				<img :src="newAvatar" />
@@ -57,9 +52,6 @@
 					满意吗？可以长按图片保存到本地，手动更换您的微信头像
 				</p>
 			</div>
-			<p v-if="detect" class="no-content">
-				您的头像已经生成了DID
-			</p>
 		</div>
 		<van-popup v-model="show" position="top">
 			<div class="cropper-content">
@@ -77,12 +69,10 @@
 </template>
 <script>
 	import { mapState } from 'vuex'
-	import { getTeamLogo, getTeamInfo } from '@/util/api'
-	import { sleep } from '@/util/common'
+	import { getAvatarStyle, encodeAvatar, getTeamLogo, getTeamInfo, uploadImg } from '@/util/api'
+	import { sleep, blobToFile } from '@/util/common'
 	import { convert } from '@/util/chain'
 	import { VueCropper } from 'vue-cropper'
-	import decodeAvatarLocal from '@/util/decode'
-	import encodeLocal, { pickColor } from '@/util/encode'
 	export default {
 		name: 'walletAvatar',
 		data() {
@@ -137,7 +127,7 @@
 				handler(val) {
 					const teamname = this.teamname || (val.logo && val.logo.name)
 					if (val.color && teamname && val.avatar) {
-						this.handleCreateAvatar(val.color, teamname, val.avatar, val.logo)
+						this.handleCreateAvatar(val.color, teamname, val.avatar)
 					}
 				},
 				deep: true
@@ -174,13 +164,11 @@
 
 				this.previews = data
 			},
-			async handleCreateAvatar(color, logo, avatar, sybmol) {
+			async handleCreateAvatar(color, logo, avatar) {
 				try {
-					this.$store.commit('showLoading')
-					if (!this.detect) {
-						this.newAvatar = await encodeLocal(avatar, color, sybmol.url, this.walletInfo.did)
-					}
-					this.$store.commit('hideLoading')
+					const data = await encodeAvatar(avatar, color, this.walletInfo.did, logo)
+					this.newAvatar = 'data:image/png;base64,' + btoa(new Uint8Array(data).reduce((data, byte) => data + String.fromCharCode(
+						byte), ''))
 				} catch (error) {
 					console.log(error)
 				}
@@ -188,10 +176,10 @@
 			async handleAvatarChange(avatar) {
 				const { result } = await convert(this.walletInfo.superior, 'hash')
 				const { data: { list } } = await getTeamLogo(result, this.walletInfo.did)
-				this.logoArr = list.filter(v => v.url.search(/wuhan|china/i) === -1)
-				const { colorList } = await pickColor('#avatar')
-				this.colorArr = colorList
-				this.detect = await decodeAvatarLocal(avatar)
+				this.logoArr = list
+				const { data: styles } = await getAvatarStyle(avatar)
+				this.colorArr = styles.list
+				// this.$set(this.result, 'avatar', avatar)
 				this.result = {
 					...this.result,
 					avatar,
@@ -215,10 +203,14 @@
 				this.current = 2
 			},
 			finish() {
-				this.$refs.cropper.getCropData(data => {
+				this.$refs.cropper.getCropBlob(async blob => {
 					this.show = false
 					this.option.img = ''
-					this.avatar = data
+					const file = blobToFile(blob, this.filename)
+					const data = new FormData()
+					data.append('file', file, this.filename)
+					const rs = await uploadImg(data)
+					this.avatar = `https://static.chain.pro/${rs.data}`
 				})
 			},
 			async handleSuccess(res) {
@@ -277,7 +269,7 @@
 
 			.avatar {
 				width: 30%;
-				margin: 10px 0;
+				margin: 30px 0;
 			}
 
 			.avatar-icon {
@@ -328,10 +320,10 @@
 
 		.choose-logo {
 			position: relative;
-			margin: $largeGutter $mediumGutter 0;
+			margin: 0 $mediumGutter;
+			font-size: $smallFontSize;
 
 			.logos {
-				font-size: $smallFontSize;
 				overflow: hidden;
 
 				li {
@@ -370,21 +362,17 @@
 					width: 100%;
 				}
 			}
-
 			.van-collapse {
 				.van-collapse-item__content {
 					color: $dark;
 					padding: 0;
 				}
-
 				.van-collapse-item__title {
 					padding: 0;
 				}
-
 				.van-collapse-item__wrapper {
-					margin-top: 6px;
+					margin-top: $smallGutter;
 				}
-
 				.more {
 					margin-left: 20%;
 					text-align: center;
@@ -432,9 +420,6 @@
 			.avatar-tip {
 				color: $red;
 			}
-		}
-		.no-content {
-			padding: 80px 0;
 		}
 	}
 
