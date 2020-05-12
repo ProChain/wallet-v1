@@ -68,7 +68,7 @@ const router = new VueRouter({
 		{
 			path: '/avatar',
 			name: 'walletAvatar',
-			component: () => lazyLoadView(import('@/views/wallet/avatar')),
+			component: () => lazyLoadView(import('@/views/wallet/avatar-old')),
 			delay: 5000,
 			meta: {
 				index: 6,

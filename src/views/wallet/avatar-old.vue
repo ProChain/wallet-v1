@@ -13,7 +13,8 @@
 			<div class="update-avatar">
 				<img v-if="avatar" class="avatar" :src="avatar" />
 				<van-icon v-else class="avatar-icon" name="user-circle-o" />
-				<van-uploader class="upload" :max-size="1024 * 1024 * 10" @oversize="$toast('文件大小不能超过10M')" :preview-image="false" :after-read="handleSuccess" />
+				<van-uploader class="upload" :max-size="1024 * 1024 * 10" @oversize="$toast('文件大小不能超过10M')" :preview-image="false"
+				 :after-read="handleSuccess" />
 				<p>点击左图手动选择新图生成您的区块链头像</p>
 			</div>
 			<div v-if="result.avatar" class="choose-color">
@@ -52,6 +53,9 @@
 					满意吗？可以长按图片保存到本地，手动更换您的微信头像
 				</p>
 			</div>
+			<p v-if="!newAvatar && tip" class="no-content">
+				{{ tip }}
+			</p>
 		</div>
 		<van-popup v-model="show" position="top">
 			<div class="cropper-content">
@@ -93,6 +97,7 @@
 				filename: '',
 				show: false,
 				activeItem: [],
+				tip: '',
 				option: {
 					img: '', // 裁剪图片的地址
 					info: true, // 裁剪框的大小信息
@@ -167,8 +172,13 @@
 			async handleCreateAvatar(color, logo, avatar) {
 				try {
 					const data = await encodeAvatar(avatar, color, this.walletInfo.did, logo)
-					this.newAvatar = 'data:image/png;base64,' + btoa(new Uint8Array(data).reduce((data, byte) => data + String.fromCharCode(
-						byte), ''))
+					const str = new Uint8Array(data).reduce((data, byte) => data + String.fromCharCode(
+						byte), '')
+					if (str.includes('"hasErrors":true')) {
+						this.tip = '您已经创建了DID头像'
+					} else {
+						this.newAvatar = 'data:image/png;base64,' + btoa(str)
+					}
 				} catch (error) {
 					console.log(error)
 				}
@@ -362,17 +372,21 @@
 					width: 100%;
 				}
 			}
+
 			.van-collapse {
 				.van-collapse-item__content {
 					color: $dark;
 					padding: 0;
 				}
+
 				.van-collapse-item__title {
 					padding: 0;
 				}
+
 				.van-collapse-item__wrapper {
 					margin-top: $smallGutter;
 				}
+
 				.more {
 					margin-left: 20%;
 					text-align: center;
