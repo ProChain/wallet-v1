@@ -35,13 +35,13 @@
 			<div class="bottom">
 				<span>待领取奖励 {{ detail.withdraw | money }}</span><van-button type="warning">点击领取</van-button>
 			</div>
-			<div class="notice">
+			<!-- <div class="notice">
 				昨日活跃数：即昨天所有参与挖矿的人数<br>
 				当前个人系数：即每个人平均每天可以得到币的数量<br>
 				今日奖池：昨日活跃数 × 当前个人系数<br>
 				我的算力：每日发言 + 1，给上级 + 0.5（待定）<br>
 				每日PRM收益：今日奖池 × （我的算力 / 全网总算力）
-			</div>
+			</div> -->
 		</div>
 	</div>
 </template>
