@@ -23,6 +23,7 @@ const apiSymbolPic = '/api/v1/mainnet/get_team_logo_by_symbol'
 const apiBalance = '/api/v1/lottery/balance'
 const apiInviteRank = '/api/v1/mainnet/invite_report'
 const apiRemoveBind = 'api/v1/mainnet/remove_bind'
+const apiMiningDetail = '/api/v1/mainnet/mine_detail'
 
 const mockData = {
 	'country': '中国',
@@ -222,6 +223,14 @@ export async function removeBind(token) {
 	return axios.get(apiRemoveBind, {
 		params: {
 			token
+		}
+	})
+}
+
+export async function getMineDetail(did) {
+	return axios.get(apiMiningDetail, {
+		params: {
+			did
 		}
 	})
 }

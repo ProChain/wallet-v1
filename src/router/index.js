@@ -244,6 +244,17 @@ const router = new VueRouter({
 				keepAlive: false,
 				requireAuth: false
 			}
+		},
+		{
+			path: '/activity/mint',
+			name: 'faucet',
+			component: () => lazyLoadView(import('@/views/activity/mint')),
+			meta: {
+				index: 6,
+				title: 'meta.mint',
+				keepAlive: false,
+				requireAuth: false
+			}
 		}
 	]
 });

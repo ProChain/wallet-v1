@@ -22,6 +22,7 @@ module.exports = {
 		help: '帮助',
 		promotion: '邀请好友',
 		qrcode: '进群二维码',
-		faucet: '领取测试币'
+		faucet: '领取测试币',
+		mint: '挖矿'
 	}
 };

@@ -7,7 +7,8 @@
 				<van-grid :border="false" :column-num="3">
 					<van-grid-item icon="manager-o" text="DID" to="/profile" />
 					<van-grid-item icon="friends-o" text="团队" :to="mode === 'hosted' ? '/team' : ''" :class="{'disabled': mode !== 'hosted'}" />
-					<van-grid-item icon="replay" text="更新" :to="mode === 'hosted' ? '/update-pubkey' : ''" :class="{'disabled': mode !== 'hosted'}" />
+					<!-- <van-grid-item icon="replay" text="更新" :to="mode === 'hosted' ? '/update-pubkey' : ''" :class="{'disabled': mode !== 'hosted'}" /> -->
+					<van-grid-item icon="balance-o" text="挖矿" to="/activity/mint" />
 				</van-grid>
 			</div>
 			<van-skeleton title avatar :row="2" :loading="!walletInfo.did">
