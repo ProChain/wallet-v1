@@ -46,6 +46,7 @@
 	</div>
 </template>
 <script>
+	import { mapState } from 'vuex'
 	import { getMineDetail } from '@/util/api'
 	export default {
 		name: 'mint',
@@ -54,10 +55,15 @@
 				detail: {}
 			}
 		},
+		computed: {
+			...mapState([
+				'walletInfo',
+			])
+		},
 		async mounted() {
 			try {
 				this.$store.commit('hideLoading')
-				const { data } = await getMineDetail()
+				const { data } = await getMineDetail(this.walletInfo.did)
 				console.log(data)
 				this.detail = data
 			} catch (e) {
