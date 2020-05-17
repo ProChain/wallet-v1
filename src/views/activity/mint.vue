@@ -33,7 +33,7 @@
 				</ul>
 			</div>
 			<div class="bottom">
-				<span>待领取奖励 {{ detail.withdraw | money }}</span><van-button type="warning">点击领取</van-button>
+				<span>待领取奖励 {{ detail.withdraw | money }}</span><van-button type="warning" @click="withdraw">点击领取</van-button>
 			</div>
 			<!-- <div class="notice">
 				昨日活跃数：即昨天所有参与挖矿的人数<br>
@@ -47,7 +47,7 @@
 </template>
 <script>
 	import { mapState } from 'vuex'
-	import { getMineDetail } from '@/util/api'
+	import { getMineDetail, withdraw } from '@/util/api'
 	export default {
 		name: 'mint',
 		data() {
@@ -58,6 +58,7 @@
 		computed: {
 			...mapState([
 				'walletInfo',
+				'token'
 			])
 		},
 		async mounted() {
@@ -68,6 +69,12 @@
 				this.detail = data
 			} catch (e) {
 				alert(e)
+			}
+		},
+		methods: {
+			withdraw() {
+				if (this.detail.withdraw < 10**16) return this.$toast('10个PRM起提')
+				withdraw(this.token)
 			}
 		}
 	}

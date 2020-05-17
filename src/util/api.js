@@ -24,6 +24,7 @@ const apiBalance = '/api/v1/lottery/balance'
 const apiInviteRank = '/api/v1/mainnet/invite_report'
 const apiRemoveBind = 'api/v1/mainnet/remove_bind'
 const apiMiningDetail = '/api/v1/mainnet/mine_detail'
+const apiWithdraw = 'api/v1/mainnet/withdraw'
 
 const mockData = {
 	'country': '中国',
@@ -231,6 +232,14 @@ export async function getMineDetail(did) {
 	return axios.get(apiMiningDetail, {
 		params: {
 			did
+		}
+	})
+}
+
+export async function withdraw(token) {
+	return axios.get(apiWithdraw, {
+		params: {
+			token
 		}
 	})
 }
