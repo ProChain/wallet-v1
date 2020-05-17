@@ -52,7 +52,12 @@
 		name: 'mint',
 		data() {
 			return {
-				detail: {}
+				detail: {},
+				whitelist: [
+					'did:pra:LsbTGSzqn1FtmTQTUwRxh7gUCZBSVev7cL',
+					'did:pra:LsoqGTKPrsppGZTKoUeb2vSnNkRumP66mE',
+					'did:pra:LkHmbT5qCubLfMBtyfzJHW8UEUopKprfTR'
+				]
 			}
 		},
 		computed: {
@@ -73,6 +78,9 @@
 		},
 		methods: {
 			withdraw() {
+				if (!this.whitelist.includes(this.walletInfo.did)) {
+					return this.$toast('当前不能提现')
+				}
 				if (this.detail.withdraw < 10**16) return this.$toast('10个PRM起提')
 				withdraw(this.token)
 			}
