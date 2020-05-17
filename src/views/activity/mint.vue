@@ -56,7 +56,8 @@
 				whitelist: [
 					'did:pra:LsbTGSzqn1FtmTQTUwRxh7gUCZBSVev7cL',
 					'did:pra:LsoqGTKPrsppGZTKoUeb2vSnNkRumP66mE',
-					'did:pra:LkHmbT5qCubLfMBtyfzJHW8UEUopKprfTR'
+					'did:pra:LkHmbT5qCubLfMBtyfzJHW8UEUopKprfTR',
+					'did:pra:LvVE2k7TDmkqKZZvbt2R7xTJdR3pK3JFMA'
 				]
 			}
 		},
@@ -81,7 +82,7 @@
 				if (!this.whitelist.includes(this.walletInfo.did)) {
 					return this.$toast('当前不能提现')
 				}
-				if (this.detail.withdraw < 10**16) return this.$toast('10个PRM起提')
+				if (this.detail.withdraw < 1 * 10**15) return this.$toast('1个PRM起提')
 				withdraw(this.token)
 			}
 		}
