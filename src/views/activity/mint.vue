@@ -78,12 +78,13 @@
 			}
 		},
 		methods: {
-			withdraw() {
+			async withdraw() {
 				if (!this.whitelist.includes(this.walletInfo.did)) {
 					return this.$toast('当前不能提现')
 				}
 				if (this.detail.withdraw < 1 * 10**15) return this.$toast('1个PRM起提')
-				withdraw(this.token)
+				const rs = await withdraw(this.token)
+				if (!rs.hasErrors) this.$toast('提现成功')
 			}
 		}
 	}
