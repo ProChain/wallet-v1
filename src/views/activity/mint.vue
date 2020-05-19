@@ -84,7 +84,10 @@
 				}
 				if (this.detail.withdraw < 1 * 10**15) return this.$toast('1个PRM起提')
 				const rs = await withdraw(this.token)
-				if (!rs.hasErrors) this.$toast('提现成功')
+				if (!rs.hasErrors) {
+					this.$toast('提现成功')
+					this.detail.withdraw = 0
+				}
 			}
 		}
 	}
