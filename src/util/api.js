@@ -25,6 +25,8 @@ const apiInviteRank = '/api/v1/mainnet/invite_report'
 const apiRemoveBind = 'api/v1/mainnet/remove_bind'
 const apiMiningDetail = '/api/v1/mainnet/mine_detail'
 const apiWithdraw = 'api/v1/mainnet/withdraw'
+const apiAdsMining = 'api/v1/mainnet/ad_mining'
+const apiDistribute = '/api/v1/mainnet/distribute'
 
 const mockData = {
 	'country': '中国',
@@ -241,5 +243,20 @@ export async function withdraw(token) {
 		params: {
 			token
 		}
+	})
+}
+
+export async function distribute(adid, did, token) {
+	return axios.post(apiDistribute, {
+		adid,
+		did,
+		token
+	})
+}
+
+export async function adsMining(did, token) {
+	return axios.post(apiAdsMining, {
+		did,
+		token
 	})
 }

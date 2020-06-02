@@ -255,6 +255,16 @@ const router = new VueRouter({
 				keepAlive: false,
 				requireAuth: false
 			}
+		}, {
+			path: '/show',
+			name: 'faucet',
+			component: () => lazyLoadView(import('@/views/activity/show')),
+			meta: {
+				index: 6,
+				title: 'meta.show',
+				keepAlive: false,
+				requireAuth: false
+			}
 		}
 	]
 });
@@ -271,7 +281,8 @@ router.beforeEach(async(to, from, next) => {
 		}
 	} else if (to.name === 'walletHome' && window.location.href.indexOf('code') === -1) {
 		const redirectUri = encodeURIComponent(window.location.href)
-		window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx48f51627bef8bcdf&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect`
+		window.location.href =
+			`https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx48f51627bef8bcdf&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect`
 	} else {
 		next()
 	}

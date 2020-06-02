@@ -23,6 +23,7 @@ module.exports = {
 		promotion: '邀请好友',
 		qrcode: '进群二维码',
 		faucet: '领取测试币',
-		mint: '挖矿'
+		mint: '挖矿',
+		show: '新手训练营'
 	}
 };

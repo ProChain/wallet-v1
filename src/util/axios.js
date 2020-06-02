@@ -5,7 +5,8 @@ import vm from '../main'
 
 const WHITELIST = [
 	'get_team_logo_by_symbol',
-	'https://dana.prabox.net/api/v1/transfer'
+	'https://dana.prabox.net/api/v1/transfer',
+	'distribute'
 ]
 let needLoadingRequestCount = 0
 
