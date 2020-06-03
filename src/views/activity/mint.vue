@@ -35,6 +35,7 @@
 			<div class="bottom">
 				<span>待领取奖励 {{ detail.withdraw | money }}</span><van-button type="warning" @click="withdraw">点击领取</van-button>
 			</div>
+			<van-button class="newbie" type="warning" size="large" to="/show">新手训练营</van-button>
 			<!-- <div class="notice">
 				昨日活跃数：即昨天所有参与挖矿的人数<br>
 				当前个人系数：即每个人平均每天可以得到币的数量<br>
@@ -176,6 +177,9 @@
 			text-align: left;
 			color: $grey;
 			padding: 30px $mediumGutter 0;
+		}
+		.newbie {
+			margin-top: $largeGutter*2;
 		}
 	}
 </style>
