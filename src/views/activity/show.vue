@@ -6,7 +6,8 @@
 				<p class="desc">{{ ads.advertiser }}</p>
 			</div>
 			<p class="no-contetn" v-else>
-				暂时没有广告了
+				<van-loading v-if="showLoading" size="24px">加载中...</van-loading>
+				<span v-else>暂时没有广告了</span>
 			</p>
 		</div>
 		<van-notice-bar v-if="showTip" color="#eee" mode="closeable" wrapable background="#333" @close="close">
@@ -28,6 +29,7 @@
 				userInfo: {},
 				did: '',
 				ads: {},
+				showLoading: true,
 				showTip: false
 			};
 		},
@@ -55,6 +57,7 @@
 			this.showTip = isAccept !== '1'
 			this.sockets.subscribe('new-ads', async payload => {
 				this.ads = payload
+				this.showLoading = !payload.advertiser
 				if (payload.advertiser) {
 					try {
 						const keyToday = moment().format('l')
