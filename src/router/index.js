@@ -257,7 +257,7 @@ const router = new VueRouter({
 			}
 		}, {
 			path: '/show',
-			name: 'faucet',
+			name: 'show',
 			component: () => lazyLoadView(import('@/views/activity/show')),
 			meta: {
 				index: 6,

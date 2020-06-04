@@ -22,7 +22,7 @@
 	import decodeAvatarLocal from '@/util/decode'
 	import moment from 'moment'
 	export default {
-		name: 'walletDecode',
+		name: 'show',
 		data() {
 			return {
 				decode: '',
@@ -122,7 +122,7 @@
 				localStorage.setItem('isAccept', '1')
 			}
 		},
-		deactivated() {
+		destroyed() {
 			this.$notify.clear()
 		}
 	}

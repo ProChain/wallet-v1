@@ -226,36 +226,4 @@
 			z-index: 999;
 		}
 	}
-
-	@keyframes move {
-		0% {
-			font-size: $mediumFontSize;
-		}
-
-		50% {
-			font-size: $largeFontSize;
-		}
-
-		100% {
-			font-size: $mediumFontSize;
-		}
-	}
-
-	@keyframes scaleDrew {
-		0% {
-			transform: scale(1);
-		}
-
-		25% {
-			transform: scale(1.05);
-		}
-
-		50% {
-			transform: scale(1);
-		}
-
-		75% {
-			transform: scale(1.05);
-		}
-	}
 </style>
