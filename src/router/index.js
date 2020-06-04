@@ -260,7 +260,7 @@ const router = new VueRouter({
 			name: 'show',
 			component: () => lazyLoadView(import('@/views/activity/show')),
 			meta: {
-				index: 6,
+				index: 7,
 				title: 'meta.show',
 				keepAlive: false,
 				requireAuth: false
