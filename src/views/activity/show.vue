@@ -57,7 +57,7 @@
 			this.showTip = isAccept !== '1'
 			this.sockets.subscribe('new-ads', async payload => {
 				this.ads = payload
-				this.showLoading = !payload.advertiser
+				this.showLoading = payload.advertiser
 				if (payload.advertiser) {
 					try {
 						const keyToday = moment().format('l')
