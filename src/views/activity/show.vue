@@ -116,6 +116,7 @@
 			},
 			distribute(adsId) {
 				distribute(adsId, this.walletInfo.did, this.token)
+				if (this.ads.landing_page) window.location.href = this.ads.landing_page
 			},
 			close() {
 				localStorage.setItem('isAccept', '1')
