@@ -4,6 +4,18 @@
 			<div class="ads" v-if="ads.display_page">
 				<van-image width="100%" height="100%" fit="cover" :src="ads.display_page" @click="distribute(ads.adsId)" />
 				<p class="desc">{{ ads.advertiser }}</p>
+				<div class="countdown">
+					<p>距离下一条广告展示还剩</p>
+					<van-count-down :time="timeLeft">
+						<template v-slot="timeData">
+							<span class="block">{{ timeData.hours < 10 ? '0' + timeData.hours : timeData.hours }}</span>
+							<span class="colon">:</span>
+							<span class="block">{{ timeData.minutes < 10 ? '0' + timeData.minutes : timeData.minutes }}</span>
+							<span class="colon">:</span>
+							<span class="block">{{ timeData.seconds < 10 ? '0' + timeData.seconds : timeData.seconds }}</span>
+						</template>
+					</van-count-down>
+				</div>
 			</div>
 			<p class="no-contetn" v-else>
 				<van-loading v-if="showLoading" size="24px">加载中...</van-loading>
@@ -30,7 +42,8 @@
 				did: '',
 				ads: {},
 				showLoading: true,
-				showTip: false
+				showTip: false,
+				timeLeft: 0
 			};
 		},
 		computed: {
@@ -52,7 +65,7 @@
 				alert(e)
 				this.$store.commit('hideLoading')
 			}
-
+			this.getTimeDiff()
 			const isAccept = localStorage.getItem('isAccept')
 			this.showTip = isAccept !== '1'
 			this.sockets.subscribe('new-ads', async payload => {
@@ -118,6 +131,29 @@
 				distribute(adsId, this.walletInfo.did, this.token)
 				if (this.ads.landing_page) window.location.href = this.ads.landing_page
 			},
+			getTimeDiff() {
+				const cur = moment().toArray()
+				const fut = cur.map((v, i) => {
+					if (i === 3) {
+						if (v >= 0 && v < 8) {
+							return 8
+						} else if (v >= 8 && v < 13) {
+							return 13
+						} else if (v >= 13 && v < 20) {
+							return 20
+						} else {
+							return 24
+						}
+					}
+					if (i >3) return 0
+					return v
+				})
+				var t1 = moment(cur)
+				var t2 = moment(fut)
+				var tDiff = t2.diff(t1)
+				console.log(cur, fut, 'cur--')
+				this.timeLeft = tDiff
+			},
 			close() {
 				localStorage.setItem('isAccept', '1')
 			}
@@ -162,6 +198,35 @@
 				line-height: 40px;
 				background-color: rgba(255, 255, 255, 0.7);
 				color: $dark;
+			}
+
+			.countdown {
+				position: absolute;
+				width: 60%;
+				left: 20%;
+				top: 70px;
+				background-color: rgba(255, 255, 255, 0.6);
+				color: $dark;
+				padding: 10px 0;
+				font-size: $smallFontSize;
+
+				p {
+					margin-bottom: $smallGutter;
+				}
+
+				.colon {
+					display: inline-block;
+					margin: 0 4px;
+					color: #f15918;
+				}
+
+				.block {
+					display: inline-block;
+					width: 22px;
+					color: #fff;
+					text-align: center;
+					background-color: #f15918;
+				}
 			}
 		}
 
