@@ -1,6 +1,6 @@
 <template>
 	<div class="decode-component">
-		<div class="decode-card">
+		<div class="ads-card">
 			<div class="ads" v-if="ads.display_page">
 				<van-image width="100%" height="100%" fit="cover" :src="ads.display_page" @click="distribute(ads.adsId)" />
 				<p class="desc">{{ ads.advertiser }}</p>
@@ -63,11 +63,11 @@
 						const keyToday = moment().format('l')
 						const record = {}
 						const hour = moment().hours()
-						if (hour >=0 && hour < 8) {
+						if (hour >= 0 && hour < 8) {
 							record['0-8'] = 1
-						} else if (hour >=8 && hour < 13) {
+						} else if (hour >= 8 && hour < 13) {
 							record['8-13'] = 1
-						} else if (hour >=13 && hour < 20) {
+						} else if (hour >= 13 && hour < 20) {
 							record['13-20'] = 1
 						} else {
 							record['20-24'] = 1
@@ -95,7 +95,7 @@
 					const hour = moment().hours()
 					const dKey = Object.keys(records).find(v => {
 						const [start, end] = v.split('-')
-						return hour >= start  && hour < end
+						return hour >= start && hour < end
 					})
 					if (records[dKey] < 1) {
 						this.$socket.emit('query-ads', { did: this.did })
@@ -141,7 +141,7 @@
 		}
 	}
 
-	.decode-card {
+	.ads-card {
 		height: 100%;
 		font-size: $baseFontSize;
 		text-align: center;
@@ -149,13 +149,20 @@
 		justify-content: center;
 		align-items: center;
 
-		// padding: 0 $largeGutter;
 		.ads {
-			margin-bottom: 70px;
-		}
+			height: 100%;
+			position: relative;
 
-		.van-image {
-			margin: $mediumGutter 0;
+			.desc {
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				width: 100%;
+				height: 40px;
+				line-height: 40px;
+				background-color: rgba(255, 255, 255, 0.7);
+				color: $dark;
+			}
 		}
 
 		.desc {
