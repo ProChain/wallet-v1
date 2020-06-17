@@ -146,12 +146,12 @@
 			async handleSubmit() {
 				// register name to chain
 				if (this.pageType === 'create') {
-					const data = {
-						address: this.walletInfo.address,
-						method: 'setGroupName',
-						params: [this.didForm.name]
-					}
-					this[DISPATCH_SIGN](data)
+					// const data = {
+					// 	address: this.walletInfo.address,
+					// 	method: 'setGroupName',
+					// 	params: [this.didForm.name]
+					// }
+					// this[DISPATCH_SIGN](data)
 				} else {
 					this.didForm.name = this.teamInfo.name
 				}

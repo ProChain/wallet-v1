@@ -60,17 +60,19 @@
 				</p>
 			</van-panel>
 		</div>
-		<van-row class="footer" v-if="walletInfo.donate >= 5">
-			<van-col span="12">
-				<van-button square type="primary" size="large" to="/lock">抵押</van-button>
-			</van-col>
-			<van-col span="12">
-				<van-button square color="#ccc" size="large" to="/redemption">赎回</van-button>
-			</van-col>
-		</van-row>
-		<van-button v-else size="large" type="primary" @click="becomePartner" class="become-partner">
-			立刻成为共识合伙人
-		</van-button>
+		<div v-if="mode === 'hosted'">
+			<van-row class="footer" v-if="walletInfo.donate >= 5">
+				<van-col span="12">
+					<van-button square type="primary" size="large" to="/lock">抵押</van-button>
+				</van-col>
+				<van-col span="12">
+					<van-button square color="#ccc" size="large" to="/redemption">赎回</van-button>
+				</van-col>
+			</van-row>
+			<van-button v-else size="large" type="primary" @click="becomePartner" class="become-partner">
+				立刻成为共识合伙人
+			</van-button>
+		</div>
 		<van-overlay :show="show">
 			<div class="tips">
 				<div class="con">
@@ -132,7 +134,8 @@
 			...mapState([
 				'walletInfo',
 				'teamInfo',
-				'userInfo'
+				'userInfo',
+				'mode'
 			])
 		},
 		methods: {
