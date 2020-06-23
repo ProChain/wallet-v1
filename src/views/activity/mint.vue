@@ -49,6 +49,7 @@
 <script>
 	import { mapState } from 'vuex'
 	import { getMineDetail, withdraw } from '@/util/api'
+	import { sleep } from '@/util/common'
 	export default {
 		name: 'mint',
 		data() {
@@ -70,6 +71,7 @@
 		},
 		async mounted() {
 			try {
+				await sleep()
 				this.$store.commit('hideLoading')
 				const { data } = await getMineDetail(this.walletInfo.did)
 				console.log(data)
