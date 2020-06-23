@@ -4,12 +4,12 @@
 			<account :metadata="walletInfo" :headimgurl="headimgurl" :mode="mode" />
 			<van-notice-bar text="快快加入你的推荐人社群，获取更多收益信息!" left-icon="volume-o" @click="$router.push('/team/qrcode')" />
 			<div class="lock-btns" ref="locks">
-				<van-grid :border="false" :column-num="3">
+				<van-grid :border="false" :column-num="4">
 					<van-grid-item icon="manager-o" text="DID" to="/profile" />
 					<!-- <van-grid-item icon="friends-o" text="团队" :to="mode === 'hosted' ? '/team' : ''" :class="{'disabled': mode !== 'hosted'}" /> -->
 					<van-grid-item icon="friends-o" text="团队" to="/team" />
-					<!-- <van-grid-item icon="replay" text="更新" :to="mode === 'hosted' ? '/update-pubkey' : ''" :class="{'disabled': mode !== 'hosted'}" /> -->
 					<van-grid-item icon="balance-o" text="挖矿(测试)" to="/activity/mint" />
+					<van-grid-item icon="replay" text="更新" :to="mode === 'hosted' ? '/update-pubkey' : ''" :class="{'disabled': mode !== 'hosted'}" />
 				</van-grid>
 			</div>
 			<van-skeleton title avatar :row="2" :loading="!walletInfo.did">
