@@ -54,6 +54,7 @@
 		},
 		sockets: {
 			async 'new-ads'(payload) {
+				console.log(payload, 'payload--')
 				this.ads = payload
 				this.showLoading = payload.advertiser
 				if (payload.advertiser) {
