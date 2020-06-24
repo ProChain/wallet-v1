@@ -52,23 +52,8 @@
 				'token'
 			])
 		},
-		async mounted() {
-			const url = window.location.href
-			const part1 = url.split('&state')[0]
-			const code = part1.split('code=')[1]
-			try {
-				const { data: userInfo } = await getWechatUser(code)
-				userInfo.headimgurl = userInfo.headimgurl.replace(/\d+$/, 0).replace('http', 'https')
-				this.userInfo = userInfo
-				await this.decodePic()
-			} catch (e) {
-				alert(e)
-				this.$store.commit('hideLoading')
-			}
-			this.getTimeDiff()
-			const isAccept = localStorage.getItem('isAccept')
-			this.showTip = isAccept !== '1'
-			this.sockets.subscribe('new-ads', async payload => {
+		sockets: {
+			async 'new-ads'(payload) {
 				this.ads = payload
 				this.showLoading = payload.advertiser
 				if (payload.advertiser) {
@@ -93,7 +78,50 @@
 						alert(e)
 					}
 				}
-			})
+			}
+		},
+		async mounted() {
+			const url = window.location.href
+			const part1 = url.split('&state')[0]
+			const code = part1.split('code=')[1]
+			try {
+				const { data: userInfo } = await getWechatUser(code)
+				userInfo.headimgurl = userInfo.headimgurl.replace(/\d+$/, 0).replace('http', 'https')
+				this.userInfo = userInfo
+				await this.decodePic()
+			} catch (e) {
+				alert(e)
+				this.$store.commit('hideLoading')
+			}
+			this.getTimeDiff()
+			const isAccept = localStorage.getItem('isAccept')
+			this.showTip = isAccept !== '1'
+			// this.sockets.subscribe('new-ads', async payload => {
+			// 	this.ads = payload
+			// 	this.showLoading = payload.advertiser
+			// 	if (payload.advertiser) {
+			// 		try {
+			// 			const keyToday = moment().format('l')
+			// 			const record = {}
+			// 			const hour = moment().hours()
+			// 			if (hour >= 0 && hour < 8) {
+			// 				record['0-8'] = 1
+			// 			} else if (hour >= 8 && hour < 13) {
+			// 				record['8-13'] = 1
+			// 			} else if (hour >= 13 && hour < 20) {
+			// 				record['13-20'] = 1
+			// 			} else {
+			// 				record['20-24'] = 1
+			// 			}
+			// 			localStorage.setItem(keyToday, JSON.stringify(record))
+			// 			const rs = await adsMining(this.walletInfo.did, this.token)
+			// 			if (rs.hasErrors) return this.$toast(rs.message)
+			// 			this.$toast.success('恭喜您算力 +1')
+			// 		} catch (e) {
+			// 			alert(e)
+			// 		}
+			// 	}
+			// })
 		},
 		methods: {
 			async decodePic() {
