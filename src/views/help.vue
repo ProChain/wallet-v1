@@ -9,6 +9,7 @@
 			<p>
 				由用户自主管理公私钥，网页端只能用于账户获取收益，无法进行账户转账、签名等功能。相关功能需要在去中心化钱包中进行操作。
 			</p>
+			<van-button v-if="mode !== 'hosted'" to="/update-pubkey" type="primary" size="large" square class="update-did">切换为自主模式</van-button>
 		</div>
 	</div>
 </template>
