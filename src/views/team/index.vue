@@ -46,7 +46,7 @@
 
 				</van-panel>
 			</div>
-			<van-panel v-if="walletInfo.donate < 5 || lockedRecords.locked_funds < 10" class="desc">
+			<van-panel v-if="walletInfo.donate < 5 && lockedRecords.locked_funds < 10" class="desc">
 				<div class="van-cell-group__title page-bg" slot="header">成为共识合伙人，您将拥有以下特权</div>
 				<p>
 					·定制社群名称和logo，并在区块链上登记。<br>
