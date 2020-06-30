@@ -1,6 +1,6 @@
 <template>
 	<div class="team-component">
-		<van-row type="flex" class="sumary" v-if="walletInfo.donate >= 5 || lockedRecords.locked_funds >= 10">
+		<van-row type="flex" class="sumary" v-if="walletInfo.donate >= 5 || lockedRecords.locked_funds >= 5">
 			<van-col span="12">
 				已抵押
 				<p>
@@ -14,7 +14,7 @@
 				</p>
 			</van-col>
 		</van-row>
-		<van-notice-bar v-if="walletInfo.donate >= 5 || lockedRecords.locked_funds >= 10" text="邀请更多朋友加入团队" left-icon="volume-o" mode="closeable" @click="show = true"
+		<van-notice-bar v-if="walletInfo.donate >= 5 || lockedRecords.locked_funds >= 5" text="邀请更多朋友加入团队" left-icon="volume-o" mode="closeable" @click="show = true"
 		 @close.stop />
 		<van-panel v-if="teamInfo.tags && teamInfo.tags.length > 0">
 			<div class="van-cell-group__title mp-0" slot="header">团队标签</div>
@@ -26,7 +26,7 @@
 		</van-cell-group>
 		<div class="team">
 			<div class="myteam">
-				<van-cell-group v-if="(walletInfo.donate >= 5 && teamInfo.name) || lockedRecords.locked_funds >= 10" title="我的团队" :border="false" class="team-info">
+				<van-cell-group v-if="(walletInfo.donate >= 5 && teamInfo.name) || lockedRecords.locked_funds >= 5 title="我的团队" :border="false" class="team-info">
 					<van-cell title="团队信息" :label="teamInfo.name" :center="true" is-link to="/team/update" />
 					<van-cell title="团队规模" :center="true" :label="lockedRecords.max_quota | person" is-link to="/team/member" />
 					<van-cell title="团队logo" :center="true" is-link to="/team/logo">
@@ -46,7 +46,7 @@
 
 				</van-panel>
 			</div>
-			<van-panel v-if="walletInfo.donate < 5 && lockedRecords.locked_funds < 10" class="desc">
+			<van-panel v-if="walletInfo.donate < 5 && lockedRecords.locked_funds < 5" class="desc">
 				<div class="van-cell-group__title page-bg" slot="header">成为共识合伙人，您将拥有以下特权</div>
 				<p>
 					·定制社群名称和logo，并在区块链上登记。<br>
@@ -61,7 +61,7 @@
 			</van-panel>
 		</div>
 		<div v-if="mode === 'hosted'">
-			<van-row class="footer" v-if="walletInfo.donate >= 5 || lockedRecords.locked_funds >= 10">
+			<van-row class="footer" v-if="walletInfo.donate >= 5 || lockedRecords.locked_funds >= 5">
 				<van-col span="12">
 					<van-button square type="primary" size="large" to="/lock">抵押</van-button>
 				</van-col>
