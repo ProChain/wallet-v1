@@ -26,7 +26,7 @@
 		</van-cell-group>
 		<div class="team">
 			<div class="myteam">
-				<van-cell-group v-if="(walletInfo.donate >= 5 && teamInfo.name) || lockedRecords.locked_funds >= 5 title="我的团队" :border="false" class="team-info">
+				<van-cell-group v-if="(walletInfo.donate >= 5 && teamInfo.name) || lockedRecords.locked_funds >= 5" title="我的团队" :border="false" class="team-info">
 					<van-cell title="团队信息" :label="teamInfo.name" :center="true" is-link to="/team/update" />
 					<van-cell title="团队规模" :center="true" :label="lockedRecords.max_quota | person" is-link to="/team/member" />
 					<van-cell title="团队logo" :center="true" is-link to="/team/logo">
