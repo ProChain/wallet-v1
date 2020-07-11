@@ -71,7 +71,7 @@
 				const quota = metadata.locked_records ? metadata.locked_records.max_quota : 0
 				const members = quota === 0 ? 0 : quota - metadata.subordinate_count
 				this.quota = parseInt(quota)
-				this.members = parseInt(members)
+				this.members = members <= 0 ? 0 : parseInt(members)
 				const teamInfo = await getTeamInfo(result)
 				this.teamInfo = teamInfo.data || {}
 				this.showNotice = !this.teamInfo.name
